@@ -18,53 +18,14 @@ A complete, self-hosted wedding website you can fork and make your own. Handles 
 
 ## Screenshots
 
-### Gate
-![Gate](docs/screenshots/gate.png)
+| | | |
+|---|---|---|
+| ![Home](docs/screenshots/home.png) | ![Travel](docs/screenshots/travel.png) | ![Hotel Booking](docs/screenshots/hotel-booking.png) |
+| Home | Travel | Hotel Booking |
+| ![RSVP Guest Details](docs/screenshots/rsvp-guests.png) | ![RSVP Events](docs/screenshots/rsvp-events.png) | ![Admin Dashboard](docs/screenshots/admin-dashboard.png) |
+| RSVP Guest Details | RSVP Event Selection | Admin Dashboard |
 
-### Home
-![Home](docs/screenshots/home.png)
-
-### Events
-![Events](docs/screenshots/events.png)
-
-### Travel
-![Travel](docs/screenshots/travel.png)
-
-### Stay
-![Stay](docs/screenshots/stay.png)
-
-### FAQ
-![FAQ](docs/screenshots/faq.png)
-
-### Hotel Booking
-![Hotel Booking](docs/screenshots/hotel-booking.png)
-
-### RSVP Lookup
-![RSVP Lookup](docs/screenshots/rsvp-lookup.png)
-
-### RSVP Guest Details
-![RSVP Guest Details](docs/screenshots/rsvp-guests.png)
-
-### RSVP Event Selection
-![RSVP Events](docs/screenshots/rsvp-events.png)
-
-### Admin Dashboard
-![Admin Dashboard](docs/screenshots/admin-dashboard.png)
-
-### Admin Invites
-![Admin Invites](docs/screenshots/admin-invites.png)
-
-### Admin Guests
-![Admin Guests](docs/screenshots/admin-guests.png)
-
-### Admin Events
-![Admin Events](docs/screenshots/admin-events.png)
-
-### Admin Hotel Bookings
-![Admin Hotel Bookings](docs/screenshots/admin-hotel-bookings.png)
-
-### Admin Import
-![Admin Import](docs/screenshots/admin-import.png)
+[View all screenshots](docs/screenshots.html) — gate, events, stay, FAQ, RSVP lookup, and the full admin panel.
 
 ## Stack
 

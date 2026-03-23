@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const INVITE_CODE = process.env.INVITE_CODE || 'SOLSTICE';
@@ -48,8 +49,44 @@ async function enableAllPages(page) {
 
 async function screenshot(page, name) {
   const file = path.join(OUTPUT_DIR, `${name}.png`);
+
+  // Hide the "Show all pages" dev toggle before capturing
+  await page.evaluate(() => {
+    const el = document.getElementById('dev-toggle');
+    if (el) el.style.display = 'none';
+  });
+
+  // Take full viewport screenshot
   await page.screenshot({ path: file, fullPage: false });
-  console.log(`  saved ${name}.png`);
+
+  // Use ImageMagick to trim bottom whitespace:
+  // 1. Get the background color from the bottom-right pixel
+  // 2. Trim rows from the bottom that match it (with fuzz for anti-aliasing)
+  // 3. Keep full width — only trim vertically
+  try {
+    // Get original dimensions
+    const info = execSync(`magick identify -format "%w %h" "${file}"`).toString().trim();
+    const [origW, origH] = info.split(' ').map(Number);
+
+    // Find the trimmed bounding box — background is srgb(250,248,245) / #faf8f5
+    const trimInfo = execSync(
+      `magick "${file}" -bordercolor "srgb(250,248,245)" -border 1 -fuzz 3% -trim -format "%X %Y %w %h" info:`
+    ).toString().trim();
+    const [trimX, trimY, trimW, trimH] = trimInfo.split(' ').map(Number);
+
+    // Only crop if we'd save at least 50px of whitespace, and keep full width
+    const padding = 24;
+    const croppedH = Math.min(origH, trimH + padding);
+    if (origH - croppedH > 50) {
+      execSync(`magick "${file}" -crop ${origW}x${croppedH}+0+0 +repage "${file}"`);
+      console.log(`  saved ${name}.png (trimmed ${origH} → ${croppedH}px)`);
+    } else {
+      console.log(`  saved ${name}.png (${origH}px, no trim needed)`);
+    }
+  } catch (e) {
+    // If trimming fails, keep the original
+    console.log(`  saved ${name}.png (trim skipped: ${e.message})`);
+  }
 }
 
 // --- capture functions ---

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Hitched — Screenshots</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #f6f5f0;
+      color: #3d3a35;
+      line-height: 1.5;
+    }
+    header {
+      background: #d6cfc4;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    header p {
+      color: #6b6560;
+      font-size: 0.95rem;
+    }
+    header a {
+      color: #6b6560;
+      text-decoration: underline;
+    }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    section { margin-bottom: 3rem; }
+    section h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #d6cfc4;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .card img {
+      width: 100%;
+      display: block;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .card img:hover { opacity: 0.9; }
+    .card .caption {
+      padding: 0.6rem 0.85rem;
+      font-size: 0.85rem;
+      color: #6b6560;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-out;
+    }
+    .overlay.active { display: flex; }
+    .overlay img {
+      max-width: 95vw;
+      max-height: 95vh;
+      border-radius: 6px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Git Hitched</h1>
+    <p>Screenshot gallery &middot; <a href="https://github.com/fredbenenson/git-hitched">Back to repo</a></p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Guest Pages</h2>
+      <div class="grid">
+        <div class="card">
+          <img src="screenshots/gate.png" alt="Gate" onclick="openOverlay(this)">
+          <div class="caption">Gate &mdash; invite code entry</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/home.png" alt="Home" onclick="openOverlay(this)">
+          <div class="caption">Home</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/events.png" alt="Events" onclick="openOverlay(this)">
+          <div class="caption">Weekend Events</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/travel.png" alt="Travel" onclick="openOverlay(this)">
+          <div class="caption">Travel</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/stay.png" alt="Stay" onclick="openOverlay(this)">
+          <div class="caption">Where to Stay</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/explore.png" alt="Explore" onclick="openOverlay(this)">
+          <div class="caption">Things to Do</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/attire.png" alt="Attire" onclick="openOverlay(this)">
+          <div class="caption">Attire</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/faq.png" alt="FAQ" onclick="openOverlay(this)">
+          <div class="caption">FAQ</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/hotel-booking.png" alt="Hotel Booking" onclick="openOverlay(this)">
+          <div class="caption">Hotel Booking</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>RSVP Flow</h2>
+      <div class="grid">
+        <div class="card">
+          <img src="screenshots/rsvp-lookup.png" alt="RSVP Lookup" onclick="openOverlay(this)">
+          <div class="caption">Step 1 &mdash; Email lookup</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/rsvp-guests.png" alt="RSVP Guests" onclick="openOverlay(this)">
+          <div class="caption">Step 2 &mdash; Guest details &amp; meals</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/rsvp-events.png" alt="RSVP Events" onclick="openOverlay(this)">
+          <div class="caption">Step 3 &mdash; Event selection</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Admin Panel</h2>
+      <div class="grid">
+        <div class="card">
+          <img src="screenshots/admin-dashboard.png" alt="Admin Dashboard" onclick="openOverlay(this)">
+          <div class="caption">Dashboard</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/admin-invites.png" alt="Admin Invites" onclick="openOverlay(this)">
+          <div class="caption">Invites</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/admin-guests.png" alt="Admin Guests" onclick="openOverlay(this)">
+          <div class="caption">Guests</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/admin-events.png" alt="Admin Events" onclick="openOverlay(this)">
+          <div class="caption">Events</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/admin-hotel-bookings.png" alt="Admin Hotel Bookings" onclick="openOverlay(this)">
+          <div class="caption">Hotel Bookings</div>
+        </div>
+        <div class="card">
+          <img src="screenshots/admin-import.png" alt="Admin Import" onclick="openOverlay(this)">
+          <div class="caption">Google Sheets Import</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay" onclick="closeOverlay()">
+    <img id="overlay-img" src="" alt="">
+  </div>
+
+  <script>
+    function openOverlay(el) {
+      document.getElementById('overlay-img').src = el.src;
+      document.getElementById('overlay').classList.add('active');
+    }
+    function closeOverlay() {
+      document.getElementById('overlay').classList.remove('active');
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeOverlay();
+    });
+  </script>
+</body>
+</html>
