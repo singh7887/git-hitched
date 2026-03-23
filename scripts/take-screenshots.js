@@ -7,7 +7,13 @@ const INVITE_CODE = process.env.INVITE_CODE || 'SOLSTICE';
 const OUTPUT_DIR = path.join(__dirname, '..', 'docs', 'screenshots');
 const VIEWPORT = { width: 1280, height: 800 };
 
-const PAGES = [
+const GROUPS = {
+  gate: ['gate'],
+  pages: ['home', 'events', 'travel', 'stay', 'explore', 'attire', 'faq', 'rsvp'],
+  rsvp: ['rsvp-lookup', 'rsvp-guests', 'rsvp-events'],
+};
+
+const STATIC_PAGES = [
   { name: 'home', path: '/', description: 'Home page (after auth)' },
   { name: 'events', path: '/events', description: 'Weekend events' },
   { name: 'travel', path: '/travel', description: 'Travel information' },
@@ -18,53 +24,126 @@ const PAGES = [
   { name: 'rsvp', path: '/rsvp', description: 'RSVP lookup' },
 ];
 
-async function run() {
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+// --- helpers ---
 
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-  await page.setViewport(VIEWPORT);
-
-  // Step 1: Screenshot the gate page (before auth)
-  console.log('Capturing gate page...');
+async function authenticate(page) {
   await page.goto(`${BASE_URL}/`, { waitUntil: 'networkidle2' });
-  await page.screenshot({ path: path.join(OUTPUT_DIR, 'gate.png'), fullPage: false });
-  console.log('  saved gate.png');
-
-  // Step 2: Authenticate with invite code
-  console.log(`Entering invite code: ${INVITE_CODE}`);
   await page.type('input[placeholder="Invite code"]', INVITE_CODE);
   await page.click('input[type="submit"], button[type="submit"]');
   await page.waitForNavigation({ waitUntil: 'networkidle2' });
+}
 
-  // Step 2b: Enable all pages via dev toggle (POST /dev/toggle_pages)
-  console.log('Enabling all pages via dev toggle...');
-  const cookies = await page.cookies();
+async function enableAllPages(page) {
   await page.evaluate(async () => {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
     await fetch('/dev/toggle_pages', {
       method: 'POST',
-      headers: {
-        'X-CSRF-Token': csrfToken,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'X-CSRF-Token': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
       credentials: 'same-origin',
     });
   });
-  console.log('  all pages enabled');
+}
 
-  // Step 3: Screenshot each page
-  for (const { name, path: pagePath, description } of PAGES) {
+async function screenshot(page, name) {
+  const file = path.join(OUTPUT_DIR, `${name}.png`);
+  await page.screenshot({ path: file, fullPage: false });
+  console.log(`  saved ${name}.png`);
+}
+
+// --- capture functions ---
+
+async function captureGate(page) {
+  console.log('Capturing gate...');
+  await page.goto(`${BASE_URL}/`, { waitUntil: 'networkidle2' });
+  await screenshot(page, 'gate');
+}
+
+async function capturePages(page, names) {
+  const pages = names
+    ? STATIC_PAGES.filter(p => names.includes(p.name))
+    : STATIC_PAGES;
+
+  for (const { name, path: pagePath, description } of pages) {
     console.log(`Capturing ${description} (${pagePath})...`);
     await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'networkidle2' });
-    // Extra delay for images/fonts to load
     await new Promise(r => setTimeout(r, 1000));
-    await page.screenshot({ path: path.join(OUTPUT_DIR, `${name}.png`), fullPage: false });
-    console.log(`  saved ${name}.png`);
+    await screenshot(page, name);
+  }
+}
+
+async function captureRsvpFlow(page) {
+  console.log('\n--- RSVP Flow ---');
+
+  // Lookup with email filled in
+  console.log('Capturing RSVP lookup...');
+  await page.goto(`${BASE_URL}/rsvp`, { waitUntil: 'networkidle2' });
+  await page.type('input[type="email"], input[name="query"]', 'taylor@example.com');
+  await screenshot(page, 'rsvp-lookup');
+
+  // Submit lookup → guest details
+  await page.click('input[type="submit"], button[type="submit"]');
+  await page.waitForNavigation({ waitUntil: 'networkidle2' });
+  await new Promise(r => setTimeout(r, 500));
+  console.log('Capturing RSVP guest details...');
+  await screenshot(page, 'rsvp-guests');
+
+  // Submit form → events step (toggle is already on "Can attend")
+  await page.evaluate(() => {
+    document.querySelector('input[type="submit"], button[type="submit"]').click();
+  });
+  await page.waitForNavigation({ waitUntil: 'networkidle2' });
+  await new Promise(r => setTimeout(r, 500));
+  console.log('Capturing RSVP events...');
+  await screenshot(page, 'rsvp-events');
+}
+
+// --- main ---
+
+async function run() {
+  const args = process.argv.slice(2);
+  const requested = args.length ? args : ['gate', 'pages', 'rsvp'];
+
+  // Expand group names (e.g. "pages" → all static page names)
+  const targets = new Set();
+  for (const arg of requested) {
+    if (GROUPS[arg]) {
+      GROUPS[arg].forEach(t => targets.add(t));
+    } else {
+      targets.add(arg);
+    }
+  }
+
+  const needsAuth = [...targets].some(t => t !== 'gate');
+  const needsPages = STATIC_PAGES.some(p => targets.has(p.name));
+  const needsRsvp = ['rsvp-lookup', 'rsvp-guests', 'rsvp-events'].some(t => targets.has(t));
+
+  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.setViewport(VIEWPORT);
+
+  if (targets.has('gate')) {
+    await captureGate(page);
+  }
+
+  if (needsAuth) {
+    console.log('Authenticating...');
+    await authenticate(page);
+    console.log('Enabling all pages...');
+    await enableAllPages(page);
+  }
+
+  if (needsPages) {
+    const pageNames = STATIC_PAGES.map(p => p.name).filter(n => targets.has(n));
+    await capturePages(page, pageNames);
+  }
+
+  if (needsRsvp) {
+    await captureRsvpFlow(page);
   }
 
   await browser.close();
-  console.log(`\nDone! ${PAGES.length + 1} screenshots saved to ${OUTPUT_DIR}`);
+  console.log('\nDone!');
 }
 
 run().catch(err => {

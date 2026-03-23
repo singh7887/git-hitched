@@ -36,8 +36,14 @@ A complete, self-hosted wedding website you can fork and make your own. Handles 
 ### FAQ
 ![FAQ](docs/screenshots/faq.png)
 
-### RSVP
-![RSVP](docs/screenshots/rsvp.png)
+### RSVP Lookup
+![RSVP Lookup](docs/screenshots/rsvp-lookup.png)
+
+### RSVP Guest Details
+![RSVP Guest Details](docs/screenshots/rsvp-guests.png)
+
+### RSVP Event Selection
+![RSVP Events](docs/screenshots/rsvp-events.png)
 
 ## Stack
 

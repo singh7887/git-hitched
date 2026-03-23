@@ -30,7 +30,8 @@
       "mcp__server-puppeteer__puppeteer_fill",
       "mcp__server-puppeteer__puppeteer_click",
       "Bash(find /Users/fredbenenson/wedding/git-hitched -type d -name *screenshot* -o -type d -name *image*)",
-      "Bash(npm ls:*)"
+      "Bash(npm ls:*)",
+      "Bash(node:*)"
     ]
   }
 }

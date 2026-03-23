@@ -68,34 +68,34 @@ recovery.update!(
   image: "venue5.jpg"
 )
 
-# puts "Seeding test invites and guests..."
+puts "Seeding test invites and guests..."
 
-# taylor = Invite.find_or_create_by!(email: "taylor@example.com") do |i|
-#   i.name = "Taylor's Test Family"
-# end
+taylor = Invite.find_or_create_by!(email: "taylor@example.com") do |i|
+  i.name = "Taylor's Test Family"
+end
 
-# Guest.find_or_create_by!(invite: taylor, first_name: "Taylor", last_name: "Pepperworth") do |g|
-#   g.is_primary = true
-# end
+Guest.find_or_create_by!(invite: taylor, first_name: "Taylor", last_name: "Pepperworth") do |g|
+  g.is_primary = true
+end
 
-# Guest.find_or_create_by!(invite: taylor, first_name: "Taylor's", last_name: "Guest")
+Guest.find_or_create_by!(invite: taylor, first_name: "Taylor's", last_name: "Guest")
 
-# [welcome, ceremony, reception, recovery].each do |event|
-#   EventInvite.find_or_create_by!(invite: taylor, event: event)
-# end
+[welcome, ceremony, reception, recovery].each do |event|
+  EventInvite.find_or_create_by!(invite: taylor, event: event)
+end
 
-# robin = Invite.find_or_create_by!(email: "robin@example.com") do |i|
-#   i.name = "Robin's Test Family"
-# end
+robin = Invite.find_or_create_by!(email: "robin@example.com") do |i|
+  i.name = "Robin's Test Family"
+end
 
-# Guest.find_or_create_by!(invite: robin, first_name: "Robin", last_name: "Snackwell") do |g|
-#   g.is_primary = true
-# end
+Guest.find_or_create_by!(invite: robin, first_name: "Robin", last_name: "Snackwell") do |g|
+  g.is_primary = true
+end
 
-# Guest.find_or_create_by!(invite: robin, first_name: "Robin's", last_name: "Guest")
+Guest.find_or_create_by!(invite: robin, first_name: "Robin's", last_name: "Guest")
 
-# [welcome, ceremony, reception, recovery].each do |event|
-#   EventInvite.find_or_create_by!(invoke: robin, event: event)
-# end
+[welcome, ceremony, reception, recovery].each do |event|
+  EventInvite.find_or_create_by!(invite: robin, event: event)
+end
 
 puts "Seed complete! #{Invite.count} invites, #{Guest.count} guests, #{Event.count} events."
