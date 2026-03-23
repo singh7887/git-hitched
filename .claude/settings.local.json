@@ -24,7 +24,13 @@
       "WebFetch(domain:cdn.jsdelivr.net)",
       "WebFetch(domain:esm.sh)",
       "Bash(bin/rails runner:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "mcp__server-puppeteer__puppeteer_navigate",
+      "mcp__server-puppeteer__puppeteer_screenshot",
+      "mcp__server-puppeteer__puppeteer_fill",
+      "mcp__server-puppeteer__puppeteer_click",
+      "Bash(find /Users/fredbenenson/wedding/git-hitched -type d -name *screenshot* -o -type d -name *image*)",
+      "Bash(npm ls:*)"
     ]
   }
 }
