@@ -1,8 +1,8 @@
 # Git Hitched
 
-A complete, self-hosted wedding website you can fork and make your own. Handles everything from save-the-dates to day-of logistics: a gated site with a shared invite code, household-based RSVPs across multiple events, meal and dietary tracking, childcare coordination, hotel room blocks with Stripe checkout, automated email notifications, and a full admin dashboard to manage it all. Built with Ruby on Rails 8, Hotwire, Tailwind CSS, and [Claude Code](https://claude.ai/claude-code).
-
 ![Home](docs/screenshots/home.png)
+
+A complete, self-hosted wedding website you can fork and make your own. Handles everything from save-the-dates to day-of logistics: a gated site with a shared invite code, household-based RSVPs across multiple events, meal and dietary tracking, childcare coordination, hotel room blocks with Stripe checkout, automated email notifications, and a full admin dashboard to manage it all. Built with Ruby on Rails 8, Hotwire, Tailwind CSS, and [Claude Code](https://claude.ai/claude-code).
 
 ## Features at a Glance
 
