@@ -68,9 +68,9 @@ async function screenshot(page, name) {
     const info = execSync(`magick identify -format "%w %h" "${file}"`).toString().trim();
     const [origW, origH] = info.split(' ').map(Number);
 
-    // Find the trimmed bounding box — background is srgb(250,248,245) / #faf8f5
+    // Find the trimmed bounding box — background is #F8F7F9
     const trimInfo = execSync(
-      `magick "${file}" -bordercolor "srgb(250,248,245)" -border 1 -fuzz 3% -trim -format "%X %Y %w %h" info:`
+      `magick "${file}" -bordercolor "srgb(248,247,249)" -border 1 -fuzz 3% -trim -format "%X %Y %w %h" info:`
     ).toString().trim();
     const [trimX, trimY, trimW, trimH] = trimInfo.split(' ').map(Number);
 

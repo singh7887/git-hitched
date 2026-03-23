@@ -1,37 +1,44 @@
 /* ==========================================================================
    Wedding Design System — Git Hitched
-   Warm cream / neutral theme
+   Grape & Celadon theme
    ========================================================================== */
+
+/* ---------- Palette ---------- */
+/* --vintage-grape:  #654f6f  — deep muted purple    */
+/* --dusty-grape:    #5c5d8d  — indigo accent         */
+/* --cool-steel:     #99a1a6  — neutral mid-gray      */
+/* --celadon:        #a8c69f  — soft sage green        */
+/* --tea-green:      #cce2a3  — light green accent     */
 
 /* ---------- Custom Properties ---------- */
 :root {
-  --color-bg-primary:       #FAF8F5;
-  --color-bg-secondary:     #F2EDE8;
-  --color-bg-tertiary:      #EDE7E0;
+  --color-bg-primary:       #F8F7F9;
+  --color-bg-secondary:     #EFEDF2;
+  --color-bg-tertiary:      #E6E3EB;
   --color-bg-input:         #FFFFFF;
 
-  --color-text-primary:     #2C2C2C;
-  --color-text-secondary:   #5A5A5A;
-  --color-text-accent:      #3D3D3D;
-  --color-text-muted:       #8A8A8A;
-  --color-text-highlight:   #4A4A4A;
+  --color-text-primary:     #3A2F40;
+  --color-text-secondary:   #654f6f;
+  --color-text-accent:      #5c5d8d;
+  --color-text-muted:       #99a1a6;
+  --color-text-highlight:   #4A3D52;
 
-  --color-border:           #C5BEB6;
-  --color-border-focus:     #4A4A4A;
-  --color-border-light:     #D9D3CC;
+  --color-border:           #C4BFC9;
+  --color-border-focus:     #5c5d8d;
+  --color-border-light:     #D6D2DB;
 
-  --color-accent:           #4A4A4A;
-  --color-accent-hover:     #333333;
-  --color-accent-pressed:   #5A5A5A;
-  --color-highlight:        #6B5B4E;
-  --color-highlight-hover:  #5A4B3F;
-  --color-highlight-pressed:#7C6C5F;
+  --color-accent:           #5c5d8d;
+  --color-accent-hover:     #4a4b75;
+  --color-accent-pressed:   #6e6f9e;
+  --color-highlight:        #654f6f;
+  --color-highlight-hover:  #553f5f;
+  --color-highlight-pressed:#7a6485;
 
-  --color-success:          #2E7D4A;
+  --color-success:          #a8c69f;
   --color-warning:          #B8860B;
   --color-error:            #A04040;
 
-  --font-script:     'Great Vibes', cursive;
+  --font-script:     'Pinyon Script', cursive;
   --font-serif:      'Playfair Display', serif;
   --font-mono:       'Courier New', monospace;
 
