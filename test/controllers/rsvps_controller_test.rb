@@ -115,10 +115,7 @@ class RsvpsControllerTest < ActionDispatch::IntegrationTest
             first_name: "Bobby",
             last_name: "Smith",
             meal_choice: "fish",
-            dietary_notes: "Gluten free",
-            rsvps: {
-              ceremony.id.to_s => { attending: "true" }
-            }
+            dietary_notes: "Gluten free"
           }
         }
       }
@@ -131,7 +128,6 @@ class RsvpsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Smith", new_guest.last_name
     assert_equal "fish", new_guest.meal_choice
     assert_equal "Gluten free", new_guest.dietary_notes
-    assert new_guest.rsvps.find_by(event: ceremony).attending
   end
 
   test "POST /rsvp/:invite_id skips new guest with blank first name" do

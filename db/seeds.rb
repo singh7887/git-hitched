@@ -80,7 +80,7 @@ end
 
 Guest.find_or_create_by!(invite: taylor, first_name: "Taylor's", last_name: "Guest")
 
-[welcome, ceremony, reception, recovery].each do |event|
+[ welcome, ceremony, reception, recovery ].each do |event|
   EventInvite.find_or_create_by!(invite: taylor, event: event)
 end
 
@@ -94,7 +94,7 @@ end
 
 Guest.find_or_create_by!(invite: robin, first_name: "Robin's", last_name: "Guest")
 
-[welcome, ceremony, reception, recovery].each do |event|
+[ welcome, ceremony, reception, recovery ].each do |event|
   EventInvite.find_or_create_by!(invite: robin, event: event)
 end
 
