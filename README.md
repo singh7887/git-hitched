@@ -18,18 +18,26 @@ A complete, self-hosted wedding website you can fork and make your own. Handles 
 
 ## Screenshots
 
-| | |
-|---|---|
-| ![Gate](docs/screenshots/gate.png) | ![Home](docs/screenshots/home.png) |
-| Gate (invite code entry) | Home |
-| ![Events](docs/screenshots/events.png) | ![Travel](docs/screenshots/travel.png) |
-| Events | Travel |
-| ![Stay](docs/screenshots/stay.png) | ![Explore](docs/screenshots/explore.png) |
-| Stay | Explore |
-| ![Attire](docs/screenshots/attire.png) | ![FAQ](docs/screenshots/faq.png) |
-| Attire | FAQ |
-| ![RSVP](docs/screenshots/rsvp.png) | |
-| RSVP Lookup | |
+### Gate
+![Gate](docs/screenshots/gate.png)
+
+### Home
+![Home](docs/screenshots/home.png)
+
+### Events
+![Events](docs/screenshots/events.png)
+
+### Travel
+![Travel](docs/screenshots/travel.png)
+
+### Stay
+![Stay](docs/screenshots/stay.png)
+
+### FAQ
+![FAQ](docs/screenshots/faq.png)
+
+### RSVP
+![RSVP](docs/screenshots/rsvp.png)
 
 ## Stack
 
