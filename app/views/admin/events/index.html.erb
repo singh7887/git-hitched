@@ -1,0 +1,31 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl);">Events</h1>
+  <%= link_to "New Event", new_admin_event_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Location</th>
+        <th class="text-center">Attending</th>
+        <th class="text-center">Declined</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @events.each do |event| %>
+        <tr>
+          <td><%= link_to event.name, admin_event_path(event) %></td>
+          <td class="text-muted"><%= event.date&.strftime("%b %d, %Y") %></td>
+          <td class="text-muted"><%= event.start_time&.strftime("%l:%M %p")&.strip %></td>
+          <td class="text-muted"><%= event.location %></td>
+          <td class="text-center text-success"><%= event.attending_count %></td>
+          <td class="text-center text-error"><%= event.declined_count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

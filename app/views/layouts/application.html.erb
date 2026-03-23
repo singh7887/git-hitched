@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html class="h-full">
+  <head>
+    <title><%= content_for(:title) || WEDDING[:couple_names] %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta property="og:title" content="<%= WEDDING[:couple_names] %>">
+    <meta property="og:description" content="We're getting married!">
+    <meta property="og:image" content="https://example.wedding/og-image.png">
+    <meta property="og:url" content="https://example.wedding">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <%= yield :head %>
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "wedding", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="h-full">
+    <nav style="background: var(--color-bg-tertiary); border-bottom: 1px solid var(--color-border-light);" class="sticky top-0 z-50">
+      <div class="px-8 py-4 flex items-center justify-center">
+        <div class="flex gap-6 items-center flex-wrap justify-center">
+          <%= link_to "Home", root_path, class: "type-serif-small" if page_enabled?(:home) %>
+          <%= link_to "Events", events_path, class: "type-serif-small" if page_enabled?(:events) %>
+          <%= link_to "Travel", travel_path, class: "type-serif-small" if page_enabled?(:travel) %>
+          <%= link_to "Stay", stay_path, class: "type-serif-small" if page_enabled?(:stay) %>
+          <%= link_to "Explore", explore_path, class: "type-serif-small" if page_enabled?(:explore) %>
+          <%= link_to "Attire", attire_path, class: "type-serif-small" if page_enabled?(:attire) %>
+          <%= link_to "FAQ", faq_path, class: "type-serif-small" if page_enabled?(:faq) %>
+          <%= link_to "RSVP", rsvp_path, class: "btn btn-highlight", style: "margin-left: var(--space-4);" if page_enabled?(:rsvp) %>
+        </div>
+      </div>
+    </nav>
+
+    <main class="px-8 py-12" style="max-width: 48rem; margin-left: auto; margin-right: auto;">
+      <% if flash[:notice] %>
+        <div class="notice"><%= flash[:notice] %></div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="notice-error"><%= flash[:alert] %></div>
+      <% end %>
+      <%= yield %>
+    </main>
+
+    <footer style="border-top: 1px solid var(--color-border-light); color: var(--color-text-muted);" class="py-8 text-center">
+      <div class="flex gap-6 justify-center mb-4">
+        <%= link_to "Our Story", our_story_path, class: "type-serif-small", style: "color: var(--color-text-secondary);" if page_enabled?(:our_story) %>
+        <%= link_to "Gallery", gallery_path, class: "type-serif-small", style: "color: var(--color-text-secondary);" if page_enabled?(:gallery) %>
+      </div>
+      <p style="font-size: var(--text-sm); font-style: italic;"><%= WEDDING[:couple_names] %></p>
+    </footer>
+
+    <% if Rails.env.development? %>
+      <div id="dev-toggle" style="position: fixed; bottom: 16px; left: 16px; z-index: 9999;">
+        <%= form_with url: dev_toggle_pages_path, method: :post, html: { style: "margin: 0;" } do %>
+          <label style="display: inline-flex; align-items: center; gap: 8px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border-light); border-radius: 20px; padding: 5px 12px 5px 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; color: var(--color-text-secondary); cursor: pointer; user-select: none;">
+            <input type="submit" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;">
+            <span style="display: block; position: relative; width: 42px; height: 25px; min-width: 42px; border-radius: 13px; background: <%= session[:dev_show_all_pages] ? '#34C759' : 'rgba(120,120,128,0.32)' %>;">
+              <span style="position: absolute; top: 2px; <%= session[:dev_show_all_pages] ? 'left: 19px' : 'left: 2px' %>; width: 21px; height: 21px; border-radius: 50%; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></span>
+            </span>
+            Show all pages
+          </label>
+        <% end %>
+      </div>
+    <% end %>
+  </body>
+</html>

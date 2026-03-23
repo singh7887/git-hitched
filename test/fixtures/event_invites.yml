@@ -1,0 +1,19 @@
+smiths_welcome:
+  invite: smiths
+  event: welcome
+
+smiths_ceremony:
+  invite: smiths
+  event: ceremony
+
+smiths_reception:
+  invite: smiths
+  event: reception
+
+johnsons_ceremony:
+  invite: johnsons
+  event: ceremony
+
+johnsons_reception:
+  invite: johnsons
+  event: reception

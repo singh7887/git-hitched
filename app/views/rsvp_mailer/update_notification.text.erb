@@ -1,0 +1,20 @@
+Dear <%= @invite.name %>,
+
+We've received your updated RSVP. Here's what we have on file now:
+
+<% @guests.each do |guest| %>
+<%= guest.full_name %>
+<% @events.each do |event| %>
+<% rsvp = guest.rsvp_for(event) %>
+  <%= event.name %>: <%= rsvp&.attending == true ? "Joyfully accepts" : rsvp&.attending == false ? "Regretfully declines" : "Pending" %>
+<% end %>
+<% if guest.meal_choice != "tbd" %>  Meal: <%= guest.meal_choice.titleize %><% end %>
+<% if guest.dietary_notes.present? %>  Dietary notes: <%= guest.dietary_notes %><% end %>
+<% if guest.needs_childcare? %>  Needs childcare<% end %>
+
+<% end %>
+You can update your RSVP anytime:
+<%= @manage_url %>
+
+<%= WEDDING[:couple_names] %>
+example.wedding

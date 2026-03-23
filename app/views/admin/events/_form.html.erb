@@ -1,0 +1,116 @@
+<%= form_with model: [:admin, event], class: "space-y-4" do |f| %>
+  <% if event.errors.any? %>
+    <div class="notice-error">
+      <% event.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <fieldset style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); margin-bottom: var(--space-2);">
+    <legend style="font-weight: 600; padding: 0 var(--space-2);">Basic Info</legend>
+    <div class="space-y-4">
+      <div class="form-group">
+        <%= f.label :name, class: "form-label" %>
+        <%= f.text_field :name, class: "form-input" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :subtitle, class: "form-label" %>
+        <%= f.text_field :subtitle, class: "form-input", placeholder: "e.g. Welcome Dinner" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :sort_order, class: "form-label" %>
+        <%= f.number_field :sort_order, class: "form-input", style: "max-width: 120px;" %>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); margin-bottom: var(--space-2);">
+    <legend style="font-weight: 600; padding: 0 var(--space-2);">Date & Time</legend>
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <%= f.label :date, class: "form-label" %>
+          <%= f.date_field :date, class: "form-input" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :start_time, class: "form-label" %>
+          <%= f.time_field :start_time, class: "form-input" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :time_description, "Time description", class: "form-label" %>
+        <%= f.text_field :time_description, class: "form-input", placeholder: "e.g. Friday, May 16 – 7:00 PM" %>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); margin-bottom: var(--space-2);">
+    <legend style="font-weight: 600; padding: 0 var(--space-2);">Location</legend>
+    <div class="space-y-4">
+      <div class="form-group">
+        <%= f.label :location, class: "form-label" %>
+        <%= f.text_field :location, class: "form-input" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :address, class: "form-label" %>
+        <%= f.text_field :address, class: "form-input", placeholder: "e.g. 123 Main St, City, ST 12345" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :location_url, "Location URL", class: "form-label" %>
+        <%= f.url_field :location_url, class: "form-input", placeholder: "https://..." %>
+      </div>
+      <div class="form-group">
+        <%= f.label :maps_url, "Maps URL", class: "form-label" %>
+        <%= f.url_field :maps_url, class: "form-input", placeholder: "https://maps.google.com/..." %>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); margin-bottom: var(--space-2);">
+    <legend style="font-weight: 600; padding: 0 var(--space-2);">Attire</legend>
+    <div class="space-y-4">
+      <div class="form-group">
+        <%= f.label :attire, class: "form-label" %>
+        <%= f.text_field :attire, class: "form-input", placeholder: "e.g. Black Tie Optional" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :attire_description, "Attire description", class: "form-label" %>
+        <%= f.text_area :attire_description, rows: 2, class: "form-textarea" %>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); margin-bottom: var(--space-2);">
+    <legend style="font-weight: 600; padding: 0 var(--space-2);">Image</legend>
+    <div class="form-group" data-controller="image-picker">
+      <%= f.label :image, "Event image", class: "form-label" %>
+      <% event_images = Dir.glob(Rails.root.join("app/assets/images/events/*")).map { |p| File.basename(p) }.sort %>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); margin-top: var(--space-2);">
+        <label data-image-picker-target="option" data-action="click->image-picker#select" style="cursor: pointer; border: 3px solid <%= event.image.blank? ? 'var(--color-border-focus)' : 'var(--color-border-light)' %>; border-radius: var(--radius); padding: var(--space-2); text-align: center; display: flex; align-items: center; justify-content: center; min-height: 120px; background: var(--color-bg-secondary); <%= 'box-shadow: 0 0 0 2px var(--color-border-focus);' if event.image.blank? %>">
+          <%= f.radio_button :image, "", style: "display: none;", checked: event.image.blank? %>
+          <span style="font-size: var(--text-sm); color: var(--color-text-secondary);">No image</span>
+        </label>
+        <% event_images.each do |filename| %>
+          <% selected = event.image == filename %>
+          <label data-image-picker-target="option" data-action="click->image-picker#select" style="cursor: pointer; border: 3px solid <%= selected ? 'var(--color-border-focus)' : 'var(--color-border-light)' %>; border-radius: var(--radius); overflow: hidden; <%= 'box-shadow: 0 0 0 2px var(--color-border-focus);' if selected %>">
+            <%= f.radio_button :image, filename, style: "display: none;", checked: selected %>
+            <%= image_tag "events/#{filename}", style: "width: 100%; height: 120px; object-fit: cover; display: block;" %>
+            <div style="padding: 4px; font-size: 11px; color: var(--color-text-secondary); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= filename %></div>
+          </label>
+        <% end %>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); margin-bottom: var(--space-2);">
+    <legend style="font-weight: 600; padding: 0 var(--space-2);">Description</legend>
+    <div class="form-group">
+      <%= f.label :description, class: "form-label" %>
+      <%= f.text_area :description, rows: 3, class: "form-textarea" %>
+    </div>
+  </fieldset>
+
+  <%= f.submit class: "btn btn-primary btn-sm" %>
+  <%= link_to "Cancel", admin_events_path, class: "btn btn-ghost btn-sm" %>
+<% end %>

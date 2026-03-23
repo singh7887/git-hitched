@@ -1,0 +1,114 @@
+<div data-controller="appear">
+  <h1 class="type-serif-heading text-center animate-fade-in-up" style="font-size: var(--text-3xl); margin-bottom: var(--space-4);">Weekend Events</h1>
+  <p class="text-center animate-fade-in-up delay-1" style="color: var(--color-text-secondary); margin-bottom: var(--space-12);">Join us for a weekend of celebration</p>
+
+  <div class="space-y-8">
+    <div class="card appear" style="padding: 0; overflow: hidden;">
+      <%= image_tag "events/venue1.jpg", style: "width: 100%; height: auto; display: block;", alt: "Château de Flapjack" %>
+    </div>
+
+    <%# Welcome Dinner (event id 1) %>
+    <% if @welcome %>
+      <div class="appear" style="display: flex; gap: var(--space-4); align-items: stretch;">
+        <% if @welcome.image.present? %>
+          <div class="card" style="padding: 0; overflow: hidden; flex: 0 0 40%; min-height: 400px;">
+            <%= image_tag "events/#{@welcome.image}", style: "width: 100%; height: 100%; object-fit: cover; object-position: center 50%; display: block;", alt: @welcome.location %>
+          </div>
+        <% end %>
+        <section class="card" style="flex: 1;">
+          <div class="card-body">
+            <p class="type-serif-small" style="color: var(--color-text-muted); margin-bottom: var(--space-2);"><%= @welcome.subtitle %></p>
+            <h2 class="card-title" style="margin-bottom: var(--space-4);"><%= @welcome.name %></h2>
+
+            <div style="margin-bottom: var(--space-4);">
+              <p style="margin-bottom: var(--space-1);"><strong>Location:</strong> <a href="<%= @welcome.location_url %>" target="_blank" rel="noopener" style="color: var(--color-accent);"><%= @welcome.location %></a></p>
+              <p style="margin-bottom: var(--space-1);"><a href="<%= @welcome.maps_url %>" target="_blank" rel="noopener" style="color: var(--color-text-muted);"><%= @welcome.address %></a></p>
+              <p style="margin-bottom: var(--space-1);"><strong>Time:</strong> <%= @welcome.time_description %></p>
+              <p><strong>Attire:</strong> <%= @welcome.attire %></p>
+            </div>
+
+            <% if @welcome.attire_description.present? %>
+              <p style="color: var(--color-text-secondary); font-style: italic;"><%= @welcome.attire_description %></p>
+            <% end %>
+            <p style="color: var(--color-text-secondary); margin-top: var(--space-4);"><%= @welcome.description %></p>
+          </div>
+        </section>
+      </div>
+    <% end %>
+
+    <%# Ceremony (event id 2) %>
+    <% if @ceremony %>
+      <section class="card appear appear-delay-1" style="padding: 0; overflow: hidden;">
+        <% if @ceremony.image.present? %>
+          <div style="height: 300px; overflow: hidden; border-bottom: var(--border-thin);">
+            <%= image_tag "events/#{@ceremony.image}", style: "width: 100%; height: 100%; object-fit: cover; object-position: center 90%; display: block;", alt: @ceremony.location %>
+          </div>
+        <% end %>
+        <div class="card-body" style="padding: var(--space-6);">
+          <p class="type-serif-small" style="color: var(--color-text-muted); margin-bottom: var(--space-2);"><%= @ceremony.subtitle %></p>
+          <h2 class="card-title" style="margin-bottom: var(--space-4);"><%= @ceremony.name %></h2>
+
+          <div style="margin-bottom: var(--space-4);">
+            <p style="margin-bottom: var(--space-1);"><strong>Location:</strong> <a href="<%= @ceremony.location_url %>" target="_blank" rel="noopener" style="color: var(--color-accent);"><%= @ceremony.location %></a></p>
+            <p style="margin-bottom: var(--space-1);"><a href="<%= @ceremony.maps_url %>" target="_blank" rel="noopener" style="color: var(--color-text-muted);"><%= @ceremony.address %></a></p>
+            <p style="margin-bottom: var(--space-1);"><strong>Time:</strong> <%= @ceremony.time_description %></p>
+            <p><strong>Attire:</strong> <%= link_to @ceremony.attire, attire_path %></p>
+          </div>
+
+          <p style="color: var(--color-text-secondary);"><%= @ceremony.description %></p>
+        </div>
+      </section>
+    <% end %>
+
+    <%# Reception (event id 3) %>
+    <% if @reception %>
+      <div class="appear appear-delay-1" style="display: flex; gap: var(--space-4); align-items: stretch;">
+        <section class="card" style="flex: 1;">
+          <div class="card-body">
+            <p class="type-serif-small" style="color: var(--color-text-muted); margin-bottom: var(--space-2);"><%= @reception.subtitle %></p>
+            <h2 class="card-title" style="margin-bottom: var(--space-4);"><%= @reception.name %></h2>
+
+            <div style="margin-bottom: var(--space-4);">
+              <p style="margin-bottom: var(--space-1);"><strong>Time:</strong> <%= @reception.time_description %></p>
+              <p><strong>Attire:</strong> <%= link_to @reception.attire, attire_path %></p>
+            </div>
+
+            <p style="color: var(--color-text-secondary);"><%= @reception.description %></p>
+          </div>
+        </section>
+        <% if @reception.image.present? %>
+          <div class="card" style="padding: 0; overflow: hidden; flex: 0 0 40%; min-height: 400px;">
+            <%= image_tag "events/#{@reception.image}", style: "width: 100%; height: 100%; object-fit: cover; object-position: center 50%; display: block;", alt: @reception.name %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%# Recovery (event id 4) %>
+    <% if @recovery %>
+      <div class="appear appear-delay-2" style="display: flex; gap: var(--space-4); align-items: stretch;">
+        <% if @recovery.image.present? %>
+          <div class="card" style="padding: 0; overflow: hidden; flex: 0 0 40%; min-height: 400px;">
+            <%= image_tag "events/#{@recovery.image}", style: "width: 100%; height: 100%; object-fit: cover; object-position: center 80%; display: block;", alt: @recovery.name %>
+          </div>
+        <% end %>
+        <section class="card" style="flex: 1;">
+          <div class="card-body">
+            <p class="type-serif-small" style="color: var(--color-text-muted); margin-bottom: var(--space-2);"><%= @recovery.subtitle %></p>
+            <h2 class="card-title" style="margin-bottom: var(--space-4);"><%= @recovery.name %></h2>
+
+            <div style="margin-bottom: var(--space-4);">
+              <p><strong>Attire:</strong> <%= @recovery.attire %></p>
+            </div>
+
+            <p style="color: var(--color-text-secondary); font-style: italic;"><%= @recovery.description %></p>
+          </div>
+        </section>
+      </div>
+    <% end %>
+
+    <div class="card appear" style="padding: 0; overflow: hidden;">
+      <%= image_tag "events/venue2.jpg", style: "width: 100%; height: auto; display: block;", alt: "Château de Flapjack grounds" %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<p>Dear <%= @invite.name %>,</p>
+
+<p>Thank you for your RSVP! Here's a summary of what we have on file:</p>
+
+<% @guests.each do |guest| %>
+  <div class="guest-section">
+    <p class="guest-name"><%= guest.full_name %></p>
+    <table class="rsvp-table">
+      <% @events.each do |event| %>
+        <% rsvp = guest.rsvp_for(event) %>
+        <tr>
+          <td><%= event.name %></td>
+          <td>
+            <% if rsvp&.attending == true %>
+              <span class="rsvp-attending">Joyfully accepts</span>
+            <% elsif rsvp&.attending == false %>
+              <span class="rsvp-declined">Regretfully declines</span>
+            <% else %>
+              <span class="rsvp-pending">Pending</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+    <% if guest.meal_choice != "tbd" %>
+      <p class="meal-info">Meal: <%= guest.meal_choice.titleize %></p>
+    <% end %>
+    <% if guest.dietary_notes.present? %>
+      <p class="meal-info">Dietary notes: <%= guest.dietary_notes %></p>
+    <% end %>
+    <% if guest.needs_childcare? %>
+      <p class="meal-info">Needs childcare</p>
+    <% end %>
+  </div>
+<% end %>
+
+<p>Need to make changes? You can update your RSVP anytime using the link below.</p>
+
+<div class="btn-wrapper">
+  <a href="<%= @manage_url %>" class="btn">Manage Your RSVP</a>
+</div>

@@ -1,0 +1,71 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl);"><%= @invite.name %></h1>
+  <div class="flex gap-2">
+    <%= link_to "Edit", edit_admin_invite_path(@invite), class: "btn btn-outline btn-sm" %>
+    <%= button_to "Delete", admin_invite_path(@invite), method: :delete,
+      data: { turbo_confirm: "Are you sure?" },
+      class: "btn btn-danger btn-sm" %>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 gap-4 mb-6" style="font-size: var(--text-sm);">
+  <div><span class="text-muted">Email:</span> <%= @invite.email || "N/A" %></div>
+  <div><span class="text-muted">Responded:</span> <%= @invite.responded? ? @invite.responded_at.strftime("%b %d, %Y %l:%M %p") : "Not yet" %></div>
+  <div><span class="text-muted">Attending:</span> <%= @invite.attending.nil? ? "Pending" : @invite.attending? ? "Yes" : "No" %></div>
+  <div><span class="text-muted">Children Attending:</span> <%= @invite.children_attending? ? "Yes" : "No" %></div>
+</div>
+
+<% if @invite.notes.present? %>
+  <div class="card mb-6" style="background: var(--color-bg-tertiary);">
+    <h2 class="card-title">Notes from Guest</h2>
+    <div class="card-body"><%= simple_format(@invite.notes) %></div>
+  </div>
+<% end %>
+
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3);">Guests</h2>
+<div class="table-wrapper mb-6">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Meal</th>
+        <th>Dietary Notes</th>
+        <th>Primary</th>
+        <th>Child</th>
+        <th>Childcare</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @guests.each do |guest| %>
+        <tr>
+          <td><%= link_to guest.full_name, admin_guest_path(guest) %></td>
+          <td><%= guest.meal_choice.titleize %></td>
+          <td class="text-muted"><%= guest.dietary_notes.presence || "None" %></td>
+          <td><%= guest.is_primary? ? "Yes" : "" %></td>
+          <td><%= guest.is_child? ? "Yes" : "" %></td>
+          <td><%= guest.needs_childcare? ? "Yes" : "" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3);">Invited Events</h2>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @events.each do |event| %>
+        <tr>
+          <td><%= link_to event.name, admin_event_path(event) %></td>
+          <td class="text-muted"><%= event.date&.strftime("%b %d, %Y") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

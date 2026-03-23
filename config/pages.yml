@@ -1,0 +1,14 @@
+# Which pages are visible on the site.
+# Set to false to hide from navigation and block direct access.
+# Flip back to true anytime — no code changes needed.
+
+home: true
+events: false
+travel: true
+stay: true
+explore: false
+attire: false
+faq: false
+our_story: false
+gallery: false
+rsvp: false

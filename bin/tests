@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+
+echo "==> Scanning Ruby for security vulnerabilities (Brakeman)..."
+bin/brakeman --no-pager
+
+echo ""
+echo "==> Scanning JavaScript dependencies for vulnerabilities..."
+bin/importmap audit
+
+echo ""
+echo "==> Linting Ruby code (RuboCop)..."
+bin/rubocop
+
+echo ""
+echo "==> Running tests..."
+RAILS_ENV=test bin/rails db:test:prepare test test:system
+
+echo ""
+echo "All checks passed."

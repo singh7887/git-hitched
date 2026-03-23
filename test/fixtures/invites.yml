@@ -1,0 +1,9 @@
+smiths:
+  name: The Smith Family
+  email: smith@example.com
+  responded_at: null
+
+johnsons:
+  name: The Johnson Family
+  email: johnson@example.com
+  responded_at: 2025-08-01 12:00:00

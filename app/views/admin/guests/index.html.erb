@@ -1,0 +1,40 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl);">Guests</h1>
+  <%= link_to "New Guest", new_admin_guest_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<%= form_with url: admin_guests_path, method: :get, class: "mb-4" do %>
+  <div class="flex gap-2">
+    <%= text_field_tag :q, params[:q], placeholder: "Search by name...", class: "form-input flex-1" %>
+    <%= submit_tag "Search", class: "btn btn-outline btn-sm" %>
+  </div>
+<% end %>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Invite</th>
+        <th>Meal</th>
+        <th>Primary</th>
+        <th>Child</th>
+        <th>Age</th>
+        <th>Childcare</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @guests.each do |guest| %>
+        <tr>
+          <td><%= link_to guest.full_name, admin_guest_path(guest) %></td>
+          <td><%= link_to guest.invite.name, admin_invite_path(guest.invite) %></td>
+          <td><%= guest.meal_choice.titleize %></td>
+          <td><%= guest.is_primary? ? "Yes" : "" %></td>
+          <td><%= guest.is_child? ? "Yes" : "" %></td>
+          <td><%= guest.age %></td>
+          <td><%= guest.needs_childcare? ? "Yes" : "" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

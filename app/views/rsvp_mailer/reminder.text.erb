@@ -1,0 +1,17 @@
+Dear <%= @invite.name %>,
+
+We'd love to hear from you! We haven't received your RSVP yet for our wedding celebration in Provence.
+
+You're invited to the following events:
+
+<% @events.each do |event| %>
+<%= event.name %>
+<%= event.date&.strftime("%A, %B %d, %Y") %><% if event.start_time %> at <%= event.start_time.strftime("%l:%M %p").strip %><% end %>
+<% if event.location.present? %><%= event.location %><% end %>
+
+<% end %>
+Please take a moment to let us know if you can join us:
+<%= @manage_url %>
+
+<%= WEDDING[:couple_names] %>
+example.wedding

@@ -1,0 +1,144 @@
+<div data-controller="guests">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-1);">RSVP for <%= @invite.name %></h1>
+  <p style="color: var(--color-text-secondary); margin-bottom: var(--space-8);">
+    <% if @invite.responded? %>
+      Last updated <%= @invite.responded_at.strftime("%B %d, %Y") %>.
+      You can update your response below.
+    <% else %>
+      Please let us know if you can make it!
+    <% end %>
+  </p>
+
+  <%= form_with url: rsvp_update_path(invite_id: @invite.id), method: :post do |f| %>
+    <div class="toggle-switch" style="margin-bottom: var(--space-8);">
+      <span class="toggle-label <%= 'toggle-label-active' unless @invite.attending == false %>"
+            data-guests-target="acceptLabel">Can attend</span>
+      <input type="hidden" name="invite[attending]" value="0">
+      <label class="toggle-track-label">
+        <input type="checkbox"
+               name="invite[attending]"
+               value="1"
+               class="toggle-input"
+               data-action="guests#toggleAttending"
+               data-guests-target="attendingToggle"
+               <%= "checked" if @invite.attending != false %>>
+        <span class="toggle-track"></span>
+      </label>
+      <span class="toggle-label <%= 'toggle-label-active' if @invite.attending == false %>"
+            data-guests-target="declineLabel">Can't attend</span>
+    </div>
+
+    <div data-guests-target="detailsSection" style="<%= "display: none;" if @invite.attending == false %>">
+      <div data-guests-target="container">
+        <% @adults.each do |guest| %>
+          <%= render partial: "rsvps/guest_card", locals: { guest: guest, guests_count: @adults.size } %>
+        <% end %>
+      </div>
+
+      <div data-guests-target="childrenContainer">
+        <% @children.each do |child| %>
+          <%= render partial: "rsvps/child_card", locals: { child: child } %>
+        <% end %>
+      </div>
+
+      <div class="flex justify-center gap-4" style="margin-bottom: var(--space-8);">
+        <button type="button" class="btn btn-outline btn-sm" data-action="guests#add">+ Add Guest</button>
+        <button type="button" class="btn btn-outline btn-sm" data-action="guests#addChild">+ Add Child</button>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <% submit_text = @invite.attending == false ? "Save RSVP" : "Next: Event RSVPs" %>
+      <%= f.submit submit_text, class: "btn btn-highlight btn-lg",
+            data: { guests_target: "submitButton" } %>
+    </div>
+  <% end %>
+
+  <%# Adult guest template %>
+  <template data-guests-target="template">
+    <div class="card" style="margin-bottom: var(--space-6);" data-guest-card data-new-guest="true">
+      <div class="flex items-center justify-between" style="margin-bottom: var(--space-4);">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" style="flex: 1;">
+          <div>
+            <label class="form-label">First name</label>
+            <input type="text" name="new_guests[NEW_INDEX][first_name]" class="form-input" required>
+          </div>
+          <div>
+            <label class="form-label">Last name</label>
+            <input type="text" name="new_guests[NEW_INDEX][last_name]" class="form-input">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+        <div>
+          <label class="form-label">Meal preference</label>
+          <select name="new_guests[NEW_INDEX][meal_choice]" class="form-select">
+            <% Guest.meal_choices.keys.each do |k| %>
+              <option value="<%= k %>"><%= k.titleize %></option>
+            <% end %>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Dietary notes</label>
+          <input type="text" name="new_guests[NEW_INDEX][dietary_notes]" placeholder="Allergies, restrictions, etc." class="form-input">
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-4); text-align: right;">
+        <button type="button" class="btn btn-sm" style="color: var(--color-error);"
+          data-action="guests#remove">Remove</button>
+      </div>
+    </div>
+  </template>
+
+  <%# Child guest template %>
+  <template data-guests-target="childTemplate">
+    <div class="card" style="margin-bottom: var(--space-6);" data-guest-card data-new-guest="true">
+      <div class="flex items-center justify-between" style="margin-bottom: var(--space-4);">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" style="flex: 1;">
+          <div>
+            <label class="form-label">Child's first name</label>
+            <input type="text" name="new_children[NEW_INDEX][first_name]" class="form-input" required>
+          </div>
+          <div>
+            <label class="form-label">Child's last name</label>
+            <input type="text" name="new_children[NEW_INDEX][last_name]" class="form-input">
+          </div>
+          <div>
+            <label class="form-label">Age</label>
+            <input type="number" name="new_children[NEW_INDEX][age]" class="form-input" min="0" max="17" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+        <div>
+          <label class="form-label">Meal preference</label>
+          <select name="new_children[NEW_INDEX][meal_choice]" class="form-select">
+            <% Guest.meal_choices.keys.each do |k| %>
+              <option value="<%= k %>"><%= k.titleize %></option>
+            <% end %>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Dietary notes</label>
+          <input type="text" name="new_children[NEW_INDEX][dietary_notes]" placeholder="Allergies, restrictions, etc." class="form-input">
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-4);">
+        <label class="form-check">
+          <input type="hidden" name="new_children[NEW_INDEX][needs_childcare]" value="0">
+          <input type="checkbox" name="new_children[NEW_INDEX][needs_childcare]" value="1">
+          <span class="form-check-label">Needs childcare</span>
+        </label>
+      </div>
+
+      <div style="margin-top: var(--space-4); text-align: right;">
+        <button type="button" class="btn btn-sm" style="color: var(--color-error);"
+          data-action="guests#remove">Remove</button>
+      </div>
+    </div>
+  </template>
+</div>

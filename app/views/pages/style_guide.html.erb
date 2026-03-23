@@ -1,0 +1,480 @@
+<style>
+  /* Guide-specific demo styles only — component styles live in wedding.css */
+  .guide {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: var(--space-16) var(--space-8);
+  }
+
+  .guide-header {
+    text-align: center;
+    margin-bottom: var(--space-24);
+    padding-bottom: var(--space-16);
+    border-bottom: var(--border-thin);
+  }
+
+  .guide-header h1 {
+    font-family: var(--font-script);
+    font-size: var(--text-hero);
+    font-weight: 400;
+    color: var(--color-text-primary);
+    line-height: 1;
+    margin-bottom: var(--space-4);
+  }
+
+  .guide-header p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: var(--text-lg);
+    color: var(--color-text-highlight);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .section {
+    margin-bottom: var(--space-24);
+  }
+
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .section-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-highlight);
+    font-style: italic;
+    margin-bottom: var(--space-6);
+  }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .swatch {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: var(--border-thin);
+  }
+
+  .swatch-color {
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .swatch-info {
+    padding: var(--space-3);
+    background: var(--color-bg-secondary);
+  }
+
+  .swatch-name {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    display: block;
+    margin-bottom: var(--space-1);
+  }
+
+  .swatch-var {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    display: block;
+    word-break: break-all;
+  }
+
+  .swatch-hex {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-highlight);
+    display: block;
+    margin-top: var(--space-1);
+  }
+
+  .type-specimen {
+    margin-bottom: var(--space-8);
+    padding: var(--space-8);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+  }
+
+  .type-specimen-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .component-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: center;
+    margin-bottom: var(--space-6);
+  }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .demo-form {
+    max-width: 480px;
+  }
+
+  .demo-layout-box {
+    text-align: center;
+    margin: var(--space-12) 0;
+  }
+
+  @media (max-width: 640px) {
+    .demo-grid { grid-template-columns: 1fr; }
+    .guide { padding: var(--space-8) var(--space-4); }
+  }
+</style>
+
+<div class="guide" id="styleGuide">
+  <header class="guide-header">
+    <h1><%= WEDDING[:couple_names] %></h1>
+    <p>Wedding Style Guide — September 2025</p>
+  </header>
+
+  <!-- COLORS -->
+  <section class="section">
+    <h2 class="section-title">Color Palette</h2>
+    <p class="section-note">Warm cream backgrounds, dark text for legibility, warm brown for highlights and accents.</p>
+
+    <h3 style="font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-6) 0 var(--space-3); letter-spacing: var(--tracking-wider); text-transform: uppercase;">Backgrounds</h3>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-bg-primary);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Primary BG</span>
+          <span class="swatch-var">--color-bg-primary</span>
+          <span class="swatch-hex">#FAF8F5</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-bg-secondary);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Secondary BG</span>
+          <span class="swatch-var">--color-bg-secondary</span>
+          <span class="swatch-hex">#F2EDE8</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-bg-tertiary);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Tertiary BG</span>
+          <span class="swatch-var">--color-bg-tertiary</span>
+          <span class="swatch-hex">#EDE7E0</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-bg-input);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Input BG</span>
+          <span class="swatch-var">--color-bg-input</span>
+          <span class="swatch-hex">#FFFFFF</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-6) 0 var(--space-3); letter-spacing: var(--tracking-wider); text-transform: uppercase;">Text & Highlights</h3>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-text-primary);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Primary Text</span>
+          <span class="swatch-var">--color-text-primary</span>
+          <span class="swatch-hex">#2C2C2C</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-text-highlight);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Highlight</span>
+          <span class="swatch-var">--color-text-highlight</span>
+          <span class="swatch-hex">#4A4A4A</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-text-accent);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Accent Text</span>
+          <span class="swatch-var">--color-text-accent</span>
+          <span class="swatch-hex">#3D3D3D</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-text-secondary);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Secondary Text</span>
+          <span class="swatch-var">--color-text-secondary</span>
+          <span class="swatch-hex">#5A5A5A</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-text-muted);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Muted Text</span>
+          <span class="swatch-var">--color-text-muted</span>
+          <span class="swatch-hex">#8A8A8A</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-6) 0 var(--space-3); letter-spacing: var(--tracking-wider); text-transform: uppercase;">Status</h3>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-success);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Success</span>
+          <span class="swatch-var">--color-success</span>
+          <span class="swatch-hex">#2E7D4A</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-warning);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Warning</span>
+          <span class="swatch-var">--color-warning</span>
+          <span class="swatch-hex">#B8860B</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: var(--color-error);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Error</span>
+          <span class="swatch-var">--color-error</span>
+          <span class="swatch-hex">#A04040</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section class="section">
+    <h2 class="section-title">Typography</h2>
+    <p class="section-note">Great Vibes for names & display, Playfair Display for everything else.</p>
+
+    <div class="type-specimen">
+      <div class="type-specimen-label">Script Display — Great Vibes</div>
+      <div class="type-script"><%= WEDDING[:couple_names] %></div>
+    </div>
+
+    <div class="type-specimen">
+      <div class="type-specimen-label">Serif Display — Playfair Display Light Italic</div>
+      <div class="type-serif-display">20 <span style="opacity: 0.6;">——</span> 21</div>
+      <div class="type-serif-display" style="margin-top: var(--space-4);">June&emsp;2026</div>
+    </div>
+
+    <div class="type-specimen">
+      <div class="type-specimen-label">Serif Heading — Playfair Display Regular</div>
+      <div class="type-serif-heading">Buttersville, France</div>
+    </div>
+
+    <div class="type-specimen">
+      <div class="type-specimen-label">Serif Body — Playfair Display Light, 18px</div>
+      <div class="type-serif-body">
+        We are delighted to invite you to celebrate our wedding in the south of France.
+        The ceremony will take place at Ch&acirc;teau de Flapjack, a storied estate nestled
+        among rolling hills, followed by a reception under the stars.
+      </div>
+    </div>
+
+    <div class="type-specimen">
+      <div class="type-specimen-label">Small Caps Label — Playfair Display, Uppercase, Wide Tracking</div>
+      <div class="type-serif-small">Ceremony &middot; Reception &middot; Accommodation</div>
+    </div>
+
+    <div class="type-specimen">
+      <div class="type-specimen-label">Monospace — ASCII Art / Lavender Motif</div>
+      <div class="type-mono" style="white-space: pre; line-height: 1.3;">  .=*._=:
+ :-###*==:-..
+.:+=++*###+=:-.
+  ..=:=*-=+++..
+    .:-+++=-.. </div>
+    </div>
+  </section>
+
+  <!-- DATE MOTIF -->
+  <section class="section">
+    <h2 class="section-title">Date Display Motif</h2>
+    <p class="section-note">The em-dash separator from the save-the-date as a reusable pattern.</p>
+
+    <div class="demo-layout-box">
+      <span class="date-display" style="font-size: var(--text-3xl);">
+        20 <span class="sep"></span> 21
+      </span>
+      <br><br>
+      <span class="date-display" style="font-size: var(--text-2xl);">
+        June&emsp;2026
+      </span>
+    </div>
+  </section>
+
+  <div class="divider">a celebration of love</div>
+
+  <!-- BUTTONS -->
+  <section class="section">
+    <h2 class="section-title">Buttons</h2>
+
+    <p class="section-note">Primary for standard actions, Highlight for featured CTAs, Outline & Ghost for secondary actions.</p>
+
+    <div class="component-row">
+      <button class="btn btn-highlight btn-lg">RSVP Now</button>
+      <button class="btn btn-highlight">Confirm</button>
+      <button class="btn btn-highlight btn-sm">Details</button>
+    </div>
+
+    <div class="component-row">
+      <button class="btn btn-primary btn-lg">Save</button>
+      <button class="btn btn-primary">Submit</button>
+      <button class="btn btn-primary btn-sm">Update</button>
+    </div>
+
+    <div class="component-row">
+      <button class="btn btn-outline btn-lg">View Schedule</button>
+      <button class="btn btn-outline">More Info</button>
+      <button class="btn btn-outline btn-sm">Edit</button>
+    </div>
+
+    <div class="component-row">
+      <button class="btn btn-ghost">Back to Home</button>
+      <button class="btn btn-ghost">Cancel</button>
+    </div>
+  </section>
+
+  <!-- BADGES -->
+  <section class="section">
+    <h2 class="section-title">Status Badges</h2>
+    <div class="component-row">
+      <span class="badge badge-confirmed">Confirmed</span>
+      <span class="badge badge-pending">Pending</span>
+      <span class="badge badge-declined">Declined</span>
+    </div>
+  </section>
+
+  <!-- FORM ELEMENTS -->
+  <section class="section">
+    <h2 class="section-title">Form Elements</h2>
+
+    <div class="demo-form">
+      <div class="form-group">
+        <label class="form-label" for="name">Full Name</label>
+        <input class="form-input" type="text" id="name" placeholder="Your name as it appears on your invitation">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input class="form-input" type="email" id="email" placeholder="you@example.com">
+        <div class="form-hint">We'll send confirmation details here.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email-error">With Error State</label>
+        <input class="form-input error" type="email" id="email-error" value="not-an-email">
+        <div class="form-error">Please enter a valid email address.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="dietary">Dietary Requirements</label>
+        <select class="form-select" id="dietary">
+          <option value="">Select an option…</option>
+          <option>No restrictions</option>
+          <option>Vegetarian</option>
+          <option>Vegan</option>
+          <option>Gluten-free</option>
+          <option>Other (please specify)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="notes">Notes</label>
+        <textarea class="form-textarea" id="notes" placeholder="Anything we should know…"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Will you attend?</label>
+        <div class="form-check">
+          <input type="radio" name="rsvp" id="yes" checked>
+          <label class="form-check-label" for="yes">Joyfully accepts</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" name="rsvp" id="no">
+          <label class="form-check-label" for="no">Regretfully declines</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-check">
+          <input type="checkbox" id="shuttle" checked>
+          <label class="form-check-label" for="shuttle">I'd like shuttle transportation</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="plus-one">
+          <label class="form-check-label" for="plus-one">Bringing a guest</label>
+        </div>
+      </div>
+
+      <button class="btn btn-highlight btn-lg" style="width: 100%;">Submit RSVP</button>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section class="section">
+    <h2 class="section-title">Cards</h2>
+
+    <div class="demo-grid">
+      <div class="card">
+        <div class="card-title">Ceremony</div>
+        <div class="card-body">
+          Ch&acirc;teau de Flapjack<br>
+          <span style="color: var(--color-text-muted); font-style: italic;">Saturday, September 20 at 5:00 PM</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Reception</div>
+        <div class="card-body">
+          The Garden Pavilion<br>
+          <span style="color: var(--color-text-muted); font-style: italic;">Saturday, September 20 at 7:30 PM</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTICE -->
+  <section class="section">
+    <h2 class="section-title">Notice / Alert</h2>
+    <div class="notice">
+      Please note that the ceremony will begin promptly at 5:00 PM. Shuttle service will depart from the hotel at 4:15 PM.
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section class="section">
+    <h2 class="section-title">Links</h2>
+    <p style="font-weight: 300; color: var(--color-text-primary);">
+      For accommodation details, see the <a href="#">travel guide</a>.
+      Questions? <a href="#">Contact us</a>.
+    </p>
+  </section>
+
+  <div class="divider">&#10087;</div>
+
+  <footer style="text-align: center; color: var(--color-text-muted); font-style: italic; font-size: var(--text-sm); padding: var(--space-8) 0;">
+    Style Guide — <%= WEDDING[:couple_names] %>, September 2025
+  </footer>
+</div>

@@ -1,0 +1,17 @@
+Dear <%= @invite.name %>,
+
+We are thrilled to invite you to celebrate our wedding in Provence, France!
+
+You're invited to the following events:
+
+<% @events.each do |event| %>
+<%= event.name %>
+<%= event.date&.strftime("%A, %B %d, %Y") %><% if event.start_time %> at <%= event.start_time.strftime("%l:%M %p").strip %><% end %>
+<% if event.location.present? %><%= event.location %><% end %>
+
+<% end %>
+Please let us know if you can join us by visiting:
+<%= @manage_url %>
+
+<%= WEDDING[:couple_names] %>
+example.wedding

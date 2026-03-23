@@ -1,0 +1,22 @@
+<p>Dear <%= @invite.name %>,</p>
+
+<p>We are thrilled to invite you to celebrate our wedding in Provence, France!</p>
+
+<p>You're invited to the following events:</p>
+
+<% @events.each do |event| %>
+  <div class="event-card">
+    <p class="event-name"><%= event.name %></p>
+    <p class="event-details">
+      <%= event.date&.strftime("%A, %B %d, %Y") %>
+      <% if event.start_time %> at <%= event.start_time.strftime("%l:%M %p").strip %><% end %>
+      <% if event.location.present? %><br><%= event.location %><% end %>
+    </p>
+  </div>
+<% end %>
+
+<p>Please let us know if you can join us by clicking the button below.</p>
+
+<div class="btn-wrapper">
+  <a href="<%= @manage_url %>" class="btn">RSVP Now</a>
+</div>

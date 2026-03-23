@@ -1,0 +1,93 @@
+<h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-6);">RSVP Dashboard</h1>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+  <div class="stat-card">
+    <p class="stat-label">Invites</p>
+    <p class="stat-value"><%= @total_invites %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label">Responded</p>
+    <p class="stat-value"><%= @responded_invites %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label">Attending</p>
+    <p class="stat-value text-success"><%= @attending_invites %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label">Declined</p>
+    <p class="stat-value text-error"><%= @declined_invites %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label">Total Guests</p>
+    <p class="stat-value"><%= @total_guests %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label">Response Rate</p>
+    <p class="stat-value"><%= @total_invites > 0 ? "#{(@responded_invites * 100.0 / @total_invites).round}%" : "N/A" %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label">Children</p>
+    <p class="stat-value"><%= @children_count %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label">Need Childcare</p>
+    <p class="stat-value"><%= @childcare_count %></p>
+  </div>
+</div>
+
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3);">By Event</h2>
+<div class="table-wrapper mb-8">
+  <table>
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Date</th>
+        <th class="text-center">Attending</th>
+        <th class="text-center">Declined</th>
+        <th class="text-center">Pending</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @events.each do |event| %>
+        <tr>
+          <td><%= link_to event.name, admin_event_path(event) %></td>
+          <td class="text-muted"><%= event.date&.strftime("%b %d, %Y") %></td>
+          <td class="text-center text-success"><%= event.attending_count %></td>
+          <td class="text-center text-error"><%= event.declined_count %></td>
+          <td class="text-center text-muted"><%= event.pending_count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @meal_counts.any? %>
+  <h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3);">Meal Choices</h2>
+  <div class="card mb-8">
+    <div class="flex flex-wrap gap-4">
+      <% @meal_counts.each do |choice, count| %>
+        <div style="background: var(--color-bg-tertiary); border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3);">
+          <span style="font-weight: 400; color: var(--color-text-highlight);"><%= choice.titleize %></span>
+          <span class="text-muted" style="margin-left: var(--space-1);">(<%= count %>)</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="flex gap-3 flex-wrap">
+  <%= button_to "Export to Google Sheets", admin_export_path, class: "btn btn-primary btn-sm" %>
+  <%= button_to "Send Invitations to All", admin_send_invitations_path, class: "btn btn-primary btn-sm",
+    data: { turbo_confirm: "This will send invitation emails to ALL invites with an email address. Continue?" } %>
+  <%= button_to "Send Reminders to Non-Responders", admin_send_reminders_path, class: "btn btn-primary btn-sm",
+    data: { turbo_confirm: "This will send reminder emails to all invites that haven't responded yet. Continue?" } %>
+</div>
+
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3); margin-top: var(--space-6);">Test Emails</h2>
+<p class="text-muted" style="margin-bottom: var(--space-3); font-size: var(--text-sm);">Send a test email to benensonmacfadyen@gmail.com using the first invite's data.</p>
+<div class="flex gap-3 flex-wrap">
+  <%= button_to "Test Invitation", admin_send_test_email_path(email_type: "invitation"), class: "btn btn-sm", style: "background: var(--color-bg-tertiary); color: var(--color-text-highlight); border: 1px solid var(--color-border);" %>
+  <%= button_to "Test Confirmation", admin_send_test_email_path(email_type: "confirmation"), class: "btn btn-sm", style: "background: var(--color-bg-tertiary); color: var(--color-text-highlight); border: 1px solid var(--color-border);" %>
+  <%= button_to "Test Update Notification", admin_send_test_email_path(email_type: "update_notification"), class: "btn btn-sm", style: "background: var(--color-bg-tertiary); color: var(--color-text-highlight); border: 1px solid var(--color-border);" %>
+  <%= button_to "Test Reminder", admin_send_test_email_path(email_type: "reminder"), class: "btn btn-sm", style: "background: var(--color-bg-tertiary); color: var(--color-text-highlight); border: 1px solid var(--color-border);" %>
+</div>

@@ -1,0 +1,40 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl);">Invites</h1>
+  <%= link_to "New Invite", new_admin_invite_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<%= form_with url: admin_invites_path, method: :get, class: "mb-4" do %>
+  <div class="flex gap-2">
+    <%= text_field_tag :q, params[:q], placeholder: "Search by name or email...", class: "form-input flex-1" %>
+    <%= submit_tag "Search", class: "btn btn-outline btn-sm" %>
+  </div>
+<% end %>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th class="text-center">Guests</th>
+        <th>Responded</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @invites.each do |invite| %>
+        <tr>
+          <td><%= link_to invite.name, admin_invite_path(invite) %></td>
+          <td class="text-muted"><%= invite.email %></td>
+          <td class="text-center"><%= invite.guests.size %></td>
+          <td>
+            <% if invite.responded? %>
+              <span class="text-success">Yes</span>
+            <% else %>
+              <span class="text-muted">No</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

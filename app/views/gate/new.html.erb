@@ -1,0 +1,16 @@
+<div class="text-center">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-2);">Welcome</h1>
+  <p style="color: var(--color-text-secondary); margin-bottom: var(--space-8);">Please enter your invite code to continue.</p>
+
+  <%= form_with url: gate_path, method: :post, class: "space-y-4" do |f| %>
+    <div>
+      <%= f.text_field :code,
+        placeholder: "Invite code",
+        class: "form-input text-center text-lg",
+        autofocus: true,
+        autocomplete: "off" %>
+    </div>
+    <%= f.submit "Enter",
+      class: "btn btn-highlight btn-lg w-full" %>
+  <% end %>
+</div>

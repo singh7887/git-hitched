@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #EDE7E0;
+        font-family: Georgia, 'Times New Roman', serif;
+        color: #2C2C2C;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      .email-wrapper {
+        width: 100%;
+        background-color: #EDE7E0;
+        padding: 32px 0;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #FAF8F5;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .email-header {
+        background-color: #F2EDE8;
+        text-align: center;
+        padding: 32px 24px 24px;
+        border-bottom: 1px solid #D9D3CC;
+      }
+      .email-header h1 {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 36px;
+        font-weight: 400;
+        color: #2C2C2C;
+        margin: 0;
+        letter-spacing: 0.02em;
+      }
+      .email-body {
+        padding: 32px 24px;
+      }
+      .email-body p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #2C2C2C;
+        margin: 0 0 16px;
+      }
+      .email-body h2 {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 22px;
+        font-weight: 600;
+        color: #3D3D3D;
+        margin: 24px 0 12px;
+      }
+      .event-card {
+        background-color: #F2EDE8;
+        border: 1px solid #D9D3CC;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+      .event-name {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #3D3D3D;
+        margin: 0 0 4px;
+      }
+      .event-details {
+        font-size: 14px;
+        color: #5A5A5A;
+        margin: 0;
+      }
+      .guest-section {
+        margin-bottom: 20px;
+      }
+      .guest-name {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #3D3D3D;
+        margin: 0 0 8px;
+      }
+      .rsvp-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 8px;
+      }
+      .rsvp-table td {
+        padding: 6px 8px;
+        font-size: 14px;
+        border-bottom: 1px solid #D9D3CC;
+      }
+      .rsvp-table td:first-child {
+        color: #5A5A5A;
+      }
+      .rsvp-attending {
+        color: #2E7D4A;
+        font-weight: 600;
+      }
+      .rsvp-declined {
+        color: #A04040;
+      }
+      .rsvp-pending {
+        color: #8A8A8A;
+        font-style: italic;
+      }
+      .meal-info {
+        font-size: 14px;
+        color: #5A5A5A;
+        margin: 4px 0 0;
+      }
+      .btn {
+        display: inline-block;
+        background-color: #6B5B4E;
+        color: #FFFFFF !important;
+        text-decoration: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: 'Playfair Display', Georgia, serif;
+        letter-spacing: 0.02em;
+      }
+      .btn-wrapper {
+        text-align: center;
+        margin: 28px 0 8px;
+      }
+      .email-footer {
+        text-align: center;
+        padding: 20px 24px;
+        border-top: 1px solid #D9D3CC;
+      }
+      .email-footer p {
+        font-size: 13px;
+        color: #8A8A8A;
+        margin: 0 0 4px;
+      }
+      .email-footer a {
+        color: #4A4A4A;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="email-wrapper">
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+          <td align="center" style="padding: 32px 16px;">
+            <div class="email-container">
+              <div class="email-header">
+                <h1><%= WEDDING[:couple_names] %></h1>
+              </div>
+              <div class="email-body">
+                <%= yield %>
+              </div>
+              <div class="email-footer">
+                <p><a href="https://example.wedding">example.wedding</a></p>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

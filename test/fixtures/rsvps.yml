@@ -1,0 +1,9 @@
+mike_ceremony:
+  guest: mike_johnson
+  event: ceremony
+  attending: true
+
+mike_reception:
+  guest: mike_johnson
+  event: reception
+  attending: true

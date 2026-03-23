@@ -1,0 +1,26 @@
+<h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-6);">Import from Google Sheets</h1>
+
+<div class="max-w-lg">
+  <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+    Paste the URL of a Google Sheet with the following columns:
+  </p>
+  <div class="code-block" style="margin-bottom: var(--space-4);">
+    name, email
+  </div>
+  <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-2);">
+    Each row creates one invite with a primary guest.
+    Guests can add additional members to their invite when they RSVP.
+  </p>
+  <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-6);">
+    The sheet must be published to the web or shared as "Anyone with the link can view."
+  </p>
+
+  <%= form_with url: admin_import_path, method: :post, class: "space-y-4" do |f| %>
+    <div>
+      <label class="form-label">Google Sheets URL</label>
+      <%= f.url_field :sheet_url, value: @sheet_url, placeholder: "https://docs.google.com/spreadsheets/d/...",
+        class: "form-input", style: "width: 100%;" %>
+    </div>
+    <%= f.submit "Import", class: "btn btn-primary btn-sm" %>
+  <% end %>
+</div>

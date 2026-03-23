@@ -1,0 +1,49 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl);"><%= @guest.full_name %></h1>
+  <div class="flex gap-2">
+    <%= link_to "Edit", edit_admin_guest_path(@guest), class: "btn btn-outline btn-sm" %>
+    <%= button_to "Delete", admin_guest_path(@guest), method: :delete,
+      data: { turbo_confirm: "Are you sure?" },
+      class: "btn btn-danger btn-sm" %>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 gap-4 mb-6" style="font-size: var(--text-sm);">
+  <div><span class="text-muted">Invite:</span> <%= link_to @guest.invite.name, admin_invite_path(@guest.invite) %></div>
+  <div><span class="text-muted">Meal:</span> <%= @guest.meal_choice.titleize %></div>
+  <div><span class="text-muted">Dietary Notes:</span> <%= @guest.dietary_notes.presence || "None" %></div>
+  <div><span class="text-muted">Primary Contact:</span> <%= @guest.is_primary? ? "Yes" : "No" %></div>
+  <div><span class="text-muted">Child:</span> <%= @guest.is_child? ? "Yes" : "No" %></div>
+  <% if @guest.is_child? && @guest.age.present? %>
+    <div><span class="text-muted">Age:</span> <%= @guest.age %></div>
+  <% end %>
+  <div><span class="text-muted">Needs Childcare:</span> <%= @guest.needs_childcare? ? "Yes" : "No" %></div>
+</div>
+
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3);">RSVPs</h2>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Response</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @guest.rsvps.includes(:event).each do |rsvp| %>
+        <tr>
+          <td><%= rsvp.event.name %></td>
+          <td>
+            <% if rsvp.attending.nil? %>
+              <span class="text-muted">No response</span>
+            <% elsif rsvp.attending? %>
+              <span class="text-success">Attending</span>
+            <% else %>
+              <span class="text-error">Declined</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

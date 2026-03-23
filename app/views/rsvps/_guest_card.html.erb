@@ -1,0 +1,38 @@
+<div class="card" style="margin-bottom: var(--space-6);" data-guest-card>
+  <input type="hidden" name="guests[<%= guest.id %>][_destroy]" value="0" data-destroy-field>
+
+  <div class="flex items-center justify-between" style="margin-bottom: var(--space-4);">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" style="flex: 1;">
+      <div>
+        <label class="form-label">First name</label>
+        <%= text_field_tag "guests[#{guest.id}][first_name]", guest.first_name, class: "form-input", required: true %>
+      </div>
+      <div>
+        <label class="form-label">Last name</label>
+        <%= text_field_tag "guests[#{guest.id}][last_name]", guest.last_name, class: "form-input" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+    <div>
+      <label class="form-label">Meal preference</label>
+      <%= select_tag "guests[#{guest.id}][meal_choice]",
+        options_for_select(Guest.meal_choices.keys.map { |k| [k.titleize, k] }, guest.meal_choice),
+        class: "form-select" %>
+    </div>
+    <div>
+      <label class="form-label">Dietary notes</label>
+      <%= text_field_tag "guests[#{guest.id}][dietary_notes]", guest.dietary_notes,
+        placeholder: "Allergies, restrictions, etc.",
+        class: "form-input" %>
+    </div>
+  </div>
+
+  <% if guests_count > 1 %>
+    <div style="margin-top: var(--space-4); text-align: right;">
+      <button type="button" class="btn btn-sm" style="color: var(--color-error);"
+        data-action="guests#remove">Remove</button>
+    </div>
+  <% end %>
+</div>

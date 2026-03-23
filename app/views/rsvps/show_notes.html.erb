@@ -1,0 +1,18 @@
+<div>
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-1);">A Note for <%= WEDDING[:couple_names] %></h1>
+  <p style="color: var(--color-text-secondary); margin-bottom: var(--space-8);">
+    If you'd like to leave us a message, well-wish, or anything else, we'd love to hear it!
+  </p>
+
+  <%= form_with url: rsvp_update_path(invite_id: @invite.id, step: "notes"), method: :post do |f| %>
+    <div class="card" style="margin-bottom: var(--space-6);">
+      <label class="form-label" for="invite_notes">Your message (optional)</label>
+      <textarea name="invite[notes]" id="invite_notes" class="form-input" rows="5" placeholder="Write us a note..."><%= @invite.notes %></textarea>
+    </div>
+
+    <div class="flex justify-between items-center" style="margin-top: var(--space-6);">
+      <%= link_to "&larr; Back to Events".html_safe, rsvp_show_path(invite_id: @invite.id, step: "events"), class: "btn btn-outline" %>
+      <%= f.submit "Save RSVP", class: "btn btn-highlight btn-lg" %>
+    </div>
+  <% end %>
+</div>

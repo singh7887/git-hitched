@@ -1,0 +1,27 @@
+databases:
+  - name: git-hitched-db
+    plan: basic-256mb
+    databaseName: git_hitched_production
+    ipAllowList: []
+
+services:
+  - type: web
+    name: git-hitched
+    runtime: ruby
+    plan: starter
+    buildCommand: bundle install && bundle exec rails assets:precompile
+    preDeployCommand: bundle exec rails db:migrate
+    startCommand: bundle exec thrust bundle exec puma -C config/puma.rb
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: git-hitched-db
+          property: connectionString
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - key: RAILS_SERVE_STATIC_FILES
+        value: "true"

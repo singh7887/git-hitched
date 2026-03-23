@@ -1,0 +1,31 @@
+<div class="text-center py-5">
+  <p class="type-serif-small animate-fade-in-up" style="margin-bottom: var(--space-8); letter-spacing: 0.1em;">YOU ARE INVITED TO CELEBRATE THE WEDDING OF</p>
+
+  <h1 class="type-script animate-fade-in-up delay-2" style="margin-bottom: var(--space-8);">
+    <%= WEDDING[:partner_1] %><br>
+    <span style="font-size: 0.5em; font-style: italic;">&</span><br>
+    <%= WEDDING[:partner_2] %>
+  </h1>
+
+  <div class="divider divider-animated animate-fade-in delay-4">a celebration of love</div>
+
+  <p class="type-serif-small animate-fade-in-up delay-5" style="margin-bottom: var(--space-2); letter-spacing: 0.05em;">SATURDAY, THE TWENTIETH OF SEPTEMBER</p>
+  <p class="animate-fade-in-up delay-5" style="font-size: var(--text-xl); color: var(--color-text-secondary); margin-bottom: var(--space-6);">Two Thousand Twenty-Five</p>
+
+  <p class="animate-fade-in-up delay-6" style="font-size: var(--text-lg); color: var(--color-text-primary); margin-bottom: var(--space-1);">5 o'clock in the evening</p>
+  <p class="animate-fade-in-up delay-6" style="font-size: var(--text-lg); color: var(--color-text-secondary); margin-bottom: var(--space-1);">Château de Flapjack</p>
+  <p class="animate-fade-in-up delay-7" style="font-size: var(--text-base); color: var(--color-text-muted); margin-bottom: var(--space-8);">Route de Croissant, 13990 Buttersville, France</p>
+
+  <p class="type-serif-small animate-fade-in-up delay-7" style="margin-bottom: var(--space-2); letter-spacing: 0.05em;">FOLLOWED BY A RECEPTION OF</p>
+  <p class="animate-fade-in-up delay-8" style="font-size: var(--text-xl); color: var(--color-text-secondary); margin-bottom: var(--space-12);">Dinner & Dancing</p>
+
+  <% if page_enabled?(:rsvp) %>
+    <%= link_to "RSVP", rsvp_path, class: "btn btn-highlight btn-lg animate-scale-in delay-8" %>
+  <% else %>
+    <div class="card animate-fade-in-up delay-8" style="max-width: 32rem; margin: 0 auto;">
+      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); line-height: 1.6;">
+        We'll be updating this website over the coming weeks with more details about the weekend and a form to RSVP. In the meantime, check out the <strong><%= link_to "Travel", travel_path %></strong> and <strong><%= link_to "Stay", stay_path %></strong> pages to start planning your trip.
+      </p>
+    </div>
+  <% end %>
+</div>

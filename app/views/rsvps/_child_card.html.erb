@@ -1,0 +1,57 @@
+<div class="card" style="margin-bottom: var(--space-6);" data-guest-card>
+  <input type="hidden" name="guests[<%= child.id %>][_destroy]" value="0" data-destroy-field>
+  <input type="hidden" name="guests[<%= child.id %>][is_child]" value="1">
+
+  <div class="flex items-center justify-between" style="margin-bottom: var(--space-4);">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" style="flex: 1;">
+      <div>
+        <label class="form-label">Child's first name</label>
+        <%= text_field_tag "guests[#{child.id}][first_name]", child.first_name, class: "form-input", required: true %>
+      </div>
+      <div>
+        <label class="form-label">Child's last name</label>
+        <%= text_field_tag "guests[#{child.id}][last_name]", child.last_name, class: "form-input" %>
+      </div>
+      <div>
+        <label class="form-label">Age</label>
+        <%= number_field_tag "guests[#{child.id}][age]", child.age, class: "form-input", min: 0, max: 17, required: true %>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+    <div>
+      <label class="form-label">Meal preference</label>
+      <%= select_tag "guests[#{child.id}][meal_choice]",
+        options_for_select(Guest.meal_choices.keys.map { |k| [k.titleize, k] }, child.meal_choice),
+        class: "form-select" %>
+    </div>
+    <div>
+      <label class="form-label">Dietary notes</label>
+      <%= text_field_tag "guests[#{child.id}][dietary_notes]", child.dietary_notes,
+        placeholder: "Allergies, restrictions, etc.",
+        class: "form-input" %>
+    </div>
+  </div>
+
+  <div style="margin-top: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
+    <label class="form-check" style="margin: 0;">
+      <input type="hidden" name="guests[<%= child.id %>][needs_childcare]" value="0">
+      <%= check_box_tag "guests[#{child.id}][needs_childcare]", "1", child.needs_childcare? %>
+      <span class="form-check-label">Needs childcare</span>
+    </label>
+    <span class="tooltip-wrap" style="position: relative; display: inline-block;">
+      <button type="button" class="tooltip-trigger" onclick="this.parentElement.classList.toggle('tooltip-open')"
+        style="background: none; border: none; color: var(--color-text-highlight, #1f2937); cursor: pointer; font-size: 0.85rem; text-decoration: underline; padding: 0; font-weight: 500;">More info</button>
+      <span class="tooltip-content" style="display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--color-surface-dark, #1f2937); color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.8rem; line-height: 1.4; width: 240px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10;">
+        We're happy to arrange supervised childcare during the ceremony and reception so you can enjoy the evening.
+        <span style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--color-surface-dark, #1f2937);"></span>
+      </span>
+    </span>
+  </div>
+
+  <div style="margin-top: var(--space-4); text-align: right;">
+    <button type="button" class="btn btn-sm" style="color: var(--color-error);"
+      data-action="guests#remove">Remove</button>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+welcome:
+  name: Welcome Dinner
+  date: 2025-09-19
+  start_time: "17:00"
+  location: Château de Flapjack
+  description: A relaxed welcome evening at the Château.
+
+ceremony:
+  name: Ceremony
+  date: 2025-09-20
+  start_time: "17:00"
+  location: Château de Flapjack
+  description: The wedding ceremony.
+
+reception:
+  name: Reception
+  date: 2025-09-20
+  start_time: "19:00"
+  location: TBD
+  description: Dinner and dancing.
+
+recovery:
+  name: Recovery
+  date: 2025-09-21
+  start_time: "12:00"
+  location: TBD
+  description: A relaxed afternoon of celebration.
