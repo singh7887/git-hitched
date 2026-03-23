@@ -12,6 +12,7 @@ const GROUPS = {
   pages: ['home', 'events', 'travel', 'stay', 'explore', 'attire', 'faq', 'rsvp'],
   rsvp: ['rsvp-lookup', 'rsvp-guests', 'rsvp-events'],
   hotel: ['hotel-booking'],
+  admin: ['admin-dashboard', 'admin-invites', 'admin-guests', 'admin-events', 'admin-hotel-bookings', 'admin-import'],
 };
 
 const STATIC_PAGES = [
@@ -98,6 +99,36 @@ async function captureRsvpFlow(page) {
   await screenshot(page, 'rsvp-events');
 }
 
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'password';
+
+const ADMIN_PAGES = [
+  { name: 'admin-dashboard', path: '/admin', description: 'Admin dashboard' },
+  { name: 'admin-invites', path: '/admin/invites', description: 'Admin invites' },
+  { name: 'admin-guests', path: '/admin/guests', description: 'Admin guests' },
+  { name: 'admin-events', path: '/admin/events', description: 'Admin events' },
+  { name: 'admin-hotel-bookings', path: '/admin/hotel_bookings', description: 'Admin hotel bookings' },
+  { name: 'admin-import', path: '/admin/import', description: 'Admin CSV import' },
+];
+
+async function captureAdmin(page) {
+  console.log('\n--- Admin ---');
+
+  // Authenticate via HTTP basic auth using the extraHTTPHeaders approach
+  const authHeader = 'Basic ' + Buffer.from(`${ADMIN_USER}:${ADMIN_PASSWORD}`).toString('base64');
+  await page.setExtraHTTPHeaders({ 'Authorization': authHeader });
+
+  for (const { name, path: adminPath, description } of ADMIN_PAGES) {
+    console.log(`Capturing ${description} (${adminPath})...`);
+    await page.goto(`${BASE_URL}${adminPath}`, { waitUntil: 'networkidle2' });
+    await new Promise(r => setTimeout(r, 500));
+    await screenshot(page, name);
+  }
+
+  // Clear the auth header
+  await page.setExtraHTTPHeaders({});
+}
+
 async function captureHotelBooking(page) {
   console.log('\n--- Hotel Booking ---');
   console.log('Capturing hotel booking page...');
@@ -122,10 +153,11 @@ async function run() {
     }
   }
 
-  const needsAuth = [...targets].some(t => t !== 'gate');
+  const needsAuth = [...targets].some(t => t !== 'gate' && !t.startsWith('admin-'));
   const needsPages = STATIC_PAGES.some(p => targets.has(p.name));
   const needsRsvp = ['rsvp-lookup', 'rsvp-guests', 'rsvp-events'].some(t => targets.has(t));
   const needsHotel = targets.has('hotel-booking');
+  const needsAdmin = GROUPS.admin.some(t => targets.has(t));
 
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   const browser = await puppeteer.launch({ headless: true });
@@ -154,6 +186,10 @@ async function run() {
 
   if (needsHotel) {
     await captureHotelBooking(page);
+  }
+
+  if (needsAdmin) {
+    await captureAdmin(page);
   }
 
   await browser.close();

@@ -48,6 +48,24 @@ A complete, self-hosted wedding website you can fork and make your own. Handles 
 ### RSVP Event Selection
 ![RSVP Events](docs/screenshots/rsvp-events.png)
 
+### Admin Dashboard
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+
+### Admin Invites
+![Admin Invites](docs/screenshots/admin-invites.png)
+
+### Admin Guests
+![Admin Guests](docs/screenshots/admin-guests.png)
+
+### Admin Events
+![Admin Events](docs/screenshots/admin-events.png)
+
+### Admin Hotel Bookings
+![Admin Hotel Bookings](docs/screenshots/admin-hotel-bookings.png)
+
+### Admin Import
+![Admin Import](docs/screenshots/admin-import.png)
+
 ## Stack
 
 - Ruby 3.3 / Rails 8.0
