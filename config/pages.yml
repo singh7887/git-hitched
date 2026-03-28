@@ -6,9 +6,9 @@ home: true
 events: true
 travel: true
 stay: true
-explore: false
-attire: false
-faq: false
+explore: true
+attire: true
+faq: true
 our_story: false
 gallery: false
 rsvp: false
