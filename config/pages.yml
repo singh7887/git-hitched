@@ -3,7 +3,7 @@
 # Flip back to true anytime — no code changes needed.
 
 home: true
-events: false
+events: true
 travel: true
 stay: true
 explore: false

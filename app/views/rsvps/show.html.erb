@@ -70,19 +70,9 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label class="form-label">Meal preference</label>
-          <select name="new_guests[NEW_INDEX][meal_choice]" class="form-select">
-            <% Guest.meal_choices.keys.each do |k| %>
-              <option value="<%= k %>"><%= k.titleize %></option>
-            <% end %>
-          </select>
-        </div>
-        <div>
-          <label class="form-label">Dietary notes</label>
-          <input type="text" name="new_guests[NEW_INDEX][dietary_notes]" placeholder="Allergies, restrictions, etc." class="form-input">
-        </div>
+      <div style="margin-top: var(--space-4);">
+        <label class="form-label">Dietary restrictions or allergies</label>
+        <input type="text" name="new_guests[NEW_INDEX][dietary_notes]" placeholder="e.g. gluten-free, nut allergy, vegan…" class="form-input">
       </div>
 
       <div style="margin-top: var(--space-4); text-align: right;">
@@ -112,19 +102,9 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label class="form-label">Meal preference</label>
-          <select name="new_children[NEW_INDEX][meal_choice]" class="form-select">
-            <% Guest.meal_choices.keys.each do |k| %>
-              <option value="<%= k %>"><%= k.titleize %></option>
-            <% end %>
-          </select>
-        </div>
-        <div>
-          <label class="form-label">Dietary notes</label>
-          <input type="text" name="new_children[NEW_INDEX][dietary_notes]" placeholder="Allergies, restrictions, etc." class="form-input">
-        </div>
+      <div style="margin-top: var(--space-4);">
+        <label class="form-label">Dietary restrictions or allergies</label>
+        <input type="text" name="new_children[NEW_INDEX][dietary_notes]" placeholder="e.g. gluten-free, nut allergy, vegan…" class="form-input">
       </div>
 
       <div style="margin-top: var(--space-4);">

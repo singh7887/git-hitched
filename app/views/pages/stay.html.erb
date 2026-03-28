@@ -1,110 +1,70 @@
 <div data-controller="appear">
   <h1 class="type-serif-heading text-center animate-fade-in-up" style="font-size: var(--text-3xl); margin-bottom: var(--space-4);">Where to Stay</h1>
   <p class="text-center animate-fade-in-up delay-1" style="color: var(--color-text-secondary); margin-bottom: var(--space-12); max-width: 36rem; margin-left: auto; margin-right: auto;">
-    The surrounding region offers a beautiful selection of boutique hotels, luxury estates and charming hideaways.
+    We have a room block at the JW Marriott Anaheim Resort — the home base for the entire weekend.
   </p>
 
-  <!-- Recommended Areas -->
-  <section style="margin-bottom: var(--space-12);">
-    <h2 class="type-serif-heading appear" style="font-size: var(--text-xl); margin-bottom: var(--space-6);">Recommended Areas</h2>
-
-    <div class="space-y-4">
-      <div class="card appear">
-        <div class="card-body">
-          <h3 class="card-title" style="font-size: var(--text-lg);">Buttersville</h3>
-          <p style="color: var(--color-text-secondary);">The nearest town to the venue with charming shops, cafes and easy access.</p>
-        </div>
-      </div>
-
-      <div class="card appear appear-delay-1">
-        <div class="card-body">
-          <h3 class="card-title" style="font-size: var(--text-lg);">Nearby Town A</h3>
-          <p style="color: var(--color-text-secondary);">A charming, walkable town filled with markets, restaurants and cobblestone streets.</p>
-        </div>
-      </div>
-
-      <div class="card appear appear-delay-2">
-        <div class="card-body">
-          <h3 class="card-title" style="font-size: var(--text-lg);">Nearby Town B</h3>
-          <p style="color: var(--color-text-secondary);">A picturesque village known for its relaxed, elegant atmosphere.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <% if page_enabled?(:hotel) %>
-  <!-- Hotel Block -->
+  <!-- JW Marriott Room Block -->
   <section style="margin-bottom: var(--space-12);">
     <h2 class="type-serif-heading appear" style="font-size: var(--text-xl); margin-bottom: var(--space-6);">Our Hotel Block</h2>
 
     <div class="card appear" style="border: 2px solid var(--color-accent); overflow: hidden;">
       <div class="card-body">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-3);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4);">
           <div>
-            <h3 class="card-title" style="font-size: var(--text-lg);">The Grandview Hotel &amp; Spa</h3>
-            <p style="color: var(--color-text-muted); margin-bottom: var(--space-1);">123 Main Street, Buttersville</p>
-            <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">5-minute drive to the venue</p>
+            <h3 class="card-title" style="font-size: var(--text-lg);">JW Marriott Anaheim Resort</h3>
+            <p style="color: var(--color-text-muted); margin-bottom: var(--space-1);">1775 S Disneyland Dr, Anaheim, CA 92802</p>
+            <p style="color: var(--color-text-muted);">Adjacent to Disneyland · 20 min from Singh Sabha Gurudwara, Buena Park</p>
           </div>
-          <span style="background: var(--color-accent); color: white; font-size: var(--text-xs); font-weight: 600; padding: 2px 10px; border-radius: 999px; white-space: nowrap;">Special Rate</span>
+          <span style="background: var(--color-accent); color: white; font-size: var(--text-xs); font-weight: 600; padding: 2px 10px; border-radius: 999px; white-space: nowrap;">Group Rate</span>
         </div>
-        <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-3);">
-          <span>Pool</span>
-          <span>Restaurant</span>
+
+        <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+          <span>Pool & Spa</span>
+          <span>Multiple Restaurants</span>
           <span>Free WiFi</span>
-          <span>Parking</span>
+          <span>Valet & Self-Parking</span>
         </div>
-        <p style="font-size: var(--text-sm); color: var(--color-text-primary); margin-bottom: var(--space-3);">
-          We've reserved a block of rooms at a discounted rate of <strong>$<%= HotelBooking::NIGHTLY_RATE_CENTS / 100 %>/night</strong> for our guests.
-          Rooms are limited, so we encourage you to book early.
+
+        <p style="font-size: var(--text-sm); color: var(--color-text-primary); margin-bottom: var(--space-2);">
+          We've reserved a room block at a discounted group rate for our guests. We recommend checking in <strong>Wednesday, November 25</strong> and checking out <strong>Sunday, November 29</strong> to be present for the full weekend.
         </p>
-        <%= link_to "Book Your Room", new_hotel_booking_path, class: "btn btn-highlight", style: "display: inline-block;" %>
+        <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-4);">
+          Room block availability is limited — book early. The group rate cut-off date will be posted here once confirmed.
+        </p>
+
+        <%# Replace the placeholder href with the actual room block link from JW Marriott once confirmed %>
+        <a href="#" class="btn btn-highlight" style="display: inline-block;" target="_blank" rel="noopener">Book Your Room</a>
       </div>
     </div>
   </section>
-  <% end %>
 
-  <!-- Hotels -->
+  <!-- Additional Accommodations -->
   <section>
-    <h2 class="type-serif-heading appear" style="font-size: var(--text-xl); margin-bottom: var(--space-6);">Accommodations</h2>
+    <h2 class="type-serif-heading appear" style="font-size: var(--text-xl); margin-bottom: var(--space-6);">Other Nearby Options</h2>
 
     <div class="space-y-4">
       <div class="card appear">
         <div class="card-body">
-          <h3 class="card-title" style="font-size: var(--text-lg);">The Grand Hotel</h3>
-          <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">10-minute drive to Château de Flapjack</p>
-          <span style="color: var(--color-accent);">grandhotel.example.com</span>
+          <h3 class="card-title" style="font-size: var(--text-lg);">Disneyland Area Hotels</h3>
+          <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">Walking distance to JW Marriott · Harbor Blvd corridor</p>
+          <p style="color: var(--color-text-secondary); font-size: var(--text-sm);">Plenty of options at varying price points along Harbor Blvd and Katella Ave, all within a few minutes of the wedding venues.</p>
         </div>
       </div>
 
       <div class="card appear appear-delay-1">
         <div class="card-body">
-          <h3 class="card-title" style="font-size: var(--text-lg);">Boutique Inn & Spa</h3>
-          <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">10-minute drive to Château de Flapjack</p>
-          <span style="color: var(--color-accent);">boutiqueinn.example.com</span>
+          <h3 class="card-title" style="font-size: var(--text-lg);">Buena Park Hotels</h3>
+          <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">Near Singh Sabha Gurudwara · 20 min from JW Marriott</p>
+          <p style="color: var(--color-text-secondary); font-size: var(--text-sm);">Convenient if you prefer to be closer to the Gurudwara for the Anand Karaj on Friday. Several mid-range hotels near Knott's Berry Farm on Beach Blvd.</p>
         </div>
       </div>
 
       <div class="card appear appear-delay-2">
         <div class="card-body">
-          <h3 class="card-title" style="font-size: var(--text-lg);">The Country Estate</h3>
-          <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">25-minute drive to Château de Flapjack</p>
-          <span style="color: var(--color-accent);">countryestate.example.com</span>
-        </div>
-      </div>
-
-      <div class="card appear">
-        <div class="card-body">
-          <h3 class="card-title" style="font-size: var(--text-lg);">The Little Hotel</h3>
-          <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">5-minute drive to Château de Flapjack</p>
-          <span style="color: var(--color-accent);">littlehotel.example.com</span>
-        </div>
-      </div>
-
-      <div class="card appear appear-delay-1">
-        <div class="card-body">
-          <h3 class="card-title" style="font-size: var(--text-lg);">Vacation Rentals near Buttersville</h3>
-          <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">5-minute drive to Château de Flapjack</p>
-          <span style="color: var(--color-accent);">airbnb.com</span>
+          <h3 class="card-title" style="font-size: var(--text-lg);">Vacation Rentals</h3>
+          <p style="color: var(--color-text-muted); margin-bottom: var(--space-2);">Great for families and larger groups</p>
+          <p style="color: var(--color-text-secondary); font-size: var(--text-sm);">Airbnb and Vrbo have many options throughout Anaheim, Buena Park, and the surrounding area — a good choice for families or groups of friends traveling together.</p>
         </div>
       </div>
     </div>

@@ -6,10 +6,6 @@ class PagesController < ApplicationController
 
   def events
     @events = Event.order(:sort_order)
-    @welcome = @events.find { |e| e.id == 1 }
-    @ceremony = @events.find { |e| e.id == 2 }
-    @reception = @events.find { |e| e.id == 3 }
-    @recovery = @events.find { |e| e.id == 4 }
   end
 
   def travel

@@ -14,19 +14,11 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-    <div>
-      <label class="form-label">Meal preference</label>
-      <%= select_tag "guests[#{guest.id}][meal_choice]",
-        options_for_select(Guest.meal_choices.keys.map { |k| [k.titleize, k] }, guest.meal_choice),
-        class: "form-select" %>
-    </div>
-    <div>
-      <label class="form-label">Dietary notes</label>
-      <%= text_field_tag "guests[#{guest.id}][dietary_notes]", guest.dietary_notes,
-        placeholder: "Allergies, restrictions, etc.",
-        class: "form-input" %>
-    </div>
+  <div style="margin-top: var(--space-4);">
+    <label class="form-label">Dietary restrictions or allergies</label>
+    <%= text_field_tag "guests[#{guest.id}][dietary_notes]", guest.dietary_notes,
+      placeholder: "e.g. gluten-free, nut allergy, vegan…",
+      class: "form-input" %>
   </div>
 
   <% if guests_count > 1 %>

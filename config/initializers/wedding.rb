@@ -1,7 +1,7 @@
 WEDDING = {
-  couple_names: "Taylor & Robin",
-  partner_1: "Taylor Pepperworth",
-  partner_2: "Robin Snackwell",
-  couple_names_possessive: "Taylor & Robin's",
-  from_email: "Taylor & Robin <rsvp@example.wedding>"
+  couple_names: "Nuvdeep & Gulbir",
+  partner_1: "Nuvdeep Kaur Dhillon",
+  partner_2: "Gulbir Singh Pannu",
+  couple_names_possessive: "Nuvdeep & Gulbir's",
+  from_email: "Nuvdeep & Gulbir <rsvp@example.wedding>"
 }.freeze

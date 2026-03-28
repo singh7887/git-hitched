@@ -1,101 +1,104 @@
 puts "Seeding events..."
 
-welcome = Event.find_or_create_by!(name: "Welcome Dinner")
-welcome.update!(
-  date: Date.new(2025, 9, 19),
+jago = Event.find_or_create_by!(name: "Jago")
+jago.update!(
+  date: Date.new(2026, 11, 25),
   start_time: Time.zone.parse("17:00"),
-  location: "Château de Flapjack",
-  location_url: "#",
-  address: "Route de Croissant, 13990 Buttersville, France",
-  maps_url: "#",
-  time_description: "5:00pm",
-  attire: "Garden Elegance",
-  attire_description: "Elegant, effortless summer attire in soft, warm-weather fabrics.",
-  subtitle: "Friday, September 19",
-  description: "Join us as we gather at the Château for a relaxed welcome — golden light across the vineyards, an aperitif in the gardens and a warm start to the celebrations.",
+  location: "JW Marriott Anaheim Resort",
+  location_url: "https://www.marriott.com/en-us/hotels/laxjo-jw-marriott-anaheim-resort/overview/",
+  address: "1775 S Disneyland Dr, Anaheim, CA 92802",
+  maps_url: "https://maps.google.com/?q=JW+Marriott+Anaheim+Resort",
+  time_description: "5:00 PM",
+  attire: "TBD",
+  attire_description: nil,
+  subtitle: "Wednesday, November 25",
+  description: "The Jago — meaning \"wake up\" — is a joyful pre-wedding celebration filled with music, dancing, and family. Join the Pannu family as we celebrate Gulbir with song, lanterns, and late-night dancing.",
   sort_order: 1,
-  image: "venue4.jpg"
+  image: nil
 )
 
-ceremony = Event.find_or_create_by!(name: "Ceremony")
-ceremony.update!(
-  date: Date.new(2025, 9, 20),
-  start_time: Time.zone.parse("17:00"),
-  location: "Château de Flapjack",
-  location_url: "#",
-  address: "Route de Croissant, 13990 Buttersville, France",
-  maps_url: "#",
-  time_description: "Please arrive at 4:30pm for a 5:00pm Ceremony",
-  attire: "Black Tie Optional",
+thanksgiving = Event.find_or_create_by!(name: "Thanksgiving Day")
+thanksgiving.update!(
+  date: Date.new(2026, 11, 26),
+  start_time: nil,
+  location: nil,
+  location_url: nil,
+  address: nil,
+  maps_url: nil,
+  time_description: "All day",
+  attire: "Casual",
   attire_description: nil,
-  subtitle: "Saturday, September 20",
-  description: "The wedding ceremony at Château de Flapjack.",
+  subtitle: "Thursday, November 26",
+  description: "Happy Thanksgiving! Guests are welcome to explore Anaheim and Orange County on their own. If you'd like to spend the day with the Pannu family, we are thinking of organizing something at the beach — stay tuned for details.",
   sort_order: 2,
-  image: "venue6.jpg"
+  image: nil
+)
+
+ceremony = Event.find_or_create_by!(name: "Anand Karaj")
+ceremony.update!(
+  date: Date.new(2026, 11, 27),
+  start_time: Time.zone.parse("08:00"),
+  location: "Singh Sabha Gurudwara",
+  location_url: "#",
+  address: "Buena Park, CA",
+  maps_url: "#",
+  time_description: "8:00 AM depart hotel · 9:00 AM Milni · 10:00 AM Anand Karaj · 12:00 PM Langar",
+  attire: "Modest formal — head covering required",
+  attire_description: "Head coverings are required inside the Gurudwara and will be available at the entrance. Please dress modestly (covered shoulders and knees) and wear socks — shoes are removed at the door.",
+  subtitle: "Friday, November 27",
+  description: "The Anand Karaj — \"blissful union\" — is the Sikh wedding ceremony held in the presence of the Guru Granth Sahib, featuring Kirtan (devotional music) and four lavan (rounds) representing the couple's spiritual journey. Following the ceremony, all guests are warmly invited to Langar, a vegetarian community meal served in the tent.",
+  sort_order: 3,
+  image: nil
+)
+
+brunch = Event.find_or_create_by!(name: "Brunch")
+brunch.update!(
+  date: Date.new(2026, 11, 28),
+  start_time: Time.zone.parse("10:00"),
+  location: "JW Marriott Anaheim Resort",
+  location_url: "https://www.marriott.com/en-us/hotels/laxjo-jw-marriott-anaheim-resort/overview/",
+  address: "1775 S Disneyland Dr, Anaheim, CA 92802",
+  maps_url: "https://maps.google.com/?q=JW+Marriott+Anaheim+Resort",
+  time_description: "10:00 AM – 12:00 PM",
+  attire: "Casual",
+  attire_description: nil,
+  subtitle: "Saturday, November 28",
+  description: "Wind down the weekend with a relaxed farewell brunch. Come as you are, relive the weekend's highlights, and say your goodbyes before heading home.",
+  sort_order: 4,
+  image: nil
 )
 
 reception = Event.find_or_create_by!(name: "Reception")
 reception.update!(
-  date: Date.new(2025, 9, 20),
-  start_time: Time.zone.parse("19:00"),
-  location: nil,
-  location_url: nil,
-  address: nil,
-  maps_url: nil,
-  time_description: "Following the Ceremony",
-  attire: "Black Tie Optional",
+  date: Date.new(2026, 11, 28),
+  start_time: Time.zone.parse("17:00"),
+  location: "JW Marriott Anaheim Resort",
+  location_url: "https://www.marriott.com/en-us/hotels/laxjo-jw-marriott-anaheim-resort/overview/",
+  address: "1775 S Disneyland Dr, Anaheim, CA 92802",
+  maps_url: "https://maps.google.com/?q=JW+Marriott+Anaheim+Resort",
+  time_description: "5:00 PM",
+  attire: "TBD",
   attire_description: nil,
-  subtitle: "Saturday, September 20",
-  description: "After the aperitif, guests will be invited to continue the evening at a second location, where the celebrations will unfold with dinner and dancing.",
-  sort_order: 3,
-  image: "reception.png"
-)
-
-recovery = Event.find_or_create_by!(name: "Recovery")
-recovery.update!(
-  date: Date.new(2025, 9, 21),
-  start_time: Time.zone.parse("12:00"),
-  location: nil,
-  location_url: nil,
-  address: nil,
-  maps_url: nil,
-  time_description: nil,
-  attire: "Casual Elegance",
-  attire_description: nil,
-  subtitle: "Sunday, September 21",
-  description: "A relaxed afternoon — slow, sunlit and celebratory. Details to follow.",
-  sort_order: 4,
-  image: "venue5.jpg"
+  subtitle: "Saturday, November 28",
+  description: "Celebrate the newlyweds at an evening reception featuring dinner, dancing, and toasts. Join the Pannu family as we close out the weekend in style.",
+  sort_order: 5,
+  image: nil
 )
 
 puts "Seeding test invites and guests..."
 
-taylor = Invite.find_or_create_by!(email: "taylor@example.com") do |i|
-  i.name = "Taylor's Test Family"
+pannu = Invite.find_or_create_by!(email: "test@example.com") do |i|
+  i.name = "Pannu Test Family"
 end
 
-Guest.find_or_create_by!(invite: taylor, first_name: "Taylor", last_name: "Pepperworth") do |g|
+Guest.find_or_create_by!(invite: pannu, first_name: "Gulbir", last_name: "Pannu") do |g|
   g.is_primary = true
 end
 
-Guest.find_or_create_by!(invite: taylor, first_name: "Taylor's", last_name: "Guest")
+Guest.find_or_create_by!(invite: pannu, first_name: "Test", last_name: "Guest")
 
-[ welcome, ceremony, reception, recovery ].each do |event|
-  EventInvite.find_or_create_by!(invite: taylor, event: event)
-end
-
-robin = Invite.find_or_create_by!(email: "robin@example.com") do |i|
-  i.name = "Robin's Test Family"
-end
-
-Guest.find_or_create_by!(invite: robin, first_name: "Robin", last_name: "Snackwell") do |g|
-  g.is_primary = true
-end
-
-Guest.find_or_create_by!(invite: robin, first_name: "Robin's", last_name: "Guest")
-
-[ welcome, ceremony, reception, recovery ].each do |event|
-  EventInvite.find_or_create_by!(invite: robin, event: event)
+[ jago, thanksgiving, ceremony, brunch, reception ].each do |event|
+  EventInvite.find_or_create_by!(invite: pannu, event: event)
 end
 
 puts "Seed complete! #{Invite.count} invites, #{Guest.count} guests, #{Event.count} events."
