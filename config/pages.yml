@@ -9,7 +9,7 @@ stay: true
 explore: true
 attire: true
 faq: true
-our_story: false
-gallery: false
+our_story: true
+gallery: true
 rsvp: false
 hotel: false

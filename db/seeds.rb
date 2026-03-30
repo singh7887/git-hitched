@@ -12,7 +12,7 @@ jago.update!(
   attire: "Traditional Punjabi wear · bright colors encouraged",
   attire_description: "Think bold, fun, and energetic — bright kurtas, lehengas, salwar kameez. Non-Punjabi guests: colorful semi-formal or cocktail attire.",
   subtitle: "Wednesday, November 25",
-  description: "The Jago — meaning \"wake up\" — is a joyful pre-wedding celebration filled with music, dancing, and family. Join the Pannu family as we celebrate Gulbir with song, lanterns, and late-night dancing.",
+  description: "The Jago — meaning \"wake up\" — is a joyful pre-wedding celebration filled with music, dancing, and family. Join the Pannu and Dhillon families as we celebrate Nuvdeep and Gulbir with song, lanterns, and late-night dancing.",
   sort_order: 1,
   image: nil
 )
@@ -51,22 +51,7 @@ ceremony.update!(
   image: nil
 )
 
-brunch = Event.find_or_create_by!(name: "Brunch")
-brunch.update!(
-  date: Date.new(2026, 11, 28),
-  start_time: Time.zone.parse("10:00"),
-  location: "JW Marriott Anaheim Resort",
-  location_url: "https://www.marriott.com/en-us/hotels/laxjo-jw-marriott-anaheim-resort/overview/",
-  address: "1775 S Disneyland Dr, Anaheim, CA 92802",
-  maps_url: "https://maps.google.com/?q=JW+Marriott+Anaheim+Resort",
-  time_description: "10:00 AM – 12:00 PM",
-  attire: "Casual",
-  attire_description: nil,
-  subtitle: "Saturday, November 28",
-  description: "Wind down the weekend with a relaxed farewell brunch. Come as you are, relive the weekend's highlights, and say your goodbyes before heading home.",
-  sort_order: 4,
-  image: nil
-)
+Event.find_by(name: "Brunch")&.destroy
 
 reception = Event.find_or_create_by!(name: "Reception")
 reception.update!(
@@ -80,7 +65,7 @@ reception.update!(
   attire: "Punjabi formal or Western formal",
   attire_description: "Glamorous and dressy — lehengas, sherwanis, suits, gowns. This is the big celebration, so dress the part.",
   subtitle: "Saturday, November 28",
-  description: "Celebrate the newlyweds at an evening reception featuring dinner, dancing, and toasts. Join the Pannu family as we close out the weekend in style.",
+  description: "Celebrate the newlyweds at an evening reception featuring dinner, dancing, and toasts. Join the Pannu and Dhillon families as we close out the weekend in style.",
   sort_order: 5,
   image: nil
 )
@@ -97,7 +82,7 @@ end
 
 Guest.find_or_create_by!(invite: pannu, first_name: "Test", last_name: "Guest")
 
-[ jago, thanksgiving, ceremony, brunch, reception ].each do |event|
+[ jago, thanksgiving, ceremony, reception ].each do |event|
   EventInvite.find_or_create_by!(invite: pannu, event: event)
 end
 

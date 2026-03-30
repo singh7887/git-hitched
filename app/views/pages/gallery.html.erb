@@ -1,12 +1,56 @@
-<div class="text-center">
-  <h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-4);">Gallery</h1>
-  <p style="color: var(--color-text-secondary); margin-bottom: var(--space-12);">Moments from our journey</p>
-
-  <div class="card" style="max-width: 32rem; margin-left: auto; margin-right: auto;">
-    <div class="card-body">
-      <p style="color: var(--color-text-muted); font-style: italic;">
-        Photos coming soon...
-      </p>
-    </div>
+<div data-controller="appear gallery">
+  <div class="text-center" style="margin-bottom: var(--space-8);">
+    <h1 class="type-serif-display animate-fade-in-up">Gallery</h1>
+    <p class="animate-fade-in-up delay-2" style="color: var(--color-text-secondary); font-size: var(--text-lg); font-style: italic; margin-top: var(--space-4);">
+      Moments from our journey
+    </p>
+    <div class="divider divider-colored animate-fade-in delay-4">our photos</div>
   </div>
+
+  <%#
+    To add couple photos:
+    1. Create app/assets/images/gallery/ directory
+    2. Add photos named: 01.jpg, 02.jpg, etc. (or descriptive names)
+    3. Replace the image_tag paths below with: "gallery/your-photo.jpg"
+    Current photos are venue previews — replace with couple photos!
+  %>
+  <div class="gallery-grid">
+    <% gallery_photos = [
+      { src: "events/venue1.jpg",    alt: "The Venue",          caption: "JW Marriott Anaheim" },
+      { src: "events/reception.png", alt: "Reception Hall",     caption: "Reception Ballroom" },
+      { src: "events/venue2.jpg",    alt: "Ceremony Space",     caption: "The Ceremony" },
+      { src: "hotel.webp",           alt: "Our Hotel",          caption: "JW Marriott Anaheim Resort" },
+      { src: "events/venue4.jpg",    alt: "Venue Details",      caption: "Beautiful Details" },
+      { src: "events/venue5.jpg",    alt: "The Setting",        caption: "Anaheim, California" },
+      { src: "events/venue6.jpg",    alt: "Celebration Space",  caption: "A Weekend to Remember" },
+    ] %>
+
+    <% gallery_photos.each_with_index do |photo, i| %>
+      <div class="photo-card gallery-item appear-scale appear-delay-<%= [(i % 4) + 1, 6].min %>"
+           data-gallery-full-src="<%= asset_path(photo[:src]) %>"
+           data-gallery-alt="<%= photo[:alt] %>"
+           data-gallery-caption="<%= photo[:caption] %>"
+           data-action="click->gallery#open"
+           style="cursor: pointer;">
+        <%= image_tag photo[:src],
+              style: "width: 100%; display: block;",
+              alt: photo[:alt],
+              loading: "lazy" %>
+        <div class="gallery-item-overlay">
+          <p style="font-family: var(--font-serif); font-size: var(--text-sm); color: #fff; font-style: italic;">
+            <%= photo[:caption] %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Lightbox dialog %>
+  <dialog data-gallery-target="dialog"
+          data-action="click->gallery#backdropClose keydown->gallery#keydown"
+          class="gallery-lightbox">
+    <button data-action="gallery#close" class="gallery-lightbox-close" aria-label="Close">&times;</button>
+    <img data-gallery-target="full" src="" alt="" style="max-width: 90vw; max-height: 85vh; object-fit: contain; display: block; border-radius: var(--radius-md);">
+    <p data-gallery-target="caption" class="gallery-lightbox-caption"></p>
+  </dialog>
 </div>

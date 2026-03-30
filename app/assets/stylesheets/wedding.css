@@ -585,6 +585,16 @@ a:hover {
   background: var(--color-border-light);
 }
 
+.divider-colored {
+  color: var(--color-text-secondary);
+}
+
+.divider-colored::before,
+.divider-colored::after {
+  background: linear-gradient(to right, rgba(168, 198, 159, 0.4), rgba(101, 79, 111, 0.35));
+  height: 1px;
+}
+
 /* ---------- Date Display ---------- */
 .date-display {
   font-family: var(--font-serif);
@@ -889,8 +899,176 @@ nav a.type-serif-small:hover::after {
   display: block !important;
 }
 
+/* ---------- Photo Cards ---------- */
+.photo-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(101, 79, 111, 0.3);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.photo-card:hover::after {
+  opacity: 1;
+}
+
+.photo-overlay-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-6) var(--space-4) var(--space-4);
+  background: linear-gradient(to top, rgba(58, 47, 64, 0.8), transparent);
+  text-align: center;
+  z-index: 2;
+}
+
+/* ---------- Gallery Grid (masonry columns) ---------- */
+.gallery-grid {
+  columns: 2;
+  column-gap: var(--space-4);
+}
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.gallery-item-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-4) var(--space-3) var(--space-3);
+  background: linear-gradient(to top, rgba(58, 47, 64, 0.75), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: 2;
+}
+
+.gallery-item:hover .gallery-item-overlay {
+  opacity: 1;
+}
+
+/* ---------- Gallery Lightbox ---------- */
+.gallery-lightbox {
+  background: rgba(0, 0, 0, 0.92);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  max-width: 95vw;
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.gallery-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.gallery-lightbox[open] {
+  display: flex;
+}
+
+.gallery-lightbox-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: var(--text-2xl);
+  line-height: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
+  font-family: sans-serif;
+}
+
+.gallery-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.gallery-lightbox-caption {
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: var(--tracking-wider);
+  text-align: center;
+  margin: 0;
+}
+
+/* ---------- Carousel Controls ---------- */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+  z-index: 10;
+  font-family: sans-serif;
+}
+
+.carousel-btn:hover {
+  background: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+.carousel-btn-prev { left: var(--space-3); }
+.carousel-btn-next { right: var(--space-3); }
+
+.carousel-counter {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  z-index: 10;
+}
+
+/* ---------- Color Utility Variables ---------- */
+:root {
+  --color-celadon-bg:    rgba(168, 198, 159, 0.12);
+  --color-grape-overlay: rgba(101, 79, 111, 0.30);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 640px) {
   .type-script { font-size: var(--text-5xl); }
   .divider { margin: var(--space-8) 0; }
+  .gallery-grid { columns: 1; }
 }
