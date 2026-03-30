@@ -56,7 +56,7 @@ You will see Sikhs approach the Guru Granth Sahib, kneel, and touch their forehe
 **Milni (9:00 AM)**
 The two families formally meet and greet each other in the courtyard or entrance area. Garlands may be exchanged, gifts given, and prayers recited. This is a joyful, somewhat informal gathering — photographs welcome outside.
 
-**Kirtan (10:00 AM)**
+**Anand Karaj (10:00 AM)**
 Devotional music performed live by ragis (musicians) using harmonium and tabla. The Gurbani (scripture) is sung in Punjabi. You don't need to understand the words to feel the beauty — let it wash over you. The congregation typically sways gently or sits quietly in meditation.
 
 **Ardas (Prayer)**
