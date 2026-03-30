@@ -7,22 +7,23 @@
     <div class="divider divider-colored animate-fade-in delay-4">our photos</div>
   </div>
 
-  <%#
-    To add couple photos:
-    1. Create app/assets/images/gallery/ directory
-    2. Add photos named: 01.jpg, 02.jpg, etc. (or descriptive names)
-    3. Replace the image_tag paths below with: "gallery/your-photo.jpg"
-    Current photos are venue previews — replace with couple photos!
-  %>
   <div class="gallery-grid">
     <% gallery_photos = [
-      { src: "events/venue1.jpg",    alt: "The Venue",          caption: "JW Marriott Anaheim" },
-      { src: "events/reception.png", alt: "Reception Hall",     caption: "Reception Ballroom" },
-      { src: "events/venue2.jpg",    alt: "Ceremony Space",     caption: "The Ceremony" },
-      { src: "hotel.webp",           alt: "Our Hotel",          caption: "JW Marriott Anaheim Resort" },
-      { src: "events/venue4.jpg",    alt: "Venue Details",      caption: "Beautiful Details" },
-      { src: "events/venue5.jpg",    alt: "The Setting",        caption: "Anaheim, California" },
-      { src: "events/venue6.jpg",    alt: "Celebration Space",  caption: "A Weekend to Remember" },
+      { src: "couple/retro-13.jpg",   alt: "#{WEDDING[:partner_1]} & #{WEDDING[:partner_2]}", caption: "" },
+      { src: "couple/mangni-20.jpg",  alt: "The Mangni",  caption: "The Mangni" },
+      { src: "couple/retro-31.jpg",   alt: "#{WEDDING[:partner_1]} & #{WEDDING[:partner_2]}", caption: "" },
+      { src: "couple/mangni-76.jpg",  alt: "The Mangni",  caption: "The Mangni" },
+      { src: "couple/retro-32.jpg",   alt: "#{WEDDING[:partner_1]} & #{WEDDING[:partner_2]}", caption: "" },
+      { src: "couple/mangni-98.jpg",  alt: "The Mangni",  caption: "The Mangni" },
+      { src: "couple/retro-110.jpg",  alt: "#{WEDDING[:partner_1]} & #{WEDDING[:partner_2]}", caption: "" },
+      { src: "couple/mangni-115.jpg", alt: "The Mangni",  caption: "The Mangni" },
+      { src: "couple/retro-149.jpg",  alt: "#{WEDDING[:partner_1]} & #{WEDDING[:partner_2]}", caption: "" },
+      { src: "couple/mangni-116.jpg", alt: "The Mangni",  caption: "The Mangni" },
+      { src: "couple/retro-153.jpg",  alt: "#{WEDDING[:partner_1]} & #{WEDDING[:partner_2]}", caption: "" },
+      { src: "couple/mangni-121.jpg", alt: "The Mangni",  caption: "The Mangni" },
+      { src: "couple/retro-174.jpg",  alt: "#{WEDDING[:partner_1]} & #{WEDDING[:partner_2]}", caption: "" },
+      { src: "couple/mangni-133.jpg", alt: "The Mangni",  caption: "The Mangni" },
+      { src: "couple/mangni-138.jpg", alt: "The Mangni",  caption: "The Mangni" },
     ] %>
 
     <% gallery_photos.each_with_index do |photo, i| %>
@@ -36,16 +37,17 @@
               style: "width: 100%; display: block;",
               alt: photo[:alt],
               loading: "lazy" %>
-        <div class="gallery-item-overlay">
-          <p style="font-family: var(--font-serif); font-size: var(--text-sm); color: #fff; font-style: italic;">
-            <%= photo[:caption] %>
-          </p>
-        </div>
+        <% if photo[:caption].present? %>
+          <div class="gallery-item-overlay">
+            <p style="font-family: var(--font-serif); font-size: var(--text-sm); color: #fff; font-style: italic;">
+              <%= photo[:caption] %>
+            </p>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>
 
-  <%# Lightbox dialog %>
   <dialog data-gallery-target="dialog"
           data-action="click->gallery#backdropClose keydown->gallery#keydown"
           class="gallery-lightbox">
