@@ -1,45 +1,57 @@
 /* ==========================================================================
    Wedding Design System — Git Hitched
-   Grape & Celadon theme
+   Punjabi Celebration theme — marigold, rani, saffron, mehndi
    ========================================================================== */
 
-/* ---------- Palette ---------- */
-/* --vintage-grape:  #654f6f  — deep muted purple    */
-/* --dusty-grape:    #5c5d8d  — indigo accent         */
-/* --cool-steel:     #99a1a6  — neutral mid-gray      */
-/* --celadon:        #a8c69f  — soft sage green        */
-/* --tea-green:      #cce2a3  — light green accent     */
+/* ---------- Palette Reference ---------- */
+/* --marigold-gold:  #D4AF37  — ceremonial gold       */
+/* --rani-magenta:   #C2185B  — rani pink/magenta     */
+/* --saffron:        #FF6F00  — vibrant saffron       */
+/* --peacock-teal:   #00838F  — peacock blue-green    */
+/* --mehndi-green:   #388E3C  — deep mehendi green    */
+/* --deep-walnut:    #2C1A0E  — rich dark brown       */
 
 /* ---------- Custom Properties ---------- */
 :root {
-  --color-bg-primary:       #F8F7F9;
-  --color-bg-secondary:     #EFEDF2;
-  --color-bg-tertiary:      #E6E3EB;
-  --color-bg-input:         #FFFFFF;
+  --color-bg-primary:       #FDF6EC;
+  --color-bg-secondary:     #FEF0E0;
+  --color-bg-tertiary:      #FDE8C0;
+  --color-bg-input:         #FFFDF8;
 
-  --color-text-primary:     #3A2F40;
-  --color-text-secondary:   #654f6f;
-  --color-text-accent:      #5c5d8d;
-  --color-text-muted:       #99a1a6;
-  --color-text-highlight:   #4A3D52;
+  --color-text-primary:     #2C1A0E;
+  --color-text-secondary:   #7B2D42;
+  --color-text-accent:      #8B1A4A;
+  --color-text-muted:       #9E7A5A;
+  --color-text-highlight:   #4A1828;
 
-  --color-border:           #C4BFC9;
-  --color-border-focus:     #5c5d8d;
-  --color-border-light:     #D6D2DB;
+  --color-border:           #D4A866;
+  --color-border-focus:     #D4AF37;
+  --color-border-light:     #EDD9A3;
 
-  --color-accent:           #5c5d8d;
-  --color-accent-hover:     #4a4b75;
-  --color-accent-pressed:   #6e6f9e;
-  --color-highlight:        #654f6f;
-  --color-highlight-hover:  #553f5f;
-  --color-highlight-pressed:#7a6485;
+  --color-accent:           #C2185B;
+  --color-accent-hover:     #AD1457;
+  --color-accent-pressed:   #D81B60;
+  --color-highlight:        #D4AF37;
+  --color-highlight-hover:  #B8980F;
+  --color-highlight-pressed:#E8C84A;
 
-  --color-success:          #a8c69f;
-  --color-warning:          #B8860B;
-  --color-error:            #A04040;
+  --color-success:          #2E7D32;
+  --color-warning:          #E65100;
+  --color-error:            #B71C1C;
+
+  /* Punjabi palette tokens */
+  --color-gold:             #D4AF37;
+  --color-gold-light:       rgba(212, 175, 55, 0.15);
+  --color-gold-glow:        rgba(212, 175, 55, 0.30);
+  --color-magenta:          #C2185B;
+  --color-peacock:          #00838F;
+  --color-saffron:          #FF6F00;
+  --color-crimson:          #C0392B;
+  --color-mehndi:           #388E3C;
 
   --font-script:     'Pinyon Script', cursive;
   --font-serif:      'Playfair Display', serif;
+  --font-display:    'Yatra One', 'Playfair Display', serif;
   --font-mono:       'Courier New', monospace;
 
   --text-xs:   0.875rem;
@@ -118,6 +130,16 @@ body {
   font-size: var(--text-hero);
   color: var(--color-text-primary);
   line-height: 1.1;
+  text-shadow: 0 2px 24px rgba(212, 175, 55, 0.35), 0 1px 4px rgba(44, 26, 14, 0.15);
+}
+
+.type-display-punjabi {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 400;
+  color: var(--color-text-highlight);
+  letter-spacing: var(--tracking-wide);
+  line-height: var(--leading-tight);
 }
 
 .type-serif-display {
@@ -484,16 +506,17 @@ a:hover {
 /* ---------- Cards ---------- */
 .card {
   background: var(--color-bg-secondary);
-  border: var(--border-thin);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--space-8);
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
   position: relative;
   overflow: hidden;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2), var(--shadow-md);
+  border-color: var(--color-gold);
   transform: translateY(-2px);
 }
 
@@ -591,8 +614,34 @@ a:hover {
 
 .divider-colored::before,
 .divider-colored::after {
-  background: linear-gradient(to right, rgba(168, 198, 159, 0.4), rgba(101, 79, 111, 0.35));
-  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-gold), transparent);
+  height: 2px;
+}
+
+/* Punjabi ornamental divider */
+.divider-punjabi {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--color-gold);
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-style: normal;
+  letter-spacing: 0.3em;
+  margin: var(--space-12) 0;
+  line-height: 1;
+}
+
+.divider-punjabi::before,
+.divider-punjabi::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-gold), transparent);
+}
+
+.divider-punjabi::after {
+  background: linear-gradient(to left, transparent, var(--color-gold), transparent);
 }
 
 /* ---------- Date Display ---------- */
@@ -828,9 +877,10 @@ nav a.type-serif-small::after {
   bottom: -2px;
   left: 50%;
   width: 0;
-  height: 1px;
-  background: var(--color-text-highlight);
+  height: 2px;
+  background: var(--color-gold);
   transition: width var(--transition-base), left var(--transition-base);
+  border-radius: 1px;
 }
 
 nav a.type-serif-small:hover {
@@ -909,7 +959,7 @@ nav a.type-serif-small:hover::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(101, 79, 111, 0.3);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(194, 24, 91, 0.25));
   opacity: 0;
   transition: opacity var(--transition-base);
 }
@@ -924,7 +974,7 @@ nav a.type-serif-small:hover::after {
   left: 0;
   right: 0;
   padding: var(--space-6) var(--space-4) var(--space-4);
-  background: linear-gradient(to top, rgba(58, 47, 64, 0.8), transparent);
+  background: linear-gradient(to top, rgba(44, 26, 14, 0.85), transparent);
   text-align: center;
   z-index: 2;
 }
@@ -1062,8 +1112,82 @@ nav a.type-serif-small:hover::after {
 
 /* ---------- Color Utility Variables ---------- */
 :root {
-  --color-celadon-bg:    rgba(168, 198, 159, 0.12);
-  --color-grape-overlay: rgba(101, 79, 111, 0.30);
+  --color-gold-bg:       rgba(212, 175, 55, 0.10);
+  --color-magenta-overlay: rgba(194, 24, 91, 0.20);
+  --color-saffron-overlay: rgba(255, 111, 0, 0.15);
+}
+
+/* ---------- Punjabi Pattern & Texture Utilities ---------- */
+
+/* Subtle diamond lattice — use on hero sections, full-bleed backgrounds */
+.texture-diamond {
+  background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 2L30 16L16 30L2 16Z' fill='none' stroke='%23D4AF37' stroke-opacity='0.12' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 32px 32px;
+}
+
+/* Gold-tinted section backgrounds */
+.bg-saffron-wash {
+  background: linear-gradient(135deg, rgba(255, 111, 0, 0.06), rgba(212, 175, 55, 0.10));
+}
+
+.bg-magenta-wash {
+  background: linear-gradient(135deg, rgba(194, 24, 91, 0.07), rgba(212, 175, 55, 0.07));
+}
+
+.bg-peacock-wash {
+  background: linear-gradient(135deg, rgba(0, 131, 143, 0.08), rgba(212, 175, 55, 0.08));
+}
+
+/* Gold text shimmer (for key display words) */
+.text-gold {
+  color: var(--color-gold);
+}
+
+.text-magenta {
+  color: var(--color-magenta);
+}
+
+.text-peacock {
+  color: var(--color-peacock);
+}
+
+.text-saffron {
+  color: var(--color-saffron);
+}
+
+/* Festive card variant — gold inset frame */
+.card-festive {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-gold);
+  box-shadow: inset 0 0 0 4px var(--color-gold-light), 0 4px 20px rgba(212, 175, 55, 0.15);
+}
+
+.card-festive:hover {
+  box-shadow: inset 0 0 0 4px var(--color-gold-light), 0 8px 30px rgba(212, 175, 55, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Notice with gold accent */
+.notice-festive {
+  padding: var(--space-4) var(--space-6);
+  border-left: 3px solid var(--color-gold);
+  background: var(--color-gold-bg);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic;
+  color: var(--color-text-highlight);
+  margin-bottom: var(--space-6);
+}
+
+/* Keyframe: gentle gold pulse on key elements */
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.15); }
+}
+
+.btn-primary:focus-visible,
+.btn-highlight:focus-visible {
+  outline: none;
+  animation: goldPulse 1.2s ease infinite;
 }
 
 /* ---------- Responsive ---------- */
