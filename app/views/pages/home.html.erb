@@ -1,18 +1,18 @@
-<div class="text-center py-5">
-  <p class="type-serif-small animate-fade-in-up" style="margin-bottom: var(--space-8); letter-spacing: 0.1em;">YOU ARE INVITED TO CELEBRATE THE WEDDING OF</p>
+<div class="text-center py-5 texture-diamond" data-controller="petals" data-petals-count-value="22" data-petals-duration-value="5000">
+  <p class="type-serif-small animate-fade-in-up" style="margin-bottom: var(--space-8); letter-spacing: 0.1em; color: var(--color-text-muted);">YOU ARE INVITED TO CELEBRATE THE WEDDING OF</p>
 
   <h1 class="type-script animate-fade-in-up delay-2" style="margin-bottom: var(--space-8);">
-    <%= WEDDING[:partner_1] %><br>
-    <span style="font-size: 0.5em; font-style: italic;">&</span><br>
-    <%= WEDDING[:partner_2] %>
+    <span class="text-gold-shimmer"><%= WEDDING[:partner_1] %></span><br>
+    <span style="font-size: 0.5em; font-style: italic; color: var(--color-gold);">&</span><br>
+    <span class="text-gold-shimmer"><%= WEDDING[:partner_2] %></span>
   </h1>
 
-  <div class="divider divider-animated divider-colored animate-fade-in delay-4">a celebration of love</div>
+  <div class="divider divider-animated divider-punjabi animate-fade-in delay-4">✦</div>
 
   <div class="animate-fade-in-up delay-4" style="margin-bottom: var(--space-8);">
     <div data-controller="carousel" style="position: relative; max-width: 32rem; margin: 0 auto;">
 
-      <div data-carousel-target="slide" class="photo-card" style="border-radius: var(--radius-lg); overflow: hidden; height: 420px;">
+      <div data-carousel-target="slide" class="photo-card" style="border-radius: var(--radius-lg); overflow: hidden; height: 420px; box-shadow: 0 0 0 3px var(--color-gold), 0 8px 40px rgba(212, 175, 55, 0.3);">
         <%= image_tag "couple/retro-13.jpg", style: "width: 100%; height: 100%; object-fit: cover; object-position: center;", alt: "#{WEDDING[:partner_1]} & #{WEDDING[:partner_2]}" %>
         <div class="photo-overlay-caption">
           <span style="font-family: var(--font-script); font-size: var(--text-2xl); color: #fff;">
@@ -47,7 +47,34 @@
   <p class="animate-fade-in-up delay-5" style="font-size: var(--text-xl); color: var(--color-text-secondary); margin-bottom: var(--space-6);">Anaheim, California</p>
 
   <p class="animate-fade-in-up delay-6" style="font-size: var(--text-lg); color: var(--color-text-secondary); margin-bottom: var(--space-1);">JW Marriott Anaheim Resort</p>
-  <p class="animate-fade-in-up delay-6" style="font-size: var(--text-base); color: var(--color-text-muted); margin-bottom: var(--space-8);">& Singh Sabha Gurudwara, Buena Park</p>
+  <p class="animate-fade-in-up delay-6" style="font-size: var(--text-base); color: var(--color-text-muted); margin-bottom: var(--space-6);">& Singh Sabha Gurudwara, Buena Park</p>
+
+  <div class="animate-fade-in delay-7"
+       data-controller="countdown"
+       data-countdown-date-value="2026-11-25T16:00:00-08:00">
+    <p class="type-serif-small" style="color: var(--color-text-muted); margin-bottom: var(--space-4); letter-spacing: 0.12em;">DAYS UNTIL THE CELEBRATION</p>
+    <div class="countdown-display">
+      <div class="countdown-unit">
+        <span class="countdown-number" data-countdown-target="days">--</span>
+        <span class="countdown-label">Days</span>
+      </div>
+      <span class="countdown-sep">·</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" data-countdown-target="hours">--</span>
+        <span class="countdown-label">Hours</span>
+      </div>
+      <span class="countdown-sep">·</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" data-countdown-target="minutes">--</span>
+        <span class="countdown-label">Minutes</span>
+      </div>
+      <span class="countdown-sep">·</span>
+      <div class="countdown-unit">
+        <span class="countdown-number" data-countdown-target="seconds">--</span>
+        <span class="countdown-label">Seconds</span>
+      </div>
+    </div>
+  </div>
 
   <% if page_enabled?(:rsvp) %>
     <%= link_to "RSVP", rsvp_path, class: "btn btn-highlight btn-lg animate-scale-in delay-8" %>
@@ -59,7 +86,7 @@
     </div>
   <% end %>
 
-  <div class="divider divider-colored animate-fade-in" style="margin-top: var(--space-12);">more moments</div>
+  <div class="divider divider-punjabi animate-fade-in" style="margin-top: var(--space-12);">✦</div>
 
   <div data-controller="appear" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); margin-top: var(--space-6);">
     <div class="photo-card appear-scale appear-delay-1" style="height: 180px; border-radius: var(--radius-md); overflow: hidden;">
