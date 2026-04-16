@@ -1,16 +1,16 @@
-# fly.toml app configuration file generated for pannu on 2026-03-28T19:15:45Z
+# fly.toml app configuration file generated for pannu on 2026-04-16T01:24:59Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = 'pannu'
-primary_region = 'iad'
+primary_region = 'ewr'
 console_command = '/rails/bin/rails console'
 
 [build]
 
 [http_service]
-  internal_port = 3000
+  internal_port = 8080
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
