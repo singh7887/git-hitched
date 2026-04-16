@@ -1,3 +1,5 @@
+require "csv"
+
 module Admin
   class DashboardController < BaseController
     def index
@@ -14,6 +16,27 @@ module Admin
 
     def export
       redirect_to admin_dashboard_path, notice: "Google Sheets export is not yet configured. Set up credentials in config/google_sheets.yml."
+    end
+
+    def export_links
+      invites = Invite.includes(:guests).order(:name)
+      verifier = Rails.application.message_verifier(:rsvp_management)
+
+      csv_data = CSV.generate(headers: true) do |csv|
+        csv << [ "Name", "Email", "Guests", "Responded", "RSVP Link" ]
+        invites.each do |invite|
+          token = verifier.generate(invite.id, expires_in: 30.days)
+          csv << [
+            invite.name,
+            invite.no_email? ? "" : invite.email,
+            invite.guests.size,
+            invite.responded? ? "Yes" : "No",
+            rsvp_manage_url(token: token)
+          ]
+        end
+      end
+
+      send_data csv_data, filename: "rsvp-links-#{Date.today}.csv", type: "text/csv", disposition: "attachment"
     end
 
     def send_invitations

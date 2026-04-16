@@ -9,10 +9,27 @@
 </div>
 
 <div class="grid grid-cols-2 gap-4 mb-6" style="font-size: var(--text-sm);">
-  <div><span class="text-muted">Email:</span> <%= @invite.email || "N/A" %></div>
+  <div><span class="text-muted">Email:</span> <%= @invite.no_email? ? "None (send link personally)" : @invite.email %></div>
   <div><span class="text-muted">Responded:</span> <%= @invite.responded? ? @invite.responded_at.strftime("%b %d, %Y %l:%M %p") : "Not yet" %></div>
   <div><span class="text-muted">Attending:</span> <%= @invite.attending.nil? ? "Pending" : @invite.attending? ? "Yes" : "No" %></div>
   <div><span class="text-muted">Children Attending:</span> <%= @invite.children_attending? ? "Yes" : "No" %></div>
+</div>
+
+<% rsvp_link = rsvp_manage_url(token: Rails.application.message_verifier(:rsvp_management).generate(@invite.id, expires_in: 30.days)) %>
+<div class="card mb-6" style="background: var(--color-bg-tertiary);">
+  <h2 class="card-title">Personal RSVP Link</h2>
+  <div class="card-body">
+    <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-2);">
+      Send this link directly to the guest. It bypasses the email lookup.
+    </p>
+    <div style="display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap;">
+      <input type="text" value="<%= rsvp_link %>" readonly
+        style="flex: 1; font-size: var(--text-xs); font-family: monospace; padding: var(--space-2); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg-secondary);"
+        onclick="this.select();" />
+      <button onclick="navigator.clipboard.writeText('<%= rsvp_link %>'); this.textContent='Copied!';"
+        class="btn btn-outline btn-sm">Copy</button>
+    </div>
+  </div>
 </div>
 
 <% if @invite.notes.present? %>

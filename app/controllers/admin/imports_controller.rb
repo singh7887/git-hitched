@@ -27,13 +27,18 @@ module Admin
       errors = []
 
       CSV.parse(csv_data, headers: true, header_converters: :symbol) do |row|
-        next if row[:email].blank?
+        full_name = (row[:name] || row[:household_name] || "").strip
+        next if full_name.blank?
 
-        invite = Invite.find_or_create_by!(email: row[:email].strip.downcase) do |i|
-          i.name = row[:name] || row[:household_name]
+        email = row[:email]&.strip&.downcase
+
+        invite = if email.present?
+          Invite.find_or_create_by!(email: email) do |i|
+            i.name = full_name
+          end
+        else
+          Invite.create!(name: full_name)
         end
-
-        full_name = (row[:name] || row[:household_name] || "Guest").strip
 
         invite.guests.find_or_create_by!(first_name: full_name) do |g|
           g.is_primary = true

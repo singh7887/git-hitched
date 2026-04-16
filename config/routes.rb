@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       post :refund, on: :member
     end
     post "export",           to: "dashboard#export",           as: :export
+    get  "export_links",     to: "dashboard#export_links",     as: :export_links
     post "send_invitations", to: "dashboard#send_invitations", as: :send_invitations
     post "send_reminders",   to: "dashboard#send_reminders",   as: :send_reminders
     post "send_test_email",  to: "dashboard#send_test_email",  as: :send_test_email

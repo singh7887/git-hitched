@@ -29,7 +29,7 @@ thanksgiving.update!(
   attire: "Casual",
   attire_description: nil,
   subtitle: "Thursday, November 26",
-  description: "Happy Thanksgiving! Guests are welcome to explore Anaheim and Orange County on their own. If you'd like to spend the day with the Pannu family, we are thinking of organizing something at the beach — stay tuned for details.",
+  description: "Happy Thanksgiving! Guests are welcome to explore Orange County on their own. If you'd like to spend the day with the Pannu family, we are thinking of organizing something at the beach — stay tuned for details.",
   sort_order: 2,
   image: nil
 )

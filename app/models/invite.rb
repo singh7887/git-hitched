@@ -5,8 +5,13 @@ class Invite < ApplicationRecord
   has_many :hotel_bookings, dependent: :destroy
   accepts_nested_attributes_for :guests, allow_destroy: true
 
+  before_validation :assign_placeholder_email, if: -> { email.blank? }
+
   validates :name, presence: true
-  validates :email, presence: true
+
+  def no_email?
+    email.blank? || email.start_with?("no-email-")
+  end
 
   after_create :assign_all_events
 
@@ -23,6 +28,10 @@ class Invite < ApplicationRecord
   end
 
   private
+
+  def assign_placeholder_email
+    self.email = "no-email-#{SecureRandom.hex(8)}@placeholder.invalid"
+  end
 
   def assign_all_events
     Event.find_each do |event|
