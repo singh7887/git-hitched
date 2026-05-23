@@ -19,19 +19,11 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-    <div>
-      <label class="form-label">Meal preference</label>
-      <%= select_tag "guests[#{child.id}][meal_choice]",
-        options_for_select(Guest.meal_choices.keys.map { |k| [k.titleize, k] }, child.meal_choice),
-        class: "form-select" %>
-    </div>
-    <div>
-      <label class="form-label">Dietary notes</label>
-      <%= text_field_tag "guests[#{child.id}][dietary_notes]", child.dietary_notes,
-        placeholder: "Allergies, restrictions, etc.",
-        class: "form-input" %>
-    </div>
+  <div class="mt-4">
+    <label class="form-label">Dietary notes</label>
+    <%= text_field_tag "guests[#{child.id}][dietary_notes]", child.dietary_notes,
+      placeholder: "Allergies, restrictions, etc.",
+      class: "form-input" %>
   </div>
 
   <div style="margin-top: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">

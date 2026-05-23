@@ -61,20 +61,6 @@
   </table>
 </div>
 
-<% if @meal_counts.any? %>
-  <h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3);">Meal Choices</h2>
-  <div class="card mb-8">
-    <div class="flex flex-wrap gap-4">
-      <% @meal_counts.each do |choice, count| %>
-        <div style="background: var(--color-bg-tertiary); border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3);">
-          <span style="font-weight: 400; color: var(--color-text-highlight);"><%= choice.titleize %></span>
-          <span class="text-muted" style="margin-left: var(--space-1);">(<%= count %>)</span>
-        </div>
-      <% end %>
-    </div>
-  </div>
-<% end %>
-
 <div class="flex gap-3 flex-wrap">
   <%= button_to "Export to Google Sheets", admin_export_path, class: "btn btn-primary btn-sm" %>
   <%= button_to "Send Invitations to All", admin_send_invitations_path, class: "btn btn-primary btn-sm",
