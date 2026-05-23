@@ -39,6 +39,9 @@ gem "thruster", require: false
 
 gem "minitest", "~> 6.0"
 
+# CSV parsing (removed from Ruby 3.4 default gems) — used by guest-list import
+gem "csv"
+
 # Stripe for payment processing (hotel bookings, etc.)
 gem "stripe"
 
