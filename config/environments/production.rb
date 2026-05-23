@@ -54,15 +54,15 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.wedding" }
+  config.action_mailer.default_url_options = { host: "thepannufamily.com" }
 
-  # SendGrid SMTP relay.
+  # Gmail SMTP. Requires a Gmail App Password (2FA enabled) set as GMAIL_APP_PASSWORD.
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    user_name: "apikey",
-    password: ENV["SENDGRID_API_KEY"],
-    domain: "example.wedding",
-    address: "smtp.sendgrid.net",
+    user_name: "gspannu@gmail.com",
+    password: ENV["GMAIL_APP_PASSWORD"],
+    domain: "thepannufamily.com",
+    address: "smtp.gmail.com",
     port: 587,
     authentication: :plain,
     enable_starttls_auto: true
