@@ -21,6 +21,14 @@ class Invite < ApplicationRecord
     where("LOWER(email) = LOWER(?)", query.strip).first
   end
 
+  # Match on the last 10 digits so guests can enter their number in any format.
+  def self.find_by_phone(query)
+    digits = query.to_s.gsub(/\D/, "")
+    return nil if digits.length < 10
+
+    where("phone IS NOT NULL AND phone <> '' AND RIGHT(phone, 10) = ?", digits.last(10)).first
+  end
+
   def responded?
     responded_at.present?
   end

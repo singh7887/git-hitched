@@ -1,14 +1,13 @@
 <div class="text-center">
   <h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-2);">RSVP</h1>
-  <p style="color: var(--color-text-secondary); margin-bottom: var(--space-8);">Enter your email address to find your invitation.</p>
+  <p style="color: var(--color-text-secondary); margin-bottom: var(--space-8);">Enter your email address or phone number to find your invitation.</p>
 
   <%= form_with url: rsvp_lookup_path, method: :post, class: "space-y-4" do |f| %>
     <div>
-      <%= f.email_field :query,
-        placeholder: "Email address",
+      <%= f.text_field :query,
+        placeholder: "Email or phone number",
         class: "form-input text-center text-lg",
-        autofocus: true,
-        autocomplete: "email" %>
+        autofocus: true %>
     </div>
     <%= f.submit "Find My Invitation",
       class: "btn btn-highlight btn-lg w-full" %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_23_155929) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_23_190000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -443,8 +443,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_23_155929) do
     t.string "email"
     t.string "name", null: false
     t.text "notes"
+    t.string "phone"
     t.datetime "responded_at"
     t.datetime "updated_at", null: false
+    t.index ["phone"], name: "index_invites_on_phone"
   end
 
   create_table "notification_suppressions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

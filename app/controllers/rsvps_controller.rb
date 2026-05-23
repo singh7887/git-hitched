@@ -7,15 +7,15 @@ class RsvpsController < ApplicationController
   def lookup
     query = params[:query]&.strip
     if query.blank?
-      flash.now[:alert] = "Please enter your email address."
+      flash.now[:alert] = "Please enter your email address or phone number."
       return render :new, status: :unprocessable_entity
     end
 
-    invite = Invite.find_by_email(query)
+    invite = Invite.find_by_email(query) || Invite.find_by_phone(query)
     if invite
       redirect_to rsvp_show_path(invite_id: invite.id)
     else
-      flash.now[:alert] = "We couldn't find your invitation. Please check your email and try again."
+      flash.now[:alert] = "We couldn't find your invitation. Please check your email or phone number, or use the link from your invitation."
       render :new, status: :unprocessable_entity
     end
   end

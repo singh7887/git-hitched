@@ -28,6 +28,7 @@ namespace :invites do
 
       invite.name      = name
       invite.attending = attending_from(coming)
+      invite.phone     = phone&.gsub(/\D/, "").presence
       invite.notes     = build_notes(location: location, coming: coming, party: party,
                                       phone: phone, address: address)
       invite.save!
@@ -91,14 +92,29 @@ def find_or_build_invite(name, location, email)
   existing || Invite.new(name: name)
 end
 
+# "Ghoman, Alex" => first "Alex", last "Ghoman"; "Amar Singh Pannu" => first
+# "Amar", last "Singh Pannu"; single token => all first name.
+def split_name(full)
+  full = full.to_s.strip
+  if full.include?(",")
+    last, first = full.split(",", 2)
+    [first.strip, last.strip]
+  else
+    parts = full.split(/\s+/)
+    parts.size <= 1 ? [full, ""] : [parts.first, parts[1..].join(" ")]
+  end
+end
+
 # Primary guest = the named household head. Add placeholder guests up to the
-# invited party size so the headcount matches. Idempotent by first_name.
+# invited party size so the headcount matches. Idempotent (one primary per invite).
 def ensure_guests(invite, name, party)
   created = 0
 
-  primary = invite.guests.find_or_initialize_by(first_name: name)
+  first, last = split_name(name)
+  primary = invite.guests.find_or_initialize_by(is_primary: true)
   created += 1 if primary.new_record?
-  primary.is_primary = true
+  primary.first_name = first
+  primary.last_name = last
   primary.save!
 
   size = party.to_i
