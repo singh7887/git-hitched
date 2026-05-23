@@ -61,23 +61,7 @@
             <%# Day-of timeline %>
             <div style="margin-bottom: var(--space-6);">
               <h3 style="font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-4);">Day-of Schedule</h3>
-              <div style="display: grid; gap: var(--space-2);">
-                <% [
-                  ["8:00 AM", "Depart JW Marriott (shuttle available)"],
-                  ["8:30 AM", "Barat arrives at Gurudwara"],
-                  ["9:00 AM", "Milni — families formally greet each other"],
-                  ["9:00–10:00 AM", "Tea and snacks"],
-                  ["10:00 AM", "Proceed to Darbar Hall"],
-                  ["10:00–12:00 PM", "Anand Karaj"],
-                  ["12:00 PM", "Langar — vegetarian community meal in tent"],
-                  ["1:30 PM", "Doli — bride's departure ceremony"]
-                ].each do |time, detail| %>
-                  <div style="display: grid; grid-template-columns: 10rem 1fr; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border-light);">
-                    <span style="font-size: var(--text-sm); font-weight: 600; color: var(--color-text-muted); white-space: nowrap;"><%= time %></span>
-                    <span style="font-size: var(--text-sm); color: var(--color-text-secondary);"><%= detail %></span>
-                  </div>
-                <% end %>
-              </div>
+              <p style="font-size: var(--text-sm); color: var(--color-text-secondary);">Starts at 9:00 AM · Lunch (Langar) served after the ceremony.</p>
             </div>
 
             <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4);"><%= event.description %></p>

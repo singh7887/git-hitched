@@ -3,12 +3,12 @@ puts "Seeding events..."
 jago = Event.find_or_create_by!(name: "Jago")
 jago.update!(
   date: Date.new(2026, 11, 25),
-  start_time: Time.zone.parse("17:00"),
+  start_time: Time.zone.parse("18:00"),
   location: "JW Marriott Anaheim Resort",
   location_url: "https://www.marriott.com/en-us/hotels/laxjo-jw-marriott-anaheim-resort/overview/",
   address: "1775 S Disneyland Dr, Anaheim, CA 92802",
   maps_url: "https://maps.google.com/?q=JW+Marriott+Anaheim+Resort",
-  time_description: "5:00 PM",
+  time_description: "6:00 PM",
   attire: "Traditional Punjabi wear · bright colors encouraged",
   attire_description: "Think bold, fun, and energetic — bright kurtas, lehengas, salwar kameez. Non-Punjabi guests: colorful semi-formal or cocktail attire.",
   subtitle: "Wednesday, November 25",
@@ -37,12 +37,12 @@ thanksgiving.update!(
 ceremony = Event.find_or_create_by!(name: "Anand Karaj")
 ceremony.update!(
   date: Date.new(2026, 11, 27),
-  start_time: Time.zone.parse("08:00"),
+  start_time: Time.zone.parse("09:00"),
   location: "Singh Sabha Gurudwara",
   location_url: "#",
   address: "Buena Park, CA",
   maps_url: "#",
-  time_description: "8:00 AM depart hotel · 9:00 AM Milni · 10:00 AM Anand Karaj · 12:00 PM Langar",
+  time_description: "Starts at 9:00 AM · Lunch after",
   attire: "Modest formal — head covering required",
   attire_description: "Head coverings are required inside the Gurudwara and will be available at the entrance. Please dress modestly (covered shoulders and knees) and wear socks — shoes are removed at the door.",
   subtitle: "Friday, November 27",
@@ -56,12 +56,12 @@ Event.find_by(name: "Brunch")&.destroy
 reception = Event.find_or_create_by!(name: "Reception")
 reception.update!(
   date: Date.new(2026, 11, 28),
-  start_time: Time.zone.parse("17:00"),
+  start_time: Time.zone.parse("18:00"),
   location: "JW Marriott Anaheim Resort",
   location_url: "https://www.marriott.com/en-us/hotels/laxjo-jw-marriott-anaheim-resort/overview/",
   address: "1775 S Disneyland Dr, Anaheim, CA 92802",
   maps_url: "https://maps.google.com/?q=JW+Marriott+Anaheim+Resort",
-  time_description: "5:00 PM",
+  time_description: "6:00 PM",
   attire: "Punjabi formal or Western formal",
   attire_description: "Glamorous and dressy — lehengas, sherwanis, suits, gowns. This is the big celebration, so dress the part.",
   subtitle: "Saturday, November 28",

@@ -25,7 +25,7 @@ module Admin
       csv_data = CSV.generate(headers: true) do |csv|
         csv << [ "Name", "Email", "Guests", "Responded", "RSVP Link" ]
         invites.each do |invite|
-          token = verifier.generate(invite.id, expires_in: 30.days)
+          token = verifier.generate(invite.id, expires_in: 1.year)
           csv << [
             invite.name,
             invite.no_email? ? "" : invite.email,

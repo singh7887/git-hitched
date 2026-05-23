@@ -33,7 +33,7 @@ class RsvpMailer < ApplicationMailer
 
   def signed_token(invite)
     Rails.application.message_verifier(:rsvp_management).generate(
-      invite.id, expires_in: 30.days
+      invite.id, expires_in: 1.year
     )
   end
 end
