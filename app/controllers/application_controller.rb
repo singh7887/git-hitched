@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
-  before_action :require_invite_code
-
   helper_method :page_enabled?
 
   def page_enabled?(page)
@@ -15,13 +13,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
-  def require_invite_code
-    return if session[:site_authenticated]
-
-    session[:return_to] = request.fullpath
-    redirect_to gate_path
-  end
 
   def require_page_enabled!(page)
     redirect_to root_path unless page_enabled?(page)

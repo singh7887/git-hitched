@@ -1,5 +1,4 @@
 class StripeWebhooksController < ApplicationController
-  skip_before_action :require_invite_code
   skip_before_action :verify_authenticity_token
 
   def create

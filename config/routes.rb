@@ -3,10 +3,6 @@ Rails.application.routes.draw do
 
   root "pages#home"
 
-  # Site gate
-  get  "gate", to: "gate#new",    as: :gate
-  post "gate", to: "gate#create"
-
   # RSVP flow
   get  "rsvp",                to: "rsvps#new",    as: :rsvp
   post "rsvp/lookup",         to: "rsvps#lookup", as: :rsvp_lookup
