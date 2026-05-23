@@ -122,12 +122,7 @@ class RsvpsController < ApplicationController
       redirect_to rsvp_show_path(invite_id: @invite.id, step: "events")
     else
       @invite.update!(responded_at: Time.current)
-      was_first_response = @invite.responded_at_previously_was.nil?
-      if was_first_response
-        RsvpMailer.confirmation(@invite).deliver_later
-      else
-        RsvpMailer.update_notification(@invite).deliver_later
-      end
+      notify_rsvp(@invite.responded_at_previously_was.nil?)
       redirect_to rsvp_show_path(invite_id: @invite.id), notice: "We're sorry you can't make it! Your response has been saved."
     end
   end
@@ -155,13 +150,20 @@ class RsvpsController < ApplicationController
 
     @invite.update!(notes: params.dig(:invite, :notes), responded_at: Time.current)
 
+    notify_rsvp(was_first_response)
+
+    redirect_to rsvp_show_path(invite_id: @invite.id, step: "confirmation")
+  end
+
+  # Skip mail for invites without a real address (placeholder no-email-* would bounce).
+  def notify_rsvp(was_first_response)
+    return if @invite.no_email?
+
     if was_first_response
       RsvpMailer.confirmation(@invite).deliver_later
     else
       RsvpMailer.update_notification(@invite).deliver_later
     end
-
-    redirect_to rsvp_show_path(invite_id: @invite.id, step: "confirmation")
   end
 
   def ensure_rsvps_exist

@@ -39,13 +39,13 @@ module Admin
     end
 
     def send_invitations
-      invites = Invite.where.not(email: nil)
+      invites = Invite.with_real_email
       invites.each { |i| RsvpMailer.invitation(i).deliver_later }
       redirect_to admin_root_path, notice: "Invitations sent to #{invites.count} invites."
     end
 
     def send_reminders
-      invites = Invite.where(responded_at: nil).where.not(email: nil)
+      invites = Invite.with_real_email.where(responded_at: nil)
       invites.each { |i| RsvpMailer.reminder(i).deliver_later }
       redirect_to admin_root_path, notice: "Reminders sent to #{invites.count} invites."
     end
