@@ -29,7 +29,8 @@ module Admin
           name: invite.name,
           first_name: first_name,
           phone: invite.phone,
-          rsvp_link: rsvp_manage_url(token: verifier.generate(invite.id, expires_in: 1.year))
+          rsvp_link: rsvp_manage_url(token: verifier.generate(invite.id, expires_in: 1.year)),
+          sent_at: invite.invite_sent_at&.iso8601
         }
       end
       render json: payload

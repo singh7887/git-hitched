@@ -65,11 +65,29 @@ function buildMessage(invite) {
     .replace(/\{rsvp_link\}/g, invite.rsvp_link);
 }
 
+function authHeader() {
+  return "Basic " + Buffer.from(`${CONFIG.adminUser}:${CONFIG.adminPass}`).toString("base64");
+}
+
 async function fetchTargets() {
-  const auth = Buffer.from(`${CONFIG.adminUser}:${CONFIG.adminPass}`).toString("base64");
-  const res = await fetch(CONFIG.targetsUrl, { headers: { Authorization: `Basic ${auth}` } });
+  const res = await fetch(CONFIG.targetsUrl, { headers: { Authorization: authHeader() } });
   if (!res.ok) throw new Error(`Targets fetch failed: ${res.status} ${res.statusText}`);
   return res.json();
+}
+
+// Record a successful send in the DB so the admin panel shows it.
+async function markSentInDb(inviteId) {
+  const base = CONFIG.targetsUrl.replace(/\/admin\/whatsapp_targets\.json$/, "");
+  const url = `${base}/admin/invites/${inviteId}/mark_sent`;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { Authorization: authHeader(), Accept: "application/json" },
+    });
+    if (!res.ok) console.warn(`  ⚠ mark_sent ${inviteId}: ${res.status} ${res.statusText}`);
+  } catch (e) {
+    console.warn(`  ⚠ mark_sent ${inviteId} error: ${e?.message || e}`);
+  }
 }
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -107,7 +125,9 @@ async function runLive(pending) {
   });
 
   client.on("ready", async () => {
-    console.log(`\nWhatsApp ready. Sending to ${pending.length} invites...\n`);
+    console.log(`\nWhatsApp ready. Letting session sync for 8s before first send...`);
+    await delay(8000);
+    console.log(`Sending to ${pending.length} invites...\n`);
 
     for (const t of pending) {
       const id = toWhatsAppId(t.phone);
@@ -127,6 +147,7 @@ async function runLive(pending) {
           await client.sendMessage(id, buildMessage(t));
           log[t.id] = { status: "sent", phone: t.phone, at: new Date().toISOString() };
           saveLog(log);
+          await markSentInDb(t.id);
           sentCount++;
           console.log(`✓ ${t.name} (${t.phone})  [${sentCount}/${pending.length}]`);
         }
@@ -167,11 +188,15 @@ async function main() {
 
   const targets = await fetchTargets();
   const log = loadLog();
-  const pending = targets.filter((t) => !log[t.id] || log[t.id].status !== "sent");
+  const pending = targets.filter((t) => {
+    if (t.sent_at) return false;                                  // already marked sent in DB
+    if (log[t.id] && log[t.id].status === "sent") return false;   // already sent in this local log
+    return true;
+  });
   console.log(
     `Loaded ${targets.length} targets; ${pending.length} pending (skipping ${
       targets.length - pending.length
-    } already sent).`
+    } already sent in DB or local log).`
   );
 
   if (CONFIG.dryRun) return runDryRun(pending);

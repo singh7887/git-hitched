@@ -42,7 +42,12 @@ Rails.application.routes.draw do
   namespace :admin do
     root to: "dashboard#index"
     get "dashboard", to: "dashboard#index"
-    resources :invites
+    resources :invites do
+      member do
+        post :mark_sent
+        post :unmark_sent
+      end
+    end
     resources :guests
     resources :events
     resources :hotel_bookings, only: [ :index ] do
