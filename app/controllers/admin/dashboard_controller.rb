@@ -17,6 +17,24 @@ module Admin
       redirect_to admin_dashboard_path, notice: "Google Sheets export is not yet configured. Set up credentials in config/google_sheets.yml."
     end
 
+    # Feeds the standalone WhatsApp sender script (tools/whatsapp_sender/).
+    # Returns one row per invite WITH a phone, including a fresh 1-year signed RSVP link.
+    def whatsapp_targets
+      verifier = Rails.application.message_verifier(:rsvp_management)
+      payload = Invite.where.not(phone: [ nil, "" ]).order(:name).map do |invite|
+        primary = invite.primary_guest
+        first_name = (primary&.first_name.presence) || invite.name.to_s.split(/\s+/).first
+        {
+          id: invite.id,
+          name: invite.name,
+          first_name: first_name,
+          phone: invite.phone,
+          rsvp_link: rsvp_manage_url(token: verifier.generate(invite.id, expires_in: 1.year))
+        }
+      end
+      render json: payload
+    end
+
     def export_links
       invites = Invite.includes(:guests).order(:name)
       verifier = Rails.application.message_verifier(:rsvp_management)

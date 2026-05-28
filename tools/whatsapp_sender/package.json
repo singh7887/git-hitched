@@ -1,0 +1,17 @@
+{
+  "name": "wedding-whatsapp-sender",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sends personalized WhatsApp RSVP invites to wedding guests using a logged-in WhatsApp Web session. ⚠️ Uses unofficial whatsapp-web.js; prefer a secondary WhatsApp number.",
+  "scripts": {
+    "send": "node send.js",
+    "dry-run": "node send.js --dry-run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.23.0"
+  }
+}

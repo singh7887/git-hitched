@@ -43,3 +43,10 @@
 *.csv
 
 .claude/
+
+# WhatsApp sender tool — session, dependencies, send log
+/tools/whatsapp_sender/node_modules/
+/tools/whatsapp_sender/.wwebjs_auth/
+/tools/whatsapp_sender/.wwebjs_cache/
+/tools/whatsapp_sender/sent.json
+/tools/whatsapp_sender/package-lock.json
