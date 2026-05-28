@@ -1,20 +1,29 @@
 <div class="text-center" data-controller="confetti" data-confetti-count-value="90" data-confetti-delay-value="200">
   <h1 class="type-display-punjabi text-gold-shimmer" style="font-size: var(--text-3xl); margin-bottom: var(--space-2);">Thank You!</h1>
   <p style="color: var(--color-text-secondary); margin-bottom: var(--space-8); max-width: 520px; margin-left: auto; margin-right: auto;">
-    Your RSVP has been saved. We're so excited to celebrate with you in Provence!
+    Your RSVP has been saved. We're so excited to celebrate with you in Anaheim!
     You can come back and update your response anytime.
   </p>
 
   <div style="display: flex; flex-direction: column; gap: var(--space-4); max-width: 400px; margin: 0 auto var(--space-8);">
     <%= link_to travel_path, class: "card", style: "text-decoration: none; text-align: left;" do %>
       <h2 style="font-family: var(--font-serif); font-size: var(--text-lg); color: var(--color-text-highlight); margin-bottom: 2px;">Travel</h2>
-      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0;">Flights, getting around, and travel tips for Provence.</p>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0;">Flights, getting around, and travel tips for Orange County.</p>
     <% end %>
 
-    <%= link_to stay_path, class: "card", style: "text-decoration: none; text-align: left;" do %>
-      <h2 style="font-family: var(--font-serif); font-size: var(--text-lg); color: var(--color-text-highlight); margin-bottom: 2px;">Accommodations</h2>
-      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0;">Where to stay near the venue if you haven't booked yet.</p>
-    <% end %>
+    <div class="card" style="background: var(--color-gold-bg); border-left: 3px solid var(--color-gold); text-align: left;">
+      <h2 style="font-family: var(--font-serif); font-size: var(--text-lg); color: var(--color-text-highlight); margin-bottom: 4px;">Book Your Hotel Room</h2>
+      <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0 0 var(--space-2);">
+        JW Marriott Anaheim Resort — our home base for the weekend. Group rate available; book early.
+      </p>
+      <p style="font-size: var(--text-xs); color: var(--color-text-muted); margin: 0 0 var(--space-3);">
+        <strong>Tip:</strong> Select <strong>4 guests per room</strong> when booking — that signals a double queen.
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+        <a href="<%= WEDDING[:hotel_block_url] %>" target="_blank" rel="noopener" class="btn btn-highlight">Book Your Room</a>
+        <%= link_to "See all hotel options", stay_path, class: "btn btn-outline btn-sm" %>
+      </div>
+    </div>
 
     <%= link_to faq_path, class: "card", style: "text-decoration: none; text-align: left;" do %>
       <h2 style="font-family: var(--font-serif); font-size: var(--text-lg); color: var(--color-text-highlight); margin-bottom: 2px;">FAQ</h2>
