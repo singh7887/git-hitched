@@ -34,6 +34,7 @@ module Admin
     end
 
     def edit
+      @invite.guests.build # one empty slot so admin can add a new guest in-form
     end
 
     def update
@@ -88,8 +89,8 @@ module Admin
     end
 
     def invite_params
-      params.require(:invite).permit(:name, :email,
-        guests_attributes: [ :id, :first_name, :last_name, :is_primary, :meal_choice, :dietary_notes, :_destroy ])
+      params.require(:invite).permit(:name, :email, :phone, :party_size, :notes,
+        guests_attributes: [ :id, :first_name, :last_name, :is_primary, :is_child, :age, :meal_choice, :dietary_notes, :_destroy ])
     end
   end
 end

@@ -3,9 +3,10 @@ class Invite < ApplicationRecord
   has_many :event_invites, dependent: :destroy
   has_many :events, through: :event_invites
   has_many :hotel_bookings, dependent: :destroy
-  accepts_nested_attributes_for :guests, allow_destroy: true
+  accepts_nested_attributes_for :guests, allow_destroy: true, reject_if: :all_blank
 
   before_validation :assign_placeholder_email, if: -> { email.blank? }
+  before_validation :normalize_phone
 
   validates :name, presence: true
 
@@ -41,6 +42,13 @@ class Invite < ApplicationRecord
 
   def assign_placeholder_email
     self.email = "no-email-#{SecureRandom.hex(8)}@placeholder.invalid"
+  end
+
+  # Strip everything but digits so phone-lookup matches regardless of input format.
+  def normalize_phone
+    return if phone.blank?
+    digits = phone.gsub(/\D/, "")
+    self.phone = digits.presence
   end
 
   def assign_all_events

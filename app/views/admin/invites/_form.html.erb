@@ -8,7 +8,7 @@
   <% end %>
 
   <div class="form-group">
-    <%= f.label :name, class: "form-label" %>
+    <%= f.label :name, "Household name", class: "form-label" %>
     <%= f.text_field :name, class: "form-input" %>
   </div>
 
@@ -17,6 +17,53 @@
     <%= f.email_field :email, class: "form-input", placeholder: "Leave blank if sending the link personally" %>
   </div>
 
-  <%= f.submit class: "btn btn-primary btn-sm" %>
-  <%= link_to "Cancel", admin_invites_path, class: "btn btn-ghost btn-sm" %>
+  <div class="form-group">
+    <%= f.label :phone, "Phone (optional)", class: "form-label" %>
+    <%= f.text_field :phone, class: "form-input", placeholder: "Any format — digits are extracted automatically" %>
+    <p class="text-muted" style="font-size: var(--text-xs); margin-top: 4px;">Used for RSVP phone lookup and the WhatsApp send.</p>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :party_size, "Invited allocation (party size)", class: "form-label" %>
+    <%= f.number_field :party_size, class: "form-input", min: 0, max: 30, style: "max-width: 8rem;" %>
+    <p class="text-muted" style="font-size: var(--text-xs); margin-top: 4px;">How many people this household is invited to bring. 0 = decided not to attend.</p>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :notes, "Notes (internal)", class: "form-label" %>
+    <%= f.text_area :notes, class: "form-input", rows: 3 %>
+  </div>
+
+  <h3 class="type-serif-heading" style="font-size: var(--text-lg); margin-top: var(--space-6);">Guests</h3>
+  <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: var(--space-3);">
+    Edit names and roles. Leave the bottom row blank if you're not adding anyone.
+  </p>
+
+  <%= f.fields_for :guests do |g| %>
+    <div class="card" style="padding: var(--space-3); margin-bottom: var(--space-3);">
+      <%= g.hidden_field :id %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" style="margin-bottom: var(--space-2);">
+        <div>
+          <%= g.label :first_name, class: "form-label" %>
+          <%= g.text_field :first_name, class: "form-input" %>
+        </div>
+        <div>
+          <%= g.label :last_name, class: "form-label" %>
+          <%= g.text_field :last_name, class: "form-input" %>
+        </div>
+      </div>
+      <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; align-items: center; font-size: var(--text-sm);">
+        <label class="form-check"><%= g.check_box :is_primary %> <span class="form-check-label">Primary contact</span></label>
+        <label class="form-check"><%= g.check_box :is_child %> <span class="form-check-label">Child</span></label>
+        <% unless g.object.new_record? %>
+          <label class="form-check" style="color: var(--color-error);"><%= g.check_box :_destroy %> <span class="form-check-label">Remove</span></label>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div style="margin-top: var(--space-6);">
+    <%= f.submit class: "btn btn-primary btn-sm" %>
+    <%= link_to "Cancel", admin_invites_path, class: "btn btn-ghost btn-sm" %>
+  </div>
 <% end %>
