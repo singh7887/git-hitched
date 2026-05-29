@@ -7,11 +7,14 @@
 </div>
 
 <div class="card mb-4" style="background: var(--color-bg-tertiary); padding: var(--space-3); display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center;">
-  <strong>Invitations sent: <%= @sent_count %> / <%= @total_count %></strong>
+  <strong>Sent: <%= @sent_count %> / <%= @total_count %></strong>
+  <span class="text-muted">·</span>
+  <strong>Do-not-send: <%= @skip_count %></strong>
   <span class="text-muted" style="margin-left: var(--space-2);">Filter:</span>
-  <%= link_to "All",          admin_invites_path(q: params[:q]),                   class: "btn btn-sm #{params[:filter].blank?      ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Not yet sent", admin_invites_path(q: params[:q], filter: "unsent"), class: "btn btn-sm #{params[:filter] == 'unsent' ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Sent",         admin_invites_path(q: params[:q], filter: "sent"),   class: "btn btn-sm #{params[:filter] == 'sent'   ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "All",          admin_invites_path(q: params[:q]),                    class: "btn btn-sm #{params[:filter].blank?       ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Not yet sent", admin_invites_path(q: params[:q], filter: "unsent"),  class: "btn btn-sm #{params[:filter] == 'unsent'  ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Sent",         admin_invites_path(q: params[:q], filter: "sent"),    class: "btn btn-sm #{params[:filter] == 'sent'    ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Skipped",      admin_invites_path(q: params[:q], filter: "skipped"), class: "btn btn-sm #{params[:filter] == 'skipped' ? 'btn-highlight' : 'btn-outline'}" %>
 </div>
 
 <%= form_with url: admin_invites_path, method: :get, class: "mb-4" do %>
@@ -36,8 +39,13 @@
     </thead>
     <tbody>
       <% @invites.each do |invite| %>
-        <tr>
-          <td><%= link_to invite.name, admin_invite_path(invite) %></td>
+        <tr<%= invite.do_not_send ? " style=\"opacity: 0.55;\"".html_safe : "".html_safe %>>
+          <td>
+            <%= link_to invite.name, admin_invite_path(invite) %>
+            <% if invite.do_not_send %>
+              <span style="margin-left: 6px; font-size: var(--text-xs); padding: 1px 6px; border-radius: 999px; background: var(--color-bg-tertiary); color: var(--color-text-muted);">do-not-send</span>
+            <% end %>
+          </td>
           <td class="text-muted"><%= invite.no_email? ? "—" : invite.email %></td>
           <td class="text-center"><%= invite.guests.size %></td>
           <td>
@@ -54,11 +62,16 @@
               <span class="text-muted">No</span>
             <% end %>
           </td>
-          <td class="text-right">
+          <td class="text-right" style="white-space: nowrap;">
             <% if invite.invite_sent_at %>
               <%= button_to "Mark unsent", unmark_sent_admin_invite_path(invite), method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" }, data: { turbo_confirm: "Clear the sent date for #{invite.name}?" } %>
             <% else %>
               <%= button_to "Mark sent",   mark_sent_admin_invite_path(invite),   method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" } %>
+            <% end %>
+            <% if invite.do_not_send %>
+              <%= button_to "Allow send", unmark_skip_admin_invite_path(invite), method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" } %>
+            <% else %>
+              <%= button_to "Skip",       mark_skip_admin_invite_path(invite),   method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" }, data: { turbo_confirm: "Exclude #{invite.name} from the WhatsApp send?" } %>
             <% end %>
           </td>
         </tr>

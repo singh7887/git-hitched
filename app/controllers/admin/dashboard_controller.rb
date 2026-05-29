@@ -21,7 +21,7 @@ module Admin
     # Returns one row per invite WITH a phone, including a fresh 1-year signed RSVP link.
     def whatsapp_targets
       verifier = Rails.application.message_verifier(:rsvp_management)
-      payload = Invite.where.not(phone: [ nil, "" ]).order(:name).map do |invite|
+      payload = Invite.where.not(phone: [ nil, "" ]).where(do_not_send: false).order(:name).map do |invite|
         primary = invite.primary_guest
         first_name = (primary&.first_name.presence) || invite.name.to_s.split(/\s+/).first
         {

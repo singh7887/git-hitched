@@ -46,6 +46,8 @@ Rails.application.routes.draw do
       member do
         post :mark_sent
         post :unmark_sent
+        post :mark_skip
+        post :unmark_skip
       end
     end
     resources :guests
