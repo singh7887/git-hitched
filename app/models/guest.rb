@@ -10,6 +10,7 @@ class Guest < ApplicationRecord
   validates :first_name, presence: true
 
   before_validation :normalize_phone
+  after_save :sync_phone_to_invite, if: :should_sync_phone_to_invite?
 
   def full_name
     [ first_name, last_name ].map(&:presence).compact.join(" ")
@@ -26,5 +27,15 @@ class Guest < ApplicationRecord
     return if phone.blank?
     digits = phone.gsub(/\D/, "")
     self.phone = digits.presence
+  end
+
+  # Sync the primary guest's phone up to the household invite (so the WhatsApp send
+  # and RSVP lookup both stay in sync with whoever the contact person is).
+  def should_sync_phone_to_invite?
+    is_primary? && phone.present? && (saved_change_to_phone? || saved_change_to_is_primary?)
+  end
+
+  def sync_phone_to_invite
+    invite.update_column(:phone, phone) if invite.phone != phone
   end
 end
