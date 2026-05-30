@@ -28,7 +28,7 @@
             data-guests-target="declineLabel">Can't attend</span>
     </div>
 
-    <div data-guests-target="detailsSection" style="<%= "display: none;" if @invite.attending == false %>">
+    <div data-guests-target="detailsSection">
       <div data-guests-target="container">
         <% @adults.each do |guest| %>
           <%= render partial: "rsvps/guest_card", locals: { guest: guest, guests_count: @adults.size } %>

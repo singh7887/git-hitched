@@ -19,7 +19,8 @@ export default class extends Controller {
 
   toggleAttending() {
     const attending = this.attendingToggleTarget.checked
-    this.detailsSectionTarget.style.display = attending ? "" : "none"
+    // Keep guest editor visible regardless — even declining households may want
+    // to fix names. Only swap the toggle labels and the submit button text.
     this.acceptLabelTarget.classList.toggle("toggle-label-active", attending)
     this.declineLabelTarget.classList.toggle("toggle-label-active", !attending)
 
