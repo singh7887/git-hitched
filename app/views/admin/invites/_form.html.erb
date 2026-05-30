@@ -52,6 +52,10 @@
           <%= g.text_field :last_name, class: "form-input" %>
         </div>
       </div>
+      <div style="margin-bottom: var(--space-2);">
+        <%= g.label :phone, "Phone (optional)", class: "form-label" %>
+        <%= g.text_field :phone, class: "form-input", placeholder: "Any format — digits extracted automatically" %>
+      </div>
       <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; align-items: center; font-size: var(--text-sm);">
         <label class="form-check"><%= g.check_box :is_primary %> <span class="form-check-label">Primary contact</span></label>
         <label class="form-check"><%= g.check_box :is_child %> <span class="form-check-label">Child</span></label>

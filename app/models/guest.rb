@@ -9,11 +9,22 @@ class Guest < ApplicationRecord
 
   validates :first_name, presence: true
 
+  before_validation :normalize_phone
+
   def full_name
     [ first_name, last_name ].map(&:presence).compact.join(" ")
   end
 
   def rsvp_for(event)
     rsvps.find_by(event: event)
+  end
+
+  private
+
+  # Strip everything but digits so it's stored consistently regardless of input format.
+  def normalize_phone
+    return if phone.blank?
+    digits = phone.gsub(/\D/, "")
+    self.phone = digits.presence
   end
 end

@@ -90,7 +90,7 @@ module Admin
 
     def invite_params
       params.require(:invite).permit(:name, :email, :phone, :party_size, :notes,
-        guests_attributes: [ :id, :first_name, :last_name, :is_primary, :is_child, :age, :meal_choice, :dietary_notes, :_destroy ])
+        guests_attributes: [ :id, :first_name, :last_name, :phone, :is_primary, :is_child, :age, :meal_choice, :dietary_notes, :_destroy ])
     end
   end
 end
