@@ -5,8 +5,6 @@ class Event < ApplicationRecord
 
   validates :name, presence: true
 
-  after_create :assign_to_all_invites
-
   def attending_count
     rsvps.where(attending: true).count
   end
@@ -17,13 +15,5 @@ class Event < ApplicationRecord
 
   def pending_count
     rsvps.where(attending: nil).count
-  end
-
-  private
-
-  def assign_to_all_invites
-    Invite.find_each do |invite|
-      event_invites.find_or_create_by!(invite: invite)
-    end
   end
 end

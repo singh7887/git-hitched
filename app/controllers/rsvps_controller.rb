@@ -29,6 +29,9 @@ class RsvpsController < ApplicationController
 
   def show
     @invite = Invite.find(params[:invite_id])
+    # Remember the identified guest so the public Events page can scope to the
+    # events this household is actually invited to (see PagesController#events).
+    session[:rsvp_invite_id] = @invite.id
     @adults = @invite.guests.adults.order(is_primary: :desc, first_name: :asc)
     @children = @invite.guests.children.order(:first_name)
     @guests = @adults + @children

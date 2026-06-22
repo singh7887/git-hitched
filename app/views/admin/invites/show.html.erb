@@ -9,6 +9,7 @@
 </div>
 
 <div class="grid grid-cols-2 gap-4 mb-6" style="font-size: var(--text-sm);">
+  <div><span class="text-muted">Side:</span> <%= @invite.side.titleize %></div>
   <div><span class="text-muted">Email:</span> <%= @invite.no_email? ? "None (send link personally)" : @invite.email %></div>
   <div><span class="text-muted">Responded:</span> <%= @invite.responded? ? @invite.responded_at.strftime("%b %d, %Y %l:%M %p") : "Not yet" %></div>
   <div><span class="text-muted">Attending:</span> <%= @invite.attending.nil? ? "Pending" : @invite.attending? ? "Yes" : "No" %></div>

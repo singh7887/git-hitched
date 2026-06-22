@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_23_230000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_21_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -279,6 +279,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_23_230000) do
     t.text "attire_description"
     t.datetime "created_at", null: false
     t.date "date"
+    t.boolean "default_invited", default: true, null: false
     t.text "description"
     t.string "image"
     t.string "location"
@@ -449,8 +450,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_23_230000) do
     t.integer "party_size"
     t.string "phone"
     t.datetime "responded_at"
+    t.string "side", default: "groom", null: false
     t.datetime "updated_at", null: false
     t.index ["phone"], name: "index_invites_on_phone"
+    t.index ["side"], name: "index_invites_on_side"
   end
 
   create_table "notification_suppressions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

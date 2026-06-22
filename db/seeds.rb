@@ -1,5 +1,25 @@
 puts "Seeding events..."
 
+# Bride-side (Dhillon) morning ceremony. Not a shared event, so default_invited: false —
+# it is opted into per invite via the admin event checkboxes rather than auto-attached.
+haldi = Event.find_or_create_by!(name: "Maiyaan / Haldi")
+haldi.update!(
+  date: Date.new(2026, 11, 25),
+  start_time: Time.zone.parse("10:00"),
+  location: "Dhillon Residence",
+  location_url: nil,
+  address: nil,
+  maps_url: nil,
+  time_description: "Morning",
+  attire: "Casual clothes you don't mind staining · yellows encouraged",
+  attire_description: "Turmeric (haldi) gets everywhere — wear something you don't mind getting yellow. Bright yellows and oranges are traditional and welcome.",
+  subtitle: "Wednesday, November 25 · Morning",
+  description: "The Maiyaan/Haldi is an intimate morning ceremony at the Dhillon residence where family applies a turmeric paste to the bride for blessings, good fortune, and a radiant glow before the wedding. Singing, laughter, and plenty of yellow.",
+  sort_order: 0,
+  default_invited: false,
+  image: nil
+)
+
 jago = Event.find_or_create_by!(name: "Jago")
 jago.update!(
   date: Date.new(2026, 11, 25),

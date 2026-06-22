@@ -1,6 +1,10 @@
 <div data-controller="appear">
   <h1 class="type-display-punjabi text-center animate-fade-in-up" style="margin-bottom: var(--space-4);">Weekend Events</h1>
-  <p class="text-center animate-fade-in-up delay-1" style="color: var(--color-text-secondary); margin-bottom: var(--space-12);">November 25–28, 2026 · Orange County, California</p>
+  <p class="text-center animate-fade-in-up delay-1" style="color: var(--color-text-secondary); margin-bottom: <%= @scoped_invite ? "var(--space-4)" : "var(--space-12)" %>;">November 25–28, 2026 · Orange County, California</p>
+
+  <% if @scoped_invite %>
+    <p class="text-center animate-fade-in-up delay-1" style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-12);">Showing the events <%= @scoped_invite.name %> is invited to.</p>
+  <% end %>
 
   <div class="space-y-8">
     <% @events.each_with_index do |event, i| %>
@@ -79,9 +83,10 @@
         <%# Standard event — alternating image/content layout %>
         <% image_left = i.even? %>
         <% is_mehndi     = event.name.downcase.include?("mehndi") || event.name.downcase.include?("mehendi") %>
+        <% is_haldi      = event.name.downcase.include?("haldi") || event.name.downcase.include?("maiyaan") || event.name.downcase.include?("maiyan") %>
         <% is_jago       = event.name.downcase.include?("jago") %>
         <% is_reception  = event.name.downcase.include?("reception") || event.name.downcase.include?("baraat") %>
-        <% event_card_class = if is_mehndi then "card-event-mehndi"
+        <% event_card_class = if is_mehndi || is_haldi then "card-event-mehndi"
                                elsif is_jago then "card-event-jago"
                                elsif is_reception then "card-event-reception"
                                else "card-event-ceremony" end %>

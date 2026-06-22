@@ -5,7 +5,11 @@ class PagesController < ApplicationController
   end
 
   def events
-    @events = Event.order(:sort_order)
+    # When the visitor arrived through their personal RSVP/manage link we know which
+    # household they are, so show only the events they're invited to. Otherwise the
+    # public page shows the full schedule.
+    @scoped_invite = current_rsvp_invite
+    @events = (@scoped_invite&.events || Event.all).order(:sort_order)
   end
 
   def travel
@@ -37,5 +41,13 @@ class PagesController < ApplicationController
 
   def check_page_enabled
     require_page_enabled!(action_name)
+  end
+
+  # The invite identified during the RSVP flow, if any (and still present).
+  def current_rsvp_invite
+    return @current_rsvp_invite if defined?(@current_rsvp_invite)
+
+    id = session[:rsvp_invite_id]
+    @current_rsvp_invite = id && Invite.find_by(id: id)
   end
 end
