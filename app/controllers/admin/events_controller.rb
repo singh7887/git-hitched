@@ -48,7 +48,7 @@ module Admin
     end
 
     def event_params
-      params.require(:event).permit(:name, :subtitle, :sort_order, :date, :start_time, :time_description, :location, :address, :location_url, :maps_url, :attire, :attire_description, :description, :image)
+      params.require(:event).permit(:name, :subtitle, :sort_order, :default_invited, :date, :start_time, :time_description, :location, :address, :location_url, :maps_url, :attire, :attire_description, :description, :image)
     end
   end
 end

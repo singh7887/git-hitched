@@ -18,7 +18,12 @@
     <tbody>
       <% @events.each do |event| %>
         <tr>
-          <td><%= link_to event.name, admin_event_path(event) %></td>
+          <td>
+            <%= link_to event.name, admin_event_path(event) %>
+            <% unless event.default_invited? %>
+              <span style="margin-left: 6px; font-size: var(--text-xs); padding: 1px 6px; border-radius: 999px; background: var(--color-bg-tertiary); color: var(--color-text-muted);">opt-in</span>
+            <% end %>
+          </td>
           <td class="text-muted"><%= event.date&.strftime("%b %d, %Y") %></td>
           <td class="text-muted"><%= event.start_time&.strftime("%l:%M %p")&.strip %></td>
           <td class="text-muted"><%= event.location %></td>
