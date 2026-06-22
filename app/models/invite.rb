@@ -8,6 +8,8 @@ class Invite < ApplicationRecord
   before_validation :assign_placeholder_email, if: -> { email.blank? }
   before_validation :normalize_phone
 
+  enum :side, { groom: "groom", bride: "bride" }, default: :groom
+
   validates :name, presence: true
 
   scope :with_real_email, -> { where.not(email: nil).where.not("email LIKE ?", "no-email-%") }
@@ -16,7 +18,7 @@ class Invite < ApplicationRecord
     email.blank? || email.start_with?("no-email-")
   end
 
-  after_create :assign_all_events
+  after_create :assign_default_events
 
   def self.find_by_email(query)
     where("LOWER(email) = LOWER(?)", query.strip).first
@@ -51,8 +53,11 @@ class Invite < ApplicationRecord
     self.phone = digits.presence
   end
 
-  def assign_all_events
-    Event.find_each do |event|
+  # New invites are attached to the "default" events only (the shared celebrations).
+  # Side-specific events such as the bride-side Maiyaan/Haldi are flagged
+  # default_invited: false and must be opted into per invite (admin event checkboxes).
+  def assign_default_events
+    Event.where(default_invited: true).find_each do |event|
       event_invites.find_or_create_by!(event: event)
     end
   end

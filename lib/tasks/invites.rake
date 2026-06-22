@@ -98,10 +98,10 @@ def split_name(full)
   full = full.to_s.strip
   if full.include?(",")
     last, first = full.split(",", 2)
-    [first.strip, last.strip]
+    [ first.strip, last.strip ]
   else
     parts = full.split(/\s+/)
-    parts.size <= 1 ? [full, ""] : [parts.first, parts[1..].join(" ")]
+    parts.size <= 1 ? [ full, "" ] : [ parts.first, parts[1..].join(" ") ]
   end
 end
 

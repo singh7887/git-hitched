@@ -15,6 +15,10 @@
   <%= link_to "Not yet sent", admin_invites_path(q: params[:q], filter: "unsent"),  class: "btn btn-sm #{params[:filter] == 'unsent'  ? 'btn-highlight' : 'btn-outline'}" %>
   <%= link_to "Sent",         admin_invites_path(q: params[:q], filter: "sent"),    class: "btn btn-sm #{params[:filter] == 'sent'    ? 'btn-highlight' : 'btn-outline'}" %>
   <%= link_to "Skipped",      admin_invites_path(q: params[:q], filter: "skipped"), class: "btn btn-sm #{params[:filter] == 'skipped' ? 'btn-highlight' : 'btn-outline'}" %>
+  <span class="text-muted" style="margin-left: var(--space-2);">Side:</span>
+  <%= link_to "All",   admin_invites_path(q: params[:q], filter: params[:filter]),                 class: "btn btn-sm #{params[:side].blank?      ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Groom", admin_invites_path(q: params[:q], filter: params[:filter], side: "groom"),  class: "btn btn-sm #{params[:side] == 'groom' ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Bride", admin_invites_path(q: params[:q], filter: params[:filter], side: "bride"),  class: "btn btn-sm #{params[:side] == 'bride' ? 'btn-highlight' : 'btn-outline'}" %>
 </div>
 
 <%= form_with url: admin_invites_path, method: :get, class: "mb-4" do %>
@@ -30,6 +34,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Side</th>
         <th>Email</th>
         <th class="text-center">Guests</th>
         <th>Sent</th>
@@ -46,6 +51,7 @@
               <span style="margin-left: 6px; font-size: var(--text-xs); padding: 1px 6px; border-radius: 999px; background: var(--color-bg-tertiary); color: var(--color-text-muted);">do-not-send</span>
             <% end %>
           </td>
+          <td><span style="font-size: var(--text-xs); padding: 1px 8px; border-radius: 999px; background: var(--color-bg-tertiary); color: var(--color-text-muted);"><%= invite.side.titleize %></span></td>
           <td class="text-muted"><%= invite.no_email? ? "—" : invite.email %></td>
           <td class="text-center"><%= invite.guests.size %></td>
           <td>

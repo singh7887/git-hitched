@@ -9,6 +9,7 @@ module Admin
       @invites = @invites.where.not(invite_sent_at: nil)               if params[:filter] == "sent"
       @invites = @invites.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
       @invites = @invites.where(do_not_send: true)                     if params[:filter] == "skipped"
+      @invites = @invites.where(side: params[:side])                   if Invite.sides.key?(params[:side])
       @sent_count = Invite.where.not(invite_sent_at: nil).count
       @skip_count = Invite.where(do_not_send: true).count
       @total_count = Invite.count
@@ -27,6 +28,7 @@ module Admin
     def create
       @invite = Invite.new(invite_params)
       if @invite.save
+        sync_event_assignments
         redirect_to admin_invite_path(@invite), notice: "Invite created."
       else
         render :new, status: :unprocessable_entity
@@ -39,6 +41,7 @@ module Admin
 
     def update
       if @invite.update(invite_params)
+        sync_event_assignments
         redirect_to admin_invite_path(@invite), notice: "Invite updated."
       else
         render :edit, status: :unprocessable_entity
@@ -88,8 +91,19 @@ module Admin
       @invite = Invite.find(params[:id])
     end
 
+    # The form submits event_ids[] checkboxes (plus a blank hidden field so the key is
+    # always present). Replace this invite's event assignments to match the selection.
+    # When the param is absent entirely (e.g. API/import), the model's default-event
+    # assignment is left untouched.
+    def sync_event_assignments
+      return unless params.key?(:event_ids)
+
+      selected = Array(params[:event_ids]).reject(&:blank?).map(&:to_i)
+      @invite.event_ids = Event.where(id: selected).pluck(:id)
+    end
+
     def invite_params
-      params.require(:invite).permit(:name, :email, :phone, :party_size, :notes,
+      params.require(:invite).permit(:name, :email, :phone, :party_size, :notes, :side,
         guests_attributes: [ :id, :first_name, :last_name, :phone, :is_primary, :is_child, :age, :meal_choice, :dietary_notes, :_destroy ])
     end
   end

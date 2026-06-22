@@ -20,8 +20,9 @@ module ActiveSupport
 end
 
 class ActionDispatch::IntegrationTest
+  # The site-wide invite-code gate was removed; pages are now controlled by per-page
+  # feature flags (enabled for tests via PAGES_CONFIG above). Kept as a no-op so the
+  # existing test setups that call it continue to work.
   def authenticate_gate!
-    post gate_path, params: { code: ENV.fetch("WEDDING_INVITE_CODE") }
-    follow_redirect!
   end
 end
