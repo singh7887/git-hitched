@@ -97,8 +97,9 @@ class RsvpMailerTest < ActionMailer::TestCase
     assert content_types.any? { |ct| ct.include?("text/plain") }
   end
 
-  test "default from address is set" do
+  test "default from address matches the configured wedding from_email" do
     email = RsvpMailer.invitation(@smiths)
-    assert_equal [ "rsvp@example.wedding" ], email.from
+    expected = Mail::Address.new(WEDDING[:from_email]).address
+    assert_equal [ expected ], email.from
   end
 end
