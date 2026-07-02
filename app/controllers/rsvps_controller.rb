@@ -36,6 +36,9 @@ class RsvpsController < ApplicationController
     @children = @invite.guests.children.order(:first_name)
     @guests = @adults + @children
     @events = @invite.events.order(:date, :start_time)
+    # Pre-render blank name slots up to the party size so the family just fills in
+    # names rather than clicking "Add Guest" for each one.
+    @prefill_slots = [ @invite.party_size.to_i - @guests.size, 0 ].max
 
     if params[:step] == "confirmation"
       render :show_confirmation

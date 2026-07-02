@@ -1,0 +1,26 @@
+<%# A blank, optional guest slot pre-rendered from the invite's party size. Left
+    blank = skipped on save. Uses the same new_guests[] shape as the JS template. %>
+<div class="card" style="margin-bottom: var(--space-6);" data-guest-card data-new-guest="true">
+  <div class="flex items-center justify-between" style="margin-bottom: var(--space-4);">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" style="flex: 1;">
+      <div>
+        <label class="form-label">First name</label>
+        <input type="text" name="new_guests[<%= index %>][first_name]" class="form-input" placeholder="Guest name">
+      </div>
+      <div>
+        <label class="form-label">Last name</label>
+        <input type="text" name="new_guests[<%= index %>][last_name]" class="form-input">
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: var(--space-4);">
+    <label class="form-label">Dietary restrictions or allergies</label>
+    <input type="text" name="new_guests[<%= index %>][dietary_notes]" placeholder="e.g. gluten-free, nut allergy, vegan…" class="form-input">
+  </div>
+
+  <div style="margin-top: var(--space-4); text-align: right;">
+    <button type="button" class="btn btn-sm" style="color: var(--color-error);"
+      data-action="guests#remove">Remove</button>
+  </div>
+</div>
