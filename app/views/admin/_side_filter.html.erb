@@ -1,9 +1,9 @@
-<%# Bride/Groom/All filter buttons. Preserves other query params (search, etc.). %>
+<%# Bride/Groom/All filter. Sticky across admin tabs via session (@admin_side). %>
 <% base = request.query_parameters.except("side") %>
-<% side_url = ->(s) { q = s ? base.merge("side" => s) : base; q.empty? ? request.path : "#{request.path}?#{q.to_query}" } %>
+<% side_url = ->(s) { "#{request.path}?#{base.merge('side' => s).to_query}" } %>
 <div style="display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-4);">
   <span class="text-muted">Side:</span>
-  <%= link_to "All",   side_url.call(nil),     class: "btn btn-sm #{params[:side].blank?      ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Groom", side_url.call("groom"), class: "btn btn-sm #{params[:side] == 'groom' ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Bride", side_url.call("bride"), class: "btn btn-sm #{params[:side] == 'bride' ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "All",   side_url.call("all"),   class: "btn btn-sm #{@admin_side.blank?      ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Groom", side_url.call("groom"), class: "btn btn-sm #{@admin_side == 'groom' ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Bride", side_url.call("bride"), class: "btn btn-sm #{@admin_side == 'bride' ? 'btn-highlight' : 'btn-outline'}" %>
 </div>

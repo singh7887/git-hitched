@@ -69,4 +69,26 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, "Bride side"
   end
+
+  test "side selection persists across admin tabs via session" do
+    bride = Invite.create!(name: "Persist Bride", email: "pb@example.com", side: "bride")
+    bride.guests.create!(first_name: "Persisty", last_name: "Bride", is_primary: true)
+
+    # choose Bride on the invites tab...
+    get admin_invites_path(side: "bride"), headers: admin_auth
+    assert_response :success
+
+    # ...then visit guests with NO side param — should still be bride-scoped
+    get admin_guests_path, headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Persisty"
+    assert_not_includes @response.body, guests(:john_smith).full_name
+  end
+
+  test "selecting All clears the sticky side" do
+    get admin_guests_path(side: "bride"), headers: admin_auth
+    get admin_guests_path(side: "all"), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, guests(:john_smith).full_name
+  end
 end
