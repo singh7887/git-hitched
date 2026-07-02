@@ -5,6 +5,7 @@ module Admin
     def index
       @guests = Guest.includes(:invite).order(:last_name, :first_name)
       @guests = @guests.where("first_name ILIKE ? OR last_name ILIKE ?", "%#{params[:q]}%", "%#{params[:q]}%") if params[:q].present?
+      @guests = @guests.where(invites: { side: params[:side] }).references(:invite) if Invite.sides.key?(params[:side])
     end
 
     def show

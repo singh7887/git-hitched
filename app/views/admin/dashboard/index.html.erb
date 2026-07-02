@@ -1,4 +1,6 @@
-<h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-6);">RSVP Dashboard</h1>
+<h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-6);">RSVP Dashboard<%= " · #{@side.titleize} side" if @side %></h1>
+
+<%= render "admin/side_filter" %>
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
   <div class="stat-card">
@@ -49,12 +51,13 @@
     </thead>
     <tbody>
       <% @events.each do |event| %>
+        <% counts = @event_counts[event.id] %>
         <tr>
           <td><%= link_to event.name, admin_event_path(event) %></td>
           <td class="text-muted"><%= event.date&.strftime("%b %d, %Y") %></td>
-          <td class="text-center text-success"><%= event.attending_count %></td>
-          <td class="text-center text-error"><%= event.declined_count %></td>
-          <td class="text-center text-muted"><%= event.pending_count %></td>
+          <td class="text-center text-success"><%= counts[:attending] %></td>
+          <td class="text-center text-error"><%= counts[:declined] %></td>
+          <td class="text-center text-muted"><%= counts[:pending] %></td>
         </tr>
       <% end %>
     </tbody>
