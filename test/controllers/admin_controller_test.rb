@@ -15,6 +15,28 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "second admin credential works when configured" do
+    ENV["ADMIN_USER_2"] = "nuvdeep"
+    ENV["ADMIN_PASSWORD_2"] = "sekret-pass"
+    headers = { "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Basic.encode_credentials("nuvdeep", "sekret-pass") }
+    get admin_root_path, headers: headers
+    assert_response :success
+  ensure
+    ENV.delete("ADMIN_USER_2")
+    ENV.delete("ADMIN_PASSWORD_2")
+  end
+
+  test "second admin credential rejects wrong password" do
+    ENV["ADMIN_USER_2"] = "nuvdeep"
+    ENV["ADMIN_PASSWORD_2"] = "sekret-pass"
+    headers = { "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Basic.encode_credentials("nuvdeep", "wrong") }
+    get admin_root_path, headers: headers
+    assert_response :unauthorized
+  ensure
+    ENV.delete("ADMIN_USER_2")
+    ENV.delete("ADMIN_PASSWORD_2")
+  end
+
   test "admin invites index" do
     get admin_invites_path, headers: admin_auth
     assert_response :success
