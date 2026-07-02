@@ -51,4 +51,22 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     get admin_events_path, headers: admin_auth
     assert_response :success
   end
+
+  test "guests index filters by side" do
+    bride = Invite.create!(name: "Bride Household", email: "bride-hh@example.com", side: "bride")
+    bride.guests.create!(first_name: "Bridezilla", last_name: "Kaur", is_primary: true)
+
+    get admin_guests_path(side: "bride"), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Bridezilla"
+    assert_not_includes @response.body, guests(:john_smith).full_name
+  end
+
+  test "dashboard scopes to a side" do
+    Invite.create!(name: "Bride Household 2", email: "bride-hh2@example.com", side: "bride")
+
+    get admin_root_path(side: "bride"), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Bride side"
+  end
 end

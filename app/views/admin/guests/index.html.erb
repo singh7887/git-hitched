@@ -3,7 +3,10 @@
   <%= link_to "New Guest", new_admin_guest_path, class: "btn btn-primary btn-sm" %>
 </div>
 
+<%= render "admin/side_filter" %>
+
 <%= form_with url: admin_guests_path, method: :get, class: "mb-4" do %>
+  <%= hidden_field_tag :side, params[:side] if params[:side].present? %>
   <div class="flex gap-2">
     <%= text_field_tag :q, params[:q], placeholder: "Search by name...", class: "form-input flex-1" %>
     <%= submit_tag "Search", class: "btn btn-outline btn-sm" %>
