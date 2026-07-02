@@ -9,7 +9,7 @@ module Admin
       @invites = @invites.where.not(invite_sent_at: nil)               if params[:filter] == "sent"
       @invites = @invites.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
       @invites = @invites.where(do_not_send: true)                     if params[:filter] == "skipped"
-      @invites = @invites.where(side: params[:side])                   if Invite.sides.key?(params[:side])
+      @invites = @invites.where(side: @admin_side)                     if @admin_side
       @sent_count = Invite.where.not(invite_sent_at: nil).count
       @skip_count = Invite.where(do_not_send: true).count
       @total_count = Invite.count

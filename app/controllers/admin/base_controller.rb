@@ -1,10 +1,24 @@
 module Admin
   class BaseController < ApplicationController
     before_action :authenticate_admin!
+    before_action :set_admin_side
 
     layout "admin"
 
     private
+
+    # Remember the bride/groom filter in the session so it applies across all admin
+    # tabs. `?side=groom|bride` sets it; `?side=all` (or invalid) clears it; no param
+    # keeps whatever was last chosen. Exposed to views as @admin_side.
+    def set_admin_side
+      if params.key?(:side)
+        requested = params[:side].to_s
+        @admin_side = Invite.sides.key?(requested) ? requested : nil
+        session[:admin_side] = @admin_side
+      else
+        @admin_side = session[:admin_side]
+      end
+    end
 
     # The primary admin, plus an optional second admin login (e.g. Nuvdeep) configured
     # via ADMIN_USER_2 / ADMIN_PASSWORD_2. Both get the same full admin access.

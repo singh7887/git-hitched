@@ -3,7 +3,7 @@ require "csv"
 module Admin
   class DashboardController < BaseController
     def index
-      @side = params[:side] if Invite.sides.key?(params[:side])
+      @side = @admin_side
       invites = @side ? Invite.where(side: @side) : Invite.all
       guests  = @side ? Guest.joins(:invite).where(invites: { side: @side }) : Guest.all
 
