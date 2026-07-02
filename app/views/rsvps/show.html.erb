@@ -29,9 +29,18 @@
     </div>
 
     <div data-guests-target="detailsSection">
+      <% if @invite.party_size.to_i > 1 %>
+        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-6); font-size: var(--text-sm);">
+          Your invitation includes up to <strong><%= @invite.party_size %></strong> guests — please add everyone's names below. Leave any extra slots blank, or use <em>Add Guest</em> if you need more.
+        </p>
+      <% end %>
+
       <div data-guests-target="container">
         <% @adults.each do |guest| %>
           <%= render partial: "rsvps/guest_card", locals: { guest: guest, guests_count: @adults.size } %>
+        <% end %>
+        <% @prefill_slots.times do |i| %>
+          <%= render partial: "rsvps/new_guest_slot", locals: { index: "slot#{i}" } %>
         <% end %>
       </div>
 

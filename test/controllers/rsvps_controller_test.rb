@@ -39,6 +39,18 @@ class RsvpsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to rsvp_path
   end
 
+  test "GET /rsvp/:invite_id pre-fills blank guest slots up to party size" do
+    invite = Invite.create!(name: "Party Fam", email: "party-fam@example.com", party_size: 3)
+    invite.guests.create!(first_name: "Head", last_name: "Count", is_primary: true)
+
+    get rsvp_show_path(invite_id: invite.id)
+    assert_response :success
+    assert_includes @response.body, "new_guests[slot0]"
+    assert_includes @response.body, "new_guests[slot1]"
+    assert_not_includes @response.body, "new_guests[slot2]"
+    assert_includes @response.body, "includes up to"
+  end
+
   test "POST /rsvp/:invite_id updates RSVPs" do
     invite = invites(:smiths)
     john = guests(:john_smith)
