@@ -9,6 +9,7 @@ module Admin
 
       @total_invites = invites.count
       @responded_invites = invites.where.not(responded_at: nil).count
+      @pending_invites = invites.where(responded_at: nil).count
       @attending_invites = invites.where(attending: true).count
       @declined_invites = invites.where(attending: false).count
       @total_guests = guests.count

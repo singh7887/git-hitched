@@ -113,6 +113,13 @@ module Admin
       scope = scope.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
       scope = scope.where(do_not_send: true)                     if params[:filter] == "skipped"
       scope = scope.where(side: @admin_side)                     if @admin_side
+
+      case params[:status]
+      when "attending" then scope = scope.where(attending: true)
+      when "declined"  then scope = scope.where(attending: false)
+      when "responded" then scope = scope.where.not(responded_at: nil)
+      when "pending"   then scope = scope.where(responded_at: nil)
+      end
       scope
     end
 

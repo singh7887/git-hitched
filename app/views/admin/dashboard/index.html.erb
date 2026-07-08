@@ -2,23 +2,28 @@
 
 <%= render "admin/side_filter" %>
 
+<p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-2);">Tip: click a stat to see who's in it.</p>
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-  <div class="stat-card">
+  <%= link_to admin_invites_path, class: "stat-card", style: "text-decoration: none;" do %>
     <p class="stat-label">Invites</p>
     <p class="stat-value"><%= @total_invites %></p>
-  </div>
-  <div class="stat-card">
+  <% end %>
+  <%= link_to admin_invites_path(status: "responded"), class: "stat-card", style: "text-decoration: none;" do %>
     <p class="stat-label">Responded</p>
     <p class="stat-value"><%= @responded_invites %></p>
-  </div>
-  <div class="stat-card">
+  <% end %>
+  <%= link_to admin_invites_path(status: "pending"), class: "stat-card", style: "text-decoration: none;" do %>
+    <p class="stat-label">Pending</p>
+    <p class="stat-value text-muted"><%= @pending_invites %></p>
+  <% end %>
+  <%= link_to admin_invites_path(status: "attending"), class: "stat-card", style: "text-decoration: none;" do %>
     <p class="stat-label">Attending</p>
     <p class="stat-value text-success"><%= @attending_invites %></p>
-  </div>
-  <div class="stat-card">
+  <% end %>
+  <%= link_to admin_invites_path(status: "declined"), class: "stat-card", style: "text-decoration: none;" do %>
     <p class="stat-label">Declined</p>
     <p class="stat-value text-error"><%= @declined_invites %></p>
-  </div>
+  <% end %>
   <div class="stat-card">
     <p class="stat-label">Total Guests</p>
     <p class="stat-value"><%= @total_guests %></p>
