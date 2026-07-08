@@ -147,4 +147,16 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", admin_invites_path(status: "pending")
     assert_select "a[href=?]", admin_invites_path(status: "attending")
   end
+
+  test "whatsapp_targets can scope to pending (re-engagement)" do
+    Invite.create!(name: "Pending Phone", email: "pp@example.com", phone: "5559990000")
+    Invite.create!(name: "Done Phone", email: "dp@example.com", phone: "5559991111",
+      attending: true, responded_at: Time.current)
+
+    get admin_whatsapp_targets_path(status: "pending"), headers: admin_auth
+    assert_response :success
+    names = JSON.parse(@response.body).map { |r| r["name"] }
+    assert_includes names, "Pending Phone"
+    assert_not_includes names, "Done Phone"
+  end
 end
