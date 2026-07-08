@@ -125,4 +125,26 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     names = JSON.parse(@response.body).map { |r| r["name"] }
     assert_includes names, "WA Bride"
   end
+
+  test "invites index filters by response status" do
+    attending = Invite.create!(name: "Yes Fam", email: "yes@example.com", attending: true, responded_at: Time.current)
+    pending   = Invite.create!(name: "Quiet Fam", email: "quiet@example.com")
+
+    get admin_invites_path(status: "attending"), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Yes Fam"
+    assert_not_includes @response.body, "Quiet Fam"
+
+    get admin_invites_path(status: "pending"), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Quiet Fam"
+    assert_not_includes @response.body, "Yes Fam"
+  end
+
+  test "dashboard stat cards link to filtered invite lists" do
+    get admin_root_path, headers: admin_auth
+    assert_response :success
+    assert_select "a[href=?]", admin_invites_path(status: "pending")
+    assert_select "a[href=?]", admin_invites_path(status: "attending")
+  end
 end

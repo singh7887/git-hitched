@@ -12,16 +12,24 @@
   <span class="text-muted">·</span>
   <strong>Do-not-send: <%= @skip_count %></strong>
   <span class="text-muted" style="margin-left: var(--space-2);">Filter:</span>
-  <%= link_to "All",          admin_invites_path(q: params[:q]),                    class: "btn btn-sm #{params[:filter].blank?       ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Not yet sent", admin_invites_path(q: params[:q], filter: "unsent"),  class: "btn btn-sm #{params[:filter] == 'unsent'  ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Sent",         admin_invites_path(q: params[:q], filter: "sent"),    class: "btn btn-sm #{params[:filter] == 'sent'    ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Skipped",      admin_invites_path(q: params[:q], filter: "skipped"), class: "btn btn-sm #{params[:filter] == 'skipped' ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "All",          admin_invites_path(q: params[:q], status: params[:status]),                    class: "btn btn-sm #{params[:filter].blank?       ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Not yet sent", admin_invites_path(q: params[:q], status: params[:status], filter: "unsent"),  class: "btn btn-sm #{params[:filter] == 'unsent'  ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Sent",         admin_invites_path(q: params[:q], status: params[:status], filter: "sent"),    class: "btn btn-sm #{params[:filter] == 'sent'    ? 'btn-highlight' : 'btn-outline'}" %>
+  <%= link_to "Skipped",      admin_invites_path(q: params[:q], status: params[:status], filter: "skipped"), class: "btn btn-sm #{params[:filter] == 'skipped' ? 'btn-highlight' : 'btn-outline'}" %>
 </div>
 
 <%= render "admin/side_filter" %>
 
+<div style="display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-4);">
+  <span class="text-muted">Response:</span>
+  <% [ [ "All", nil ], [ "Attending", "attending" ], [ "Declined", "declined" ], [ "Pending", "pending" ], [ "Responded", "responded" ] ].each do |label, val| %>
+    <%= link_to label, admin_invites_path(q: params[:q], filter: params[:filter], status: val), class: "btn btn-sm #{params[:status] == val || (val.nil? && params[:status].blank?) ? 'btn-highlight' : 'btn-outline'}" %>
+  <% end %>
+</div>
+
 <%= form_with url: admin_invites_path, method: :get, class: "mb-4" do %>
   <%= hidden_field_tag :filter, params[:filter] if params[:filter].present? %>
+  <%= hidden_field_tag :status, params[:status] if params[:status].present? %>
   <div class="flex gap-2">
     <%= text_field_tag :q, params[:q], placeholder: "Search by name or email...", class: "form-input flex-1" %>
     <%= submit_tag "Search", class: "btn btn-outline btn-sm" %>
