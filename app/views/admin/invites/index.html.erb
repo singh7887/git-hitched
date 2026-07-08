@@ -1,7 +1,8 @@
 <div class="flex items-center justify-between mb-6">
   <h1 class="type-serif-heading" style="font-size: var(--text-3xl);">Invites</h1>
   <div class="flex gap-2">
-    <%= link_to "Export RSVP Links", admin_export_links_path, class: "btn btn-outline btn-sm" %>
+    <%= link_to "Bulk edit phones", bulk_phones_admin_invites_path(filter: params[:filter], q: params[:q]), class: "btn btn-outline btn-sm" %>
+    <%= link_to "Export RSVP Links", admin_export_links_path(filter: params[:filter]), class: "btn btn-outline btn-sm" %>
     <%= link_to "New Invite", new_admin_invite_path, class: "btn btn-primary btn-sm" %>
   </div>
 </div>
