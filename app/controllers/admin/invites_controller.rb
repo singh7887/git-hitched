@@ -4,15 +4,32 @@ module Admin
     before_action :set_invite, only: [ :show, :edit, :update, :destroy, :mark_sent, :unmark_sent, :mark_skip, :unmark_skip ]
 
     def index
-      @invites = Invite.includes(:guests).order(:name)
-      @invites = @invites.where("name ILIKE ? OR email ILIKE ?", "%#{params[:q]}%", "%#{params[:q]}%") if params[:q].present?
-      @invites = @invites.where.not(invite_sent_at: nil)               if params[:filter] == "sent"
-      @invites = @invites.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
-      @invites = @invites.where(do_not_send: true)                     if params[:filter] == "skipped"
-      @invites = @invites.where(side: @admin_side)                     if @admin_side
+      @invites = filtered_invites
       @sent_count = Invite.where.not(invite_sent_at: nil).count
       @skip_count = Invite.where(do_not_send: true).count
       @total_count = Invite.count
+    end
+
+    # Add/edit phone numbers for many invites at once (scoped by the active
+    # side + sent filters, so you can target e.g. groom-side, not-yet-sent).
+    def bulk_phones
+      @invites = filtered_invites
+    end
+
+    def update_phones
+      updated = 0
+      (params[:invites] || {}).each do |id, attrs|
+        invite = Invite.find_by(id: id)
+        next unless invite
+
+        new_phone = attrs[:phone].to_s.strip.presence
+        next if invite.phone.to_s == new_phone.to_s
+
+        invite.update(phone: new_phone)
+        updated += 1
+      end
+      redirect_to bulk_phones_admin_invites_path(filter: params[:filter], q: params[:q]),
+        notice: "Updated #{updated} phone number(s)."
     end
 
     def show
@@ -86,6 +103,18 @@ module Admin
     end
 
     private
+
+    # Shared list scoping for the invites index and bulk-phones page: search (q),
+    # sent/unsent/skipped filter, and the sticky bride/groom side (@admin_side).
+    def filtered_invites
+      scope = Invite.includes(:guests).order(:name)
+      scope = scope.where("name ILIKE ? OR email ILIKE ?", "%#{params[:q]}%", "%#{params[:q]}%") if params[:q].present?
+      scope = scope.where.not(invite_sent_at: nil)                if params[:filter] == "sent"
+      scope = scope.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
+      scope = scope.where(do_not_send: true)                     if params[:filter] == "skipped"
+      scope = scope.where(side: @admin_side)                     if @admin_side
+      scope
+    end
 
     def set_invite
       @invite = Invite.find(params[:id])

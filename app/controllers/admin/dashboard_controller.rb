@@ -27,7 +27,9 @@ module Admin
     # Returns one row per invite WITH a phone, including a fresh 1-year signed RSVP link.
     def whatsapp_targets
       verifier = Rails.application.message_verifier(:rsvp_management)
-      payload = Invite.where.not(phone: [ nil, "" ]).where(do_not_send: false).order(:name).map do |invite|
+      scope = Invite.where.not(phone: [ nil, "" ]).where(do_not_send: false).order(:name)
+      scope = scope_by_side_and_sent(scope)
+      payload = scope.map do |invite|
         primary = invite.primary_guest
         first_name = (primary&.first_name.presence) || invite.name.to_s.split(/\s+/).first
         {
@@ -43,15 +45,18 @@ module Admin
     end
 
     def export_links
-      invites = Invite.includes(:guests).order(:name)
+      invites = scope_by_side_and_sent(Invite.includes(:guests).order(:name))
       verifier = Rails.application.message_verifier(:rsvp_management)
 
       csv_data = CSV.generate(headers: true) do |csv|
-        csv << [ "Name", "Email", "Guests", "Responded", "RSVP Link" ]
+        csv << [ "Name", "Side", "Party Size", "Phone", "Email", "Guests", "Responded", "RSVP Link" ]
         invites.each do |invite|
           token = verifier.generate(invite.id, expires_in: 1.year)
           csv << [
             invite.name,
+            invite.side,
+            invite.party_size,
+            invite.phone,
             invite.no_email? ? "" : invite.email,
             invite.guests.size,
             invite.responded? ? "Yes" : "No",
@@ -102,6 +107,16 @@ module Admin
     end
 
     private
+
+    # Scope an invite relation by the sticky side (@admin_side) and the sent filter,
+    # so exports and the WhatsApp targets can be limited to e.g. groom-side unsent.
+    def scope_by_side_and_sent(relation)
+      relation = relation.where.not(invite_sent_at: nil)                if params[:filter] == "sent"
+      relation = relation.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
+      relation = relation.where(do_not_send: true)                     if params[:filter] == "skipped"
+      relation = relation.where(side: @admin_side)                     if @admin_side
+      relation
+    end
 
     # Per-event attending/declined/pending RSVP counts, optionally scoped to one side.
     def event_counts_by_side(side)

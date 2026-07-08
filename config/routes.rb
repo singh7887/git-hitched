@@ -43,6 +43,10 @@ Rails.application.routes.draw do
     root to: "dashboard#index"
     get "dashboard", to: "dashboard#index"
     resources :invites do
+      collection do
+        get  :bulk_phones
+        post :update_phones
+      end
       member do
         post :mark_sent
         post :unmark_sent

@@ -91,4 +91,38 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, guests(:john_smith).full_name
   end
+
+  test "bulk phones page renders" do
+    get bulk_phones_admin_invites_path, headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Bulk edit phones"
+  end
+
+  test "update_phones sets phone numbers" do
+    invite = invites(:smiths)
+    post update_phones_admin_invites_path, headers: admin_auth, params: {
+      invites: { invite.id.to_s => { phone: "559-819-1885" } }
+    }
+    assert_redirected_to bulk_phones_admin_invites_path
+    assert_equal "5598191885", invite.reload.phone
+  end
+
+  test "export_links scopes to a side and includes phone" do
+    Invite.create!(name: "Export Bride", email: "eb@example.com", side: "bride", phone: "5551234567")
+
+    get admin_export_links_path(side: "bride"), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Phone"
+    assert_includes @response.body, "Export Bride"
+    assert_not_includes @response.body, invites(:smiths).name
+  end
+
+  test "whatsapp_targets scopes to a side" do
+    Invite.create!(name: "WA Bride", email: "wab@example.com", side: "bride", phone: "5551112222")
+
+    get admin_whatsapp_targets_path(side: "bride"), headers: admin_auth
+    assert_response :success
+    names = JSON.parse(@response.body).map { |r| r["name"] }
+    assert_includes names, "WA Bride"
+  end
 end
