@@ -116,6 +116,13 @@ module Admin
       relation = relation.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
       relation = relation.where(do_not_send: true)                     if params[:filter] == "skipped"
       relation = relation.where(side: @admin_side)                     if @admin_side
+
+      case params[:status]
+      when "attending" then relation = relation.where(attending: true)
+      when "declined"  then relation = relation.where(attending: false)
+      when "responded" then relation = relation.where.not(responded_at: nil)
+      when "pending"   then relation = relation.where(responded_at: nil)
+      end
       relation
     end
 
