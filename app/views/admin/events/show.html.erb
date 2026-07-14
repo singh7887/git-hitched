@@ -76,50 +76,63 @@
   <% end %>
 </div>
 
-<%# RSVP stats %>
+<%# RSVP summary (guest headcounts) %>
 <div class="grid grid-cols-3 gap-4 mb-6">
   <div class="stat-card text-center" style="border-color: var(--color-success);">
-    <p class="stat-value text-success"><%= @attending.size %></p>
+    <p class="stat-value text-success"><%= @attending_count %></p>
     <p class="stat-label text-success">Attending</p>
   </div>
   <div class="stat-card text-center" style="border-color: var(--color-error);">
-    <p class="stat-value text-error"><%= @declined.size %></p>
+    <p class="stat-value text-error"><%= @declined_count %></p>
     <p class="stat-label text-error">Declined</p>
   </div>
   <div class="stat-card text-center">
-    <p class="stat-value text-muted"><%= @pending.size %></p>
+    <p class="stat-value text-muted"><%= @pending_count %></p>
     <p class="stat-label">Pending</p>
   </div>
 </div>
 
-<% if @attending.any? %>
-  <h2 class="type-serif-heading text-success" style="font-size: var(--text-lg); margin-bottom: var(--space-2);">Attending</h2>
-  <div class="table-wrapper mb-6">
-    <table>
-      <tbody>
-        <% @attending.each do |rsvp| %>
-          <tr>
-            <td><%= rsvp.guest.full_name %></td>
-            <td class="text-muted"><%= rsvp.guest.invite.name %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-<% end %>
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-2);">
+  By family
+  <span class="text-muted" style="font-size: var(--text-sm); font-weight: 400;">· <%= @families.size %> household(s) · click to expand</span>
+</h2>
 
-<% if @declined.any? %>
-  <h2 class="type-serif-heading text-error" style="font-size: var(--text-lg); margin-bottom: var(--space-2);">Declined</h2>
-  <div class="table-wrapper mb-6">
-    <table>
-      <tbody>
-        <% @declined.each do |rsvp| %>
-          <tr>
-            <td><%= rsvp.guest.full_name %></td>
-            <td class="text-muted"><%= rsvp.guest.invite.name %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+<% if @families.empty? %>
+  <p class="text-muted" style="font-size: var(--text-sm);">No one has RSVP'd for this event yet.</p>
+<% else %>
+  <div class="space-y-2">
+    <% @families.each do |fam| %>
+      <details class="card" style="padding: 0;">
+        <summary style="cursor: pointer; padding: var(--space-3) var(--space-4);">
+          <strong><%= fam[:invite].name %></strong>
+          <span class="text-muted" style="font-size: var(--text-xs);">· <%= fam[:invite].side.titleize %><%= " · party #{fam[:invite].party_size}" if fam[:invite].party_size %></span>
+          <span style="font-size: var(--text-sm); margin-left: var(--space-2);">
+            <% if fam[:attending].positive? %><span class="text-success"><%= fam[:attending] %> attending</span><% end %>
+            <% if fam[:declined].positive? %><span class="text-error" style="margin-left: var(--space-2);"><%= fam[:declined] %> declined</span><% end %>
+            <% if fam[:pending].positive? %><span class="text-muted" style="margin-left: var(--space-2);"><%= fam[:pending] %> pending</span><% end %>
+          </span>
+        </summary>
+        <div style="border-top: var(--border-thin); padding: var(--space-2) var(--space-4);">
+          <% fam[:guests].each do |rsvp| %>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-1) 0; font-size: var(--text-sm);">
+              <span>
+                <%= rsvp.guest.full_name %>
+                <% if rsvp.guest.is_primary? %><span class="text-muted" style="font-size: var(--text-xs);">(primary)</span><% end %>
+              </span>
+              <% if rsvp.attending == true %>
+                <span class="text-success">✓ Attending</span>
+              <% elsif rsvp.attending == false %>
+                <span class="text-error">✗ Declined</span>
+              <% else %>
+                <span class="text-muted">• Pending</span>
+              <% end %>
+            </div>
+          <% end %>
+          <div style="margin-top: var(--space-2); text-align: right;">
+            <%= link_to "Open household →", admin_invite_path(fam[:invite]), style: "font-size: var(--text-xs); color: var(--color-accent);" %>
+          </div>
+        </div>
+      </details>
+    <% end %>
   </div>
 <% end %>
