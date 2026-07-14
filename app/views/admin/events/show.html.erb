@@ -100,7 +100,7 @@
         <% @attending.each do |rsvp| %>
           <tr>
             <td><%= rsvp.guest.full_name %></td>
-            <td class="text-muted"><%= rsvp.guest.household.name %></td>
+            <td class="text-muted"><%= rsvp.guest.invite.name %></td>
           </tr>
         <% end %>
       </tbody>
@@ -116,7 +116,7 @@
         <% @declined.each do |rsvp| %>
           <tr>
             <td><%= rsvp.guest.full_name %></td>
-            <td class="text-muted"><%= rsvp.guest.household.name %></td>
+            <td class="text-muted"><%= rsvp.guest.invite.name %></td>
           </tr>
         <% end %>
       </tbody>

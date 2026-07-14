@@ -7,9 +7,9 @@ module Admin
     end
 
     def show
-      @attending = @event.rsvps.where(attending: true).includes(guest: :household)
-      @declined = @event.rsvps.where(attending: false).includes(guest: :household)
-      @pending = @event.rsvps.where(attending: nil).includes(guest: :household)
+      @attending = @event.rsvps.where(attending: true).includes(guest: :invite)
+      @declined = @event.rsvps.where(attending: false).includes(guest: :invite)
+      @pending = @event.rsvps.where(attending: nil).includes(guest: :invite)
     end
 
     def new
