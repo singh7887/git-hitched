@@ -27,5 +27,17 @@ module Admin
       assert_redirected_to admin_event_path(event)
       assert_not event.reload.default_invited?
     end
+
+    test "show renders the per-event RSVP attendee list" do
+      event = events(:ceremony)
+      invite = Invite.create!(name: "Show Household", email: "show-hh@example.com")
+      guest = invite.guests.create!(first_name: "Showy", last_name: "Guest", is_primary: true)
+      Rsvp.create!(guest: guest, event: event, attending: true)
+
+      get admin_event_path(event), headers: admin_auth
+      assert_response :success
+      assert_includes @response.body, "Showy Guest"
+      assert_includes @response.body, "Show Household"
+    end
   end
 end
