@@ -36,8 +36,10 @@ module Admin
 
       get admin_event_path(event), headers: admin_auth
       assert_response :success
-      assert_includes @response.body, "Showy Guest"
+      assert_includes @response.body, "By family"
       assert_includes @response.body, "Show Household"
+      assert_includes @response.body, "Showy Guest"
+      assert_includes @response.body, "1 attending"
     end
   end
 end

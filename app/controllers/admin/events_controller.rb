@@ -7,9 +7,22 @@ module Admin
     end
 
     def show
-      @attending = @event.rsvps.where(attending: true).includes(guest: :invite)
-      @declined = @event.rsvps.where(attending: false).includes(guest: :invite)
-      @pending = @event.rsvps.where(attending: nil).includes(guest: :invite)
+      rsvps = @event.rsvps.includes(guest: :invite).to_a
+      @attending_count = rsvps.count { |r| r.attending == true }
+      @declined_count  = rsvps.count { |r| r.attending == false }
+      @pending_count   = rsvps.count { |r| r.attending.nil? }
+
+      # Group RSVPs by family (invite) for the expandable per-family view.
+      @families = rsvps.group_by { |r| r.guest.invite_id }.map do |_invite_id, group|
+        invite = group.first.guest.invite
+        {
+          invite: invite,
+          guests: group.sort_by { |r| [ r.guest.is_primary? ? 0 : 1, r.guest.first_name.to_s.downcase ] },
+          attending: group.count { |r| r.attending == true },
+          declined:  group.count { |r| r.attending == false },
+          pending:   group.count { |r| r.attending.nil? }
+        }
+      end.sort_by { |f| [ -f[:attending], f[:invite].name.to_s.downcase ] }
     end
 
     def new
