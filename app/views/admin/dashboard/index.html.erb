@@ -1,11 +1,14 @@
-<h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin-bottom: var(--space-6);">RSVP Dashboard<%= " · #{@side.titleize} side" if @side %></h1>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl); margin: 0;">RSVP Dashboard<%= " · #{@side.titleize} side" if @side %></h1>
+  <%= link_to "+ New Household", new_admin_invite_path, class: "btn btn-primary btn-sm" %>
+</div>
 
 <%= render "admin/side_filter" %>
 
 <p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-2);">Tip: click a stat to see who's in it.</p>
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
   <%= link_to admin_invites_path, class: "stat-card", style: "text-decoration: none;" do %>
-    <p class="stat-label">Invites</p>
+    <p class="stat-label">Households</p>
     <p class="stat-value"><%= @total_invites %></p>
   <% end %>
   <%= link_to admin_invites_path(status: "responded"), class: "stat-card", style: "text-decoration: none;" do %>
