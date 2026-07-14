@@ -10,6 +10,8 @@
 
 <div class="grid grid-cols-2 gap-4 mb-6" style="font-size: var(--text-sm);">
   <div><span class="text-muted">Side:</span> <%= @invite.side.titleize %></div>
+  <div><span class="text-muted">Party size:</span> <%= @invite.party_size.presence || "—" %></div>
+  <div><span class="text-muted">Phone:</span> <%= @invite.phone.presence || "—" %></div>
   <div><span class="text-muted">Email:</span> <%= @invite.no_email? ? "None (send link personally)" : @invite.email %></div>
   <div><span class="text-muted">Responded:</span> <%= @invite.responded? ? @invite.responded_at.strftime("%b %d, %Y %l:%M %p") : "Not yet" %></div>
   <div><span class="text-muted">Attending:</span> <%= @invite.attending.nil? ? "Pending" : @invite.attending? ? "Yes" : "No" %></div>
@@ -68,22 +70,38 @@
   </table>
 </div>
 
-<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3);">Invited Events</h2>
-<div class="table-wrapper">
-  <table>
-    <thead>
-      <tr>
-        <th>Event</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @events.each do |event| %>
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-3);">
+  RSVP by event
+  <span class="text-muted" style="font-size: var(--text-sm); font-weight: 400;">· ✓ attending · ✗ declined · — no answer</span>
+</h2>
+<% if @events.empty? %>
+  <p class="text-muted" style="font-size: var(--text-sm);">This household isn't assigned to any events. Use <%= link_to "Edit", edit_admin_invite_path(@invite), style: "color: var(--color-accent);" %> to assign events.</p>
+<% else %>
+  <div class="table-wrapper">
+    <table>
+      <thead>
         <tr>
-          <td><%= link_to event.name, admin_event_path(event) %></td>
-          <td class="text-muted"><%= event.date&.strftime("%b %d, %Y") %></td>
+          <th>Guest</th>
+          <% @events.each do |event| %>
+            <th class="text-center"><%= link_to event.name, admin_event_path(event), style: "color: inherit;" %></th>
+          <% end %>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        <% @guests.each do |guest| %>
+          <tr>
+            <td><%= guest.full_name %><% if guest.is_primary? %> <span class="text-muted" style="font-size: var(--text-xs);">(primary)</span><% end %></td>
+            <% @events.each do |event| %>
+              <% rsvp = @rsvp_for[[ guest.id, event.id ]] %>
+              <td class="text-center">
+                <% if rsvp&.attending == true %><span class="text-success">✓</span>
+                <% elsif rsvp&.attending == false %><span class="text-error">✗</span>
+                <% else %><span class="text-muted">—</span><% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

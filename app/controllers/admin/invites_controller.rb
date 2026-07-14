@@ -33,8 +33,11 @@ module Admin
     end
 
     def show
-      @guests = @invite.guests.order(:last_name, :first_name)
-      @events = @invite.events.order(:date)
+      @guests = @invite.guests.order(is_primary: :desc, last_name: :asc, first_name: :asc)
+      @events = @invite.events.order(:sort_order, :date)
+      @rsvp_for = Rsvp.where(guest_id: @guests.map(&:id)).each_with_object({}) do |rsvp, map|
+        map[[ rsvp.guest_id, rsvp.event_id ]] = rsvp
+      end
     end
 
     def new
@@ -46,7 +49,7 @@ module Admin
       @invite = Invite.new(invite_params)
       if @invite.save
         sync_event_assignments
-        redirect_to admin_invite_path(@invite), notice: "Invite created."
+        redirect_to admin_invite_path(@invite), notice: "Household created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -59,7 +62,7 @@ module Admin
     def update
       if @invite.update(invite_params)
         sync_event_assignments
-        redirect_to admin_invite_path(@invite), notice: "Invite updated."
+        redirect_to admin_invite_path(@invite), notice: "Household updated."
       else
         render :edit, status: :unprocessable_entity
       end
@@ -67,7 +70,7 @@ module Admin
 
     def destroy
       @invite.destroy
-      redirect_to admin_invites_path, notice: "Invite deleted."
+      redirect_to admin_invites_path, notice: "Household deleted."
     end
 
     def mark_sent

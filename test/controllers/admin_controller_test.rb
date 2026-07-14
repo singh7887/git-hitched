@@ -40,6 +40,21 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
   test "admin invites index" do
     get admin_invites_path, headers: admin_auth
     assert_response :success
+    assert_includes @response.body, "Households"
+    assert_includes @response.body, "New Household"
+  end
+
+  test "household show renders the RSVP-by-event matrix" do
+    invite = invites(:smiths)
+    guest = guests(:john_smith)
+    event = events(:ceremony)
+    Rsvp.find_or_create_by!(guest: guest, event: event) { |r| r.attending = true }
+
+    get admin_invite_path(invite), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "RSVP by event"
+    assert_includes @response.body, event.name
+    assert_includes @response.body, guest.full_name
   end
 
   test "admin guests index" do
