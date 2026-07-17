@@ -3,7 +3,11 @@ class Invite < ApplicationRecord
   has_many :event_invites, dependent: :destroy
   has_many :events, through: :event_invites
   has_many :hotel_bookings, dependent: :destroy
-  accepts_nested_attributes_for :guests, allow_destroy: true, reject_if: :all_blank
+  # Reject a nested guest that has no first name (e.g. the empty "add a guest" slot
+  # in the admin form). `:all_blank` doesn't work here because check_box fields submit
+  # "0", which isn't blank, so the empty row would otherwise fail first_name validation.
+  accepts_nested_attributes_for :guests, allow_destroy: true,
+    reject_if: ->(attrs) { attrs["first_name"].blank? }
 
   before_validation :assign_placeholder_email, if: -> { email.blank? }
   before_validation :normalize_phone
