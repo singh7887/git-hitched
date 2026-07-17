@@ -65,5 +65,58 @@ module Admin
       assert_equal "Renamed Household", invite.reload.name
       assert_equal before, invite.guests.count
     end
+
+    test "merge moves guests, unions events, sums party, deletes source" do
+      a = Invite.create!(name: "Keep A", email: "keepa@example.com", party_size: 2)
+      b = Invite.create!(name: "Gone B", email: "goneb@example.com", party_size: 3)
+      a.guests.create!(first_name: "Aprimary", is_primary: true)
+      b.guests.create!(first_name: "Bperson", is_primary: true)
+      a.event_ids = [ events(:welcome).id ]
+      b.event_ids = [ events(:reception).id ]
+
+      assert_difference "Invite.count", -1 do
+        post merge_admin_invite_path(a), headers: admin_auth, params: { source_id: b.id }
+      end
+
+      assert_redirected_to admin_invite_path(a)
+      a.reload
+      assert_nil Invite.find_by(id: b.id)
+      assert_includes a.guests.map(&:first_name), "Bperson"
+      assert_equal 5, a.party_size
+      assert_equal [ events(:welcome).id, events(:reception).id ].sort, a.event_ids.sort
+      assert_equal 1, a.guests.where(is_primary: true).count
+    end
+
+    test "split moves guests into a new household inheriting side and events" do
+      src = Invite.create!(name: "Big Fam", email: "big@example.com", side: "bride", party_size: 4)
+      src.guests.create!(first_name: "Stay", is_primary: true)
+      mover = src.guests.create!(first_name: "Move")
+      src.event_ids = [ events(:welcome).id ]
+
+      assert_difference "Invite.count", 1 do
+        post split_admin_invite_path(src), headers: admin_auth,
+          params: { guest_ids: [ mover.id ], new_name: "New Split Fam" }
+      end
+
+      new_invite = Invite.find_by!(name: "New Split Fam")
+      assert new_invite.bride?
+      assert_equal [ events(:welcome).id ], new_invite.event_ids
+      assert_includes new_invite.guests.map(&:first_name), "Move"
+      assert_not_includes src.reload.guests.map(&:first_name), "Move"
+      assert_equal 1, new_invite.guests.where(is_primary: true).count
+      assert_equal 1, src.guests.where(is_primary: true).count
+    end
+
+    test "split refuses to move every guest" do
+      src = Invite.create!(name: "Solo Fam", email: "solo@example.com")
+      only = src.guests.create!(first_name: "Only", is_primary: true)
+
+      assert_no_difference "Invite.count" do
+        post split_admin_invite_path(src), headers: admin_auth,
+          params: { guest_ids: [ only.id ], new_name: "Nope" }
+      end
+      assert_redirected_to admin_invite_path(src)
+      assert_equal 1, src.reload.guests.count
+    end
   end
 end

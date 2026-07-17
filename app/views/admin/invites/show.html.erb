@@ -105,3 +105,46 @@
     </table>
   </div>
 <% end %>
+
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-top: var(--space-8); margin-bottom: var(--space-3);">Household tools</h2>
+
+<details class="card" style="margin-bottom: var(--space-3);">
+  <summary style="cursor: pointer; padding: var(--space-3) var(--space-4); font-weight: 600;">Merge another household into this one</summary>
+  <div class="card-body">
+    <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: var(--space-3);">
+      Moves the selected household's guests and events into <strong><%= @invite.name %></strong> (party sizes add up), then deletes it. This can't be undone.
+    </p>
+    <%= form_with url: merge_admin_invite_path(@invite), method: :post, class: "flex gap-2", style: "flex-wrap: wrap; align-items: center;" do %>
+      <select name="source_id" class="form-input" required style="min-width: 20rem;">
+        <option value="">Select a household to merge in…</option>
+        <% @merge_candidates.each do |other| %>
+          <option value="<%= other.id %>"><%= other.name %> — <%= other.side.titleize %>, <%= @guest_counts[other.id] || 0 %> guest(s)</option>
+        <% end %>
+      </select>
+      <%= submit_tag "Merge in", class: "btn btn-primary btn-sm", data: { turbo_confirm: "Merge the selected household into #{@invite.name}? The other household will be deleted." } %>
+    <% end %>
+  </div>
+</details>
+
+<details class="card" style="margin-bottom: var(--space-3);">
+  <summary style="cursor: pointer; padding: var(--space-3) var(--space-4); font-weight: 600;">Split guests into a new household</summary>
+  <div class="card-body">
+    <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: var(--space-3);">
+      Move the selected guests into a brand-new household (inherits this household's side and events). Leave at least one guest here.
+    </p>
+    <%= form_with url: split_admin_invite_path(@invite), method: :post do %>
+      <div style="margin-bottom: var(--space-3);">
+        <% @guests.each do |guest| %>
+          <label class="form-check" style="display: block; margin-bottom: 4px;">
+            <%= check_box_tag "guest_ids[]", guest.id, false %>
+            <span class="form-check-label"><%= guest.full_name %><% if guest.is_primary? %> <span class="text-muted" style="font-size: var(--text-xs);">(primary)</span><% end %></span>
+          </label>
+        <% end %>
+      </div>
+      <div class="flex gap-2" style="flex-wrap: wrap; align-items: center;">
+        <%= text_field_tag "new_name", nil, class: "form-input", placeholder: "New household name", required: true, style: "min-width: 16rem;" %>
+        <%= submit_tag "Split off", class: "btn btn-primary btn-sm", data: { turbo_confirm: "Create a new household with the selected guests?" } %>
+      </div>
+    <% end %>
+  </div>
+</details>
