@@ -1,7 +1,7 @@
 module Admin
   class InvitesController < BaseController
     skip_before_action :verify_authenticity_token, only: [ :mark_sent, :unmark_sent, :mark_skip, :unmark_skip ]
-    before_action :set_invite, only: [ :show, :edit, :update, :destroy, :mark_sent, :unmark_sent, :mark_skip, :unmark_skip ]
+    before_action :set_invite, only: [ :show, :edit, :update, :destroy, :mark_sent, :unmark_sent, :mark_skip, :unmark_skip, :merge, :split ]
 
     def index
       @invites = filtered_invites
@@ -38,6 +38,60 @@ module Admin
       @rsvp_for = Rsvp.where(guest_id: @guests.map(&:id)).each_with_object({}) do |rsvp, map|
         map[[ rsvp.guest_id, rsvp.event_id ]] = rsvp
       end
+      @merge_candidates = Invite.where.not(id: @invite.id).order(:name)
+      @guest_counts = Guest.group(:invite_id).count
+    end
+
+    # Merge another household (source) into this one: move its guests + hotel bookings,
+    # union the event assignments, sum party sizes, keep this household's contact info
+    # (fill phone / append notes from source), then delete the source.
+    def merge
+      source = Invite.find_by(id: params[:source_id])
+      if source.nil? || source.id == @invite.id
+        redirect_to admin_invite_path(@invite), alert: "Pick a different household to merge in." and return
+      end
+
+      source_name = source.name
+      Invite.transaction do
+        @invite.event_ids  = (@invite.event_ids | source.event_ids)
+        @invite.party_size = @invite.party_size.to_i + source.party_size.to_i
+        @invite.phone      = source.phone if @invite.phone.blank? && source.phone.present?
+        @invite.notes      = [ @invite.notes, source.notes ].compact_blank.join("\n---\n") if source.notes.present?
+        @invite.save!
+
+        source.guests.update_all(invite_id: @invite.id, is_primary: false)
+        source.hotel_bookings.update_all(invite_id: @invite.id)
+        source.destroy!
+        ensure_primary(@invite)
+      end
+
+      redirect_to admin_invite_path(@invite), notice: "Merged \"#{source_name}\" into \"#{@invite.name}\"."
+    end
+
+    # Split selected guests off into a brand-new household that inherits this
+    # household's side and event assignments.
+    def split
+      guest_ids = Array(params[:guest_ids]).reject(&:blank?).map(&:to_i)
+      guests = @invite.guests.where(id: guest_ids)
+      new_name = params[:new_name].to_s.strip
+
+      if guests.empty? || new_name.blank?
+        redirect_to admin_invite_path(@invite), alert: "Select at least one guest and enter a name for the new household." and return
+      end
+      if guests.count >= @invite.guests.count
+        redirect_to admin_invite_path(@invite), alert: "Leave at least one guest in the original household." and return
+      end
+
+      new_invite = nil
+      Invite.transaction do
+        new_invite = Invite.create!(name: new_name, side: @invite.side, party_size: guests.count)
+        new_invite.event_ids = @invite.event_ids
+        guests.update_all(invite_id: new_invite.id, is_primary: false)
+        ensure_primary(new_invite)
+        ensure_primary(@invite)
+      end
+
+      redirect_to admin_invite_path(new_invite), notice: "Split #{new_invite.guests.count} guest(s) into \"#{new_invite.name}\"."
     end
 
     def new
@@ -129,6 +183,14 @@ module Admin
 
     def set_invite
       @invite = Invite.find(params[:id])
+    end
+
+    # Guarantee a household has exactly one primary guest (promote the first if none).
+    def ensure_primary(invite)
+      invite.guests.reload
+      return if invite.guests.exists?(is_primary: true)
+
+      invite.guests.order(:id).first&.update_column(:is_primary, true)
     end
 
     # The form submits event_ids[] checkboxes (plus a blank hidden field so the key is

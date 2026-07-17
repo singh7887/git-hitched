@@ -52,6 +52,8 @@ Rails.application.routes.draw do
         post :unmark_sent
         post :mark_skip
         post :unmark_skip
+        post :merge
+        post :split
       end
     end
     resources :guests
