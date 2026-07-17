@@ -45,5 +45,25 @@ module Admin
       assert_includes @response.body, bride.name
       assert_not_includes @response.body, invites(:smiths).name
     end
+
+    # The admin edit form renders an empty "add a guest" slot whose checkboxes submit
+    # is_primary/is_child = "0". That must not fail first_name validation on save.
+    test "update ignores the empty add-guest slot" do
+      invite = invites(:smiths)
+      before = invite.guests.count
+
+      patch admin_invite_path(invite), headers: admin_auth, params: {
+        invite: {
+          name: "Renamed Household",
+          guests_attributes: {
+            "0" => { first_name: "", last_name: "", is_primary: "0", is_child: "0" }
+          }
+        }
+      }
+
+      assert_redirected_to admin_invite_path(invite)
+      assert_equal "Renamed Household", invite.reload.name
+      assert_equal before, invite.guests.count
+    end
   end
 end
