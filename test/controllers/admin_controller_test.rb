@@ -156,11 +156,37 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Yes Fam"
   end
 
-  test "dashboard stat cards link to filtered invite lists" do
+  test "dashboard stage cards link to the households pipeline" do
     get admin_root_path, headers: admin_auth
     assert_response :success
-    assert_select "a[href=?]", admin_invites_path(status: "pending")
-    assert_select "a[href=?]", admin_invites_path(status: "attending")
+    assert_select "a[href=?]", admin_invites_path(stage: "not_sent")
+    assert_select "a[href=?]", admin_invites_path(stage: "awaiting")
+    assert_select "a[href=?]", admin_invites_path(stage: "attending")
+  end
+
+  test "households index shows the stage pipeline bar" do
+    get admin_invites_path, headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Stage:"
+    assert_includes @response.body, "Awaiting"
+    assert_includes @response.body, "Not sent"
+  end
+
+  test "households index filters by stage=awaiting" do
+    awaiting = Invite.create!(name: "Waiting Fam", email: "wait@example.com", invite_sent_at: Time.current)
+    not_sent = Invite.create!(name: "Unsent Fam", email: "unsent@example.com")
+
+    get admin_invites_path(stage: "awaiting"), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Waiting Fam"
+    assert_not_includes @response.body, "Unsent Fam"
+  end
+
+  test "export CSV includes the Stage column" do
+    get admin_export_links_path, headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Stage"
+    assert_equal "text/csv", @response.media_type
   end
 
   test "whatsapp_targets can scope to pending (re-engagement)" do

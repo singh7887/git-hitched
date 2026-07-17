@@ -5,9 +5,9 @@ module Admin
 
     def index
       @invites = filtered_invites
-      @sent_count = Invite.where.not(invite_sent_at: nil).count
-      @skip_count = Invite.where(do_not_send: true).count
-      @total_count = Invite.count
+      base = @admin_side ? Invite.where(side: @admin_side) : Invite.all
+      @stage_counts = StageHelper::STAGE_ORDER.index_with { |stage| base.for_stage(stage).count }
+      @total_count = base.count
     end
 
     # Add/edit phone numbers for many invites at once (scoped by the active
@@ -116,6 +116,7 @@ module Admin
       scope = scope.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
       scope = scope.where(do_not_send: true)                     if params[:filter] == "skipped"
       scope = scope.where(side: @admin_side)                     if @admin_side
+      scope = scope.merge(Invite.for_stage(params[:stage]))      if params[:stage].present?
 
       case params[:status]
       when "attending" then scope = scope.where(attending: true)

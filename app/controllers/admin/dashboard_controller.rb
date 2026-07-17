@@ -9,9 +9,7 @@ module Admin
 
       @total_invites = invites.count
       @responded_invites = invites.where.not(responded_at: nil).count
-      @pending_invites = invites.where(responded_at: nil).count
-      @attending_invites = invites.where(attending: true).count
-      @declined_invites = invites.where(attending: false).count
+      @stage_counts = StageHelper::STAGE_ORDER.index_with { |stage| invites.for_stage(stage).count }
       @total_guests = guests.count
       @children_count = guests.where(is_child: true).count
       @childcare_count = guests.where(needs_childcare: true).count
@@ -50,17 +48,19 @@ module Admin
       verifier = Rails.application.message_verifier(:rsvp_management)
 
       csv_data = CSV.generate(headers: true) do |csv|
-        csv << [ "Name", "Side", "Party Size", "Phone", "Email", "Guests", "Responded", "RSVP Link" ]
+        csv << [ "Name", "Side", "Stage", "Party Size", "Phone", "Email", "Guests", "Responded", "Sent", "RSVP Link" ]
         invites.each do |invite|
           token = verifier.generate(invite.id, expires_in: 1.year)
           csv << [
             invite.name,
             invite.side,
+            StageHelper::STAGE_META.dig(invite.crm_stage, :label),
             invite.party_size,
             invite.phone,
             invite.no_email? ? "" : invite.email,
             invite.guests.size,
             invite.responded? ? "Yes" : "No",
+            invite.invite_sent_at&.to_date,
             rsvp_manage_url(token: token)
           ]
         end
@@ -116,6 +116,7 @@ module Admin
       relation = relation.where(invite_sent_at: nil, do_not_send: false) if params[:filter] == "unsent"
       relation = relation.where(do_not_send: true)                     if params[:filter] == "skipped"
       relation = relation.where(side: @admin_side)                     if @admin_side
+      relation = relation.merge(Invite.for_stage(params[:stage]))      if params[:stage].present?
 
       case params[:status]
       when "attending" then relation = relation.where(attending: true)

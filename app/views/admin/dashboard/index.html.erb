@@ -11,21 +11,21 @@
     <p class="stat-label">Households</p>
     <p class="stat-value"><%= @total_invites %></p>
   <% end %>
-  <%= link_to admin_invites_path(status: "responded"), class: "stat-card", style: "text-decoration: none;" do %>
-    <p class="stat-label">Responded</p>
-    <p class="stat-value"><%= @responded_invites %></p>
+  <%= link_to admin_invites_path(stage: "not_sent"), class: "stat-card", style: "text-decoration: none;" do %>
+    <p class="stat-label">Not sent</p>
+    <p class="stat-value text-muted"><%= @stage_counts[:not_sent] %></p>
   <% end %>
-  <%= link_to admin_invites_path(status: "pending"), class: "stat-card", style: "text-decoration: none;" do %>
-    <p class="stat-label">Pending</p>
-    <p class="stat-value text-muted"><%= @pending_invites %></p>
+  <%= link_to admin_invites_path(stage: "awaiting"), class: "stat-card", style: "text-decoration: none;" do %>
+    <p class="stat-label">Awaiting</p>
+    <p class="stat-value"><%= @stage_counts[:awaiting] %></p>
   <% end %>
-  <%= link_to admin_invites_path(status: "attending"), class: "stat-card", style: "text-decoration: none;" do %>
+  <%= link_to admin_invites_path(stage: "attending"), class: "stat-card", style: "text-decoration: none;" do %>
     <p class="stat-label">Attending</p>
-    <p class="stat-value text-success"><%= @attending_invites %></p>
+    <p class="stat-value text-success"><%= @stage_counts[:attending] %></p>
   <% end %>
-  <%= link_to admin_invites_path(status: "declined"), class: "stat-card", style: "text-decoration: none;" do %>
+  <%= link_to admin_invites_path(stage: "declined"), class: "stat-card", style: "text-decoration: none;" do %>
     <p class="stat-label">Declined</p>
-    <p class="stat-value text-error"><%= @declined_invites %></p>
+    <p class="stat-value text-error"><%= @stage_counts[:declined] %></p>
   <% end %>
   <div class="stat-card">
     <p class="stat-label">Total Guests</p>
