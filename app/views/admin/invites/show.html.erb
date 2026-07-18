@@ -14,7 +14,7 @@
   <div><span class="text-muted">Phone:</span> <%= @invite.phone.presence || "—" %></div>
   <div><span class="text-muted">Email:</span> <%= @invite.no_email? ? "None (send link personally)" : @invite.email %></div>
   <div><span class="text-muted">Responded:</span> <%= @invite.responded? ? @invite.responded_at.strftime("%b %d, %Y %l:%M %p") : "Not yet" %></div>
-  <div><span class="text-muted">Attending:</span> <%= @invite.attending.nil? ? "Pending" : @invite.attending? ? "Yes" : "No" %></div>
+  <div><span class="text-muted">Attending:</span> <%= @invite.responded? ? (@invite.attending? ? "Yes" : "No") : "No response yet" %></div>
   <div><span class="text-muted">Children Attending:</span> <%= @invite.children_attending? ? "Yes" : "No" %></div>
 </div>
 
