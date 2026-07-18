@@ -182,11 +182,23 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Unsent Fam"
   end
 
-  test "export CSV includes the Stage column" do
+  test "export CSV includes stage and yes/no flag columns" do
+    Invite.create!(name: "Flagged Fam", email: "flag@example.com", phone: "5551230000",
+      invite_sent_at: Time.current, responded_at: Time.current, attending: true)
+
     get admin_export_links_path, headers: admin_auth
     assert_response :success
-    assert_includes @response.body, "Stage"
     assert_equal "text/csv", @response.media_type
+
+    header = @response.body.lines.first
+    [ "Stage", "Sent?", "Responded?", "Attending?", "Has Phone?", "Skipped?" ].each do |col|
+      assert_includes header, col
+    end
+
+    row = @response.body.lines.find { |l| l.start_with?("Flagged Fam,") }
+    assert_not_nil row
+    # Sent? / Responded? / Attending? / Has Phone? / Skipped?
+    assert_includes row, "Attending,Yes,Yes,Yes,Yes,No"
   end
 
   test "whatsapp_targets can scope to pending (re-engagement)" do
