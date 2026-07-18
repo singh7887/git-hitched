@@ -59,7 +59,7 @@ module Admin
             StageHelper::STAGE_META.dig(invite.crm_stage, :label),
             invite.invite_sent_at.present? ? "Yes" : "No",
             invite.responded? ? "Yes" : "No",
-            invite.attending.nil? ? "" : (invite.attending? ? "Yes" : "No"),
+            invite.responded? ? (invite.attending? ? "Yes" : "No") : nil,
             invite.phone.present? ? "Yes" : "No",
             invite.do_not_send? ? "Yes" : "No",
             invite.party_size,

@@ -201,6 +201,19 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     assert_includes row, "Attending,Yes,Yes,Yes,Yes,No"
   end
 
+  # `attending` can hold a stale true for households that never responded, so the
+  # Attending? flag must only report once there's an actual response.
+  test "export Attending? is blank when the household has not responded" do
+    Invite.create!(name: "Stale Fam", email: "stale@example.com", attending: true, responded_at: nil)
+
+    get admin_export_links_path, headers: admin_auth
+    assert_response :success
+    row = @response.body.lines.find { |l| l.start_with?("Stale Fam,") }
+    assert_not_nil row
+    # Sent?=No, Responded?=No, Attending? blank, Has Phone?=No, Skipped?=No
+    assert_includes row, "No,No,,No,No"
+  end
+
   test "whatsapp_targets can scope to pending (re-engagement)" do
     Invite.create!(name: "Pending Phone", email: "pp@example.com", phone: "5559990000")
     Invite.create!(name: "Done Phone", email: "dp@example.com", phone: "5559991111",
