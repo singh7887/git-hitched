@@ -48,18 +48,24 @@ module Admin
       verifier = Rails.application.message_verifier(:rsvp_management)
 
       csv_data = CSV.generate(headers: true) do |csv|
-        csv << [ "Name", "Side", "Stage", "Party Size", "Phone", "Email", "Guests", "Responded", "Sent", "RSVP Link" ]
+        csv << [ "Name", "Side", "Stage",
+                 "Sent?", "Responded?", "Attending?", "Has Phone?", "Skipped?",
+                 "Party Size", "Guests", "Phone", "Email", "Sent Date", "RSVP Link" ]
         invites.each do |invite|
           token = verifier.generate(invite.id, expires_in: 1.year)
           csv << [
             invite.name,
             invite.side,
             StageHelper::STAGE_META.dig(invite.crm_stage, :label),
+            invite.invite_sent_at.present? ? "Yes" : "No",
+            invite.responded? ? "Yes" : "No",
+            invite.attending.nil? ? "" : (invite.attending? ? "Yes" : "No"),
+            invite.phone.present? ? "Yes" : "No",
+            invite.do_not_send? ? "Yes" : "No",
             invite.party_size,
+            invite.guests.size,
             invite.phone,
             invite.no_email? ? "" : invite.email,
-            invite.guests.size,
-            invite.responded? ? "Yes" : "No",
             invite.invite_sent_at&.to_date,
             rsvp_manage_url(token: token)
           ]
