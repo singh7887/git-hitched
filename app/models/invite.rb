@@ -44,21 +44,22 @@ class Invite < ApplicationRecord
 
   # Single CRM "stage" for a household (mutually exclusive, priority order).
   def crm_stage
-    return :skipped   if do_not_send?
-    return :not_sent  if invite_sent_at.nil?
-    return :awaiting  if responded_at.nil?
+    return :skipped if do_not_send?
+    # A reply outranks our own "sent" bookkeeping: if they responded, they clearly
+    # got the invite even if we never marked it sent.
+    return attending? ? :attending : :declined if responded_at.present?
 
-    attending? ? :attending : :declined
+    invite_sent_at.nil? ? :not_sent : :awaiting
   end
 
   # Relation matching a given stage — same definition as #crm_stage, kept here so
   # the list filter, pipeline counts, and CSV export share one source of truth.
   def self.for_stage(stage)
     case stage.to_s
-    when "not_sent"  then where(do_not_send: false, invite_sent_at: nil)
-    when "awaiting"  then where(do_not_send: false).where.not(invite_sent_at: nil).where(responded_at: nil)
+    when "not_sent"  then where(do_not_send: false, responded_at: nil, invite_sent_at: nil)
+    when "awaiting"  then where(do_not_send: false, responded_at: nil).where.not(invite_sent_at: nil)
     when "attending" then where(do_not_send: false, attending: true).where.not(responded_at: nil)
-    when "declined"  then where(do_not_send: false, attending: false).where.not(responded_at: nil)
+    when "declined"  then where(do_not_send: false, attending: [ false, nil ]).where.not(responded_at: nil)
     when "skipped"   then where(do_not_send: true)
     else all
     end
