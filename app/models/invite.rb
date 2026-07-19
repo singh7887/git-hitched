@@ -17,6 +17,8 @@ class Invite < ApplicationRecord
   validates :name, presence: true
 
   scope :with_real_email, -> { where.not(email: nil).where.not("email LIKE ?", "no-email-%") }
+  # Households still actually invited (do_not_send doubles as the "not invited" flag).
+  scope :active, -> { where(do_not_send: false) }
 
   def no_email?
     email.blank? || email.start_with?("no-email-")

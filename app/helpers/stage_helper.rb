@@ -7,8 +7,11 @@ module StageHelper
     awaiting:  { label: "Awaiting",  color: "var(--color-gold)" },
     attending: { label: "Attending", color: "var(--color-success)" },
     declined:  { label: "Declined",  color: "var(--color-error)" },
-    skipped:   { label: "Skipped",   color: "var(--color-text-muted)" }
+    skipped:   { label: "Not invited", color: "var(--color-text-muted)" }
   }.freeze
+
+  # Stages that count as actively invited (everything except the excluded bucket).
+  ACTIVE_STAGES = (STAGE_ORDER - [ :skipped ]).freeze
 
   def stage_label(stage)
     STAGE_META.dig(stage.to_sym, :label) || stage.to_s.titleize

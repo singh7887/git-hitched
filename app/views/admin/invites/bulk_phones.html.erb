@@ -1,29 +1,31 @@
 <div class="flex items-center justify-between mb-6">
-  <h1 class="type-serif-heading" style="font-size: var(--text-3xl);">Bulk edit phones</h1>
-  <%= link_to "← Back to Invites", admin_invites_path, class: "btn btn-ghost btn-sm" %>
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl);">Bulk edit</h1>
+  <%= link_to "← Back to Households", admin_invites_path, class: "btn btn-ghost btn-sm" %>
 </div>
 
 <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: var(--space-4);">
-  Add or fix phone numbers for many invites at once. Any format works — digits are
-  extracted automatically. Use the filters to narrow the list (e.g. a side + "Not yet sent").
+  Add or fix phone numbers, and mark households as <strong>Not invited</strong>, for many at once.
+  Phone: any format works — digits are extracted automatically. Use the filters to narrow the list
+  (e.g. Groom + "Not sent"). Choose the <em>Not invited</em> stage to review or restore excluded households.
 </p>
 
 <%= render "admin/side_filter" %>
 
 <div style="display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-4);">
-  <span class="text-muted">Sent:</span>
-  <%= link_to "All",          bulk_phones_admin_invites_path(q: params[:q]),                    class: "btn btn-sm #{params[:filter].blank?      ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Not yet sent", bulk_phones_admin_invites_path(q: params[:q], filter: "unsent"),  class: "btn btn-sm #{params[:filter] == 'unsent' ? 'btn-highlight' : 'btn-outline'}" %>
-  <%= link_to "Sent",         bulk_phones_admin_invites_path(q: params[:q], filter: "sent"),    class: "btn btn-sm #{params[:filter] == 'sent'   ? 'btn-highlight' : 'btn-outline'}" %>
+  <span class="text-muted">Stage:</span>
+  <%= link_to "All", bulk_phones_admin_invites_path(q: params[:q]), class: "btn btn-sm #{params[:stage].blank? ? 'btn-highlight' : 'btn-outline'}" %>
+  <% StageHelper::STAGE_ORDER.each do |stage| %>
+    <%= link_to stage_label(stage), bulk_phones_admin_invites_path(q: params[:q], stage: stage), class: "btn btn-sm #{params[:stage] == stage.to_s ? 'btn-highlight' : 'btn-outline'}" %>
+  <% end %>
 </div>
 
 <%= form_with url: update_phones_admin_invites_path, method: :post do %>
-  <%= hidden_field_tag :filter, params[:filter] if params[:filter].present? %>
+  <%= hidden_field_tag :stage, params[:stage] if params[:stage].present? %>
   <%= hidden_field_tag :q, params[:q] if params[:q].present? %>
 
   <div style="margin-bottom: var(--space-4);">
-    <%= submit_tag "Save phone numbers", class: "btn btn-primary btn-sm" %>
-    <span class="text-muted" style="font-size: var(--text-sm); margin-left: var(--space-2);"><%= @invites.size %> invite(s) shown</span>
+    <%= submit_tag "Save changes", class: "btn btn-primary btn-sm" %>
+    <span class="text-muted" style="font-size: var(--text-sm); margin-left: var(--space-2);"><%= @invites.size %> household(s) shown</span>
   </div>
 
   <div class="table-wrapper">
@@ -35,6 +37,7 @@
           <th class="text-center">Party</th>
           <th>Sent</th>
           <th>Phone</th>
+          <th class="text-center">Not invited</th>
         </tr>
       </thead>
       <tbody>
@@ -53,6 +56,10 @@
             <td>
               <%= text_field_tag "invites[#{invite.id}][phone]", invite.phone, class: "form-input", style: "min-width: 12rem;", placeholder: "e.g. 559-819-1885" %>
             </td>
+            <td class="text-center">
+              <%= hidden_field_tag "invites[#{invite.id}][do_not_send]", "0", id: nil %>
+              <%= check_box_tag "invites[#{invite.id}][do_not_send]", "1", invite.do_not_send?, id: "excl_#{invite.id}" %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -60,6 +67,6 @@
   </div>
 
   <div style="margin-top: var(--space-4);">
-    <%= submit_tag "Save phone numbers", class: "btn btn-primary btn-sm" %>
+    <%= submit_tag "Save changes", class: "btn btn-primary btn-sm" %>
   </div>
 <% end %>

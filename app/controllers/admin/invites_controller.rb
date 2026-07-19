@@ -7,7 +7,8 @@ module Admin
       @invites = filtered_invites
       base = @admin_side ? Invite.where(side: @admin_side) : Invite.all
       @stage_counts = StageHelper::STAGE_ORDER.index_with { |stage| base.for_stage(stage).count }
-      @total_count = base.count
+      # "All" means all *invited* households; the excluded ones live behind their own pill.
+      @total_count = base.active.count
     end
 
     # Add/edit phone numbers for many invites at once (scoped by the active
@@ -17,19 +18,29 @@ module Admin
     end
 
     def update_phones
-      updated = 0
+      phones = 0
+      excluded = 0
       (params[:invites] || {}).each do |id, attrs|
         invite = Invite.find_by(id: id)
         next unless invite
 
         new_phone = attrs[:phone].to_s.strip.presence
-        next if invite.phone.to_s == new_phone.to_s
+        if invite.phone.to_s != new_phone.to_s
+          invite.update(phone: new_phone)
+          phones += 1
+        end
 
-        invite.update(phone: new_phone)
-        updated += 1
+        # "Not invited" checkbox (hidden field means the key is always submitted).
+        if attrs.key?(:do_not_send)
+          flag = ActiveModel::Type::Boolean.new.cast(attrs[:do_not_send]) || false
+          if invite.do_not_send? != flag
+            invite.update(do_not_send: flag)
+            excluded += 1
+          end
+        end
       end
-      redirect_to bulk_phones_admin_invites_path(filter: params[:filter], q: params[:q]),
-        notice: "Updated #{updated} phone number(s)."
+      redirect_to bulk_phones_admin_invites_path(stage: params[:stage], q: params[:q]),
+        notice: "Updated #{phones} phone number(s) and #{excluded} invited/not-invited flag(s)."
     end
 
     def show
@@ -171,6 +182,8 @@ module Admin
       scope = scope.where(do_not_send: true)                     if params[:filter] == "skipped"
       scope = scope.where(side: @admin_side)                     if @admin_side
       scope = scope.merge(Invite.for_stage(params[:stage]))      if params[:stage].present?
+      # Not-invited households are hidden unless you explicitly view that stage.
+      scope = scope.active                                       if params[:stage].blank?
 
       case params[:status]
       when "attending" then scope = scope.where(attending: true)

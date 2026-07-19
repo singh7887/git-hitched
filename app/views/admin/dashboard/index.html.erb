@@ -5,36 +5,65 @@
 
 <%= render "admin/side_filter" %>
 
-<p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-2);">Tip: click a stat to see who's in it.</p>
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
   <%= link_to admin_invites_path, class: "stat-card", style: "text-decoration: none;" do %>
-    <p class="stat-label">Households</p>
-    <p class="stat-value"><%= @total_invites %></p>
-  <% end %>
-  <%= link_to admin_invites_path(stage: "not_sent"), class: "stat-card", style: "text-decoration: none;" do %>
-    <p class="stat-label">Not sent</p>
-    <p class="stat-value text-muted"><%= @stage_counts[:not_sent] %></p>
-  <% end %>
-  <%= link_to admin_invites_path(stage: "awaiting"), class: "stat-card", style: "text-decoration: none;" do %>
-    <p class="stat-label">Awaiting</p>
-    <p class="stat-value"><%= @stage_counts[:awaiting] %></p>
-  <% end %>
-  <%= link_to admin_invites_path(stage: "attending"), class: "stat-card", style: "text-decoration: none;" do %>
-    <p class="stat-label">Attending</p>
-    <p class="stat-value text-success"><%= @stage_counts[:attending] %></p>
-  <% end %>
-  <%= link_to admin_invites_path(stage: "declined"), class: "stat-card", style: "text-decoration: none;" do %>
-    <p class="stat-label">Declined</p>
-    <p class="stat-value text-error"><%= @stage_counts[:declined] %></p>
+    <p class="stat-label">Households invited</p>
+    <p class="stat-value"><%= @total_households %></p>
   <% end %>
   <div class="stat-card">
-    <p class="stat-label">Total Guests</p>
-    <p class="stat-value"><%= @total_guests %></p>
+    <p class="stat-label">People invited</p>
+    <p class="stat-value"><%= @total_people %></p>
   </div>
   <div class="stat-card">
-    <p class="stat-label">Response Rate</p>
-    <p class="stat-value"><%= @total_invites > 0 ? "#{(@responded_invites * 100.0 / @total_invites).round}%" : "N/A" %></p>
+    <p class="stat-label">Named guests</p>
+    <p class="stat-value"><%= @total_named_guests %></p>
   </div>
+  <div class="stat-card">
+    <p class="stat-label">Response rate</p>
+    <p class="stat-value"><%= @total_households > 0 ? "#{(@responded_households * 100.0 / @total_households).round}%" : "N/A" %></p>
+  </div>
+</div>
+
+<h2 class="type-serif-heading" style="font-size: var(--text-lg); margin-bottom: var(--space-2);">
+  Pipeline
+  <span class="text-muted" style="font-size: var(--text-sm); font-weight: 400;">· click a stage to see who's in it</span>
+</h2>
+<div class="table-wrapper mb-8">
+  <table>
+    <thead>
+      <tr>
+        <th>Stage</th>
+        <th class="text-center">Households</th>
+        <th class="text-center">People invited</th>
+        <th class="text-center">Named guests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @stage_rows.each do |row| %>
+        <tr>
+          <td><%= link_to stage_label(row[:stage]), admin_invites_path(stage: row[:stage]) %></td>
+          <td class="text-center"><%= row[:households] %></td>
+          <td class="text-center"><%= row[:people] %></td>
+          <td class="text-center text-muted"><%= row[:guests] %></td>
+        </tr>
+      <% end %>
+      <tr style="border-top: 2px solid var(--color-border);">
+        <td><strong>Total invited</strong></td>
+        <td class="text-center"><strong><%= @total_households %></strong></td>
+        <td class="text-center"><strong><%= @total_people %></strong></td>
+        <td class="text-center"><strong><%= @total_named_guests %></strong></td>
+      </tr>
+      <tr style="opacity: 0.6;">
+        <td><%= link_to "Not invited (excluded)", admin_invites_path(stage: "skipped") %></td>
+        <td class="text-center"><%= @excluded[:households] %></td>
+        <td class="text-center"><%= @excluded[:people] %></td>
+        <td class="text-center"><%= @excluded[:guests] %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
   <div class="stat-card">
     <p class="stat-label">Children</p>
     <p class="stat-value"><%= @children_count %></p>
