@@ -58,6 +58,18 @@ class InviteTest < ActiveSupport::TestCase
     assert_equal :awaiting,  Invite.create!(name: "C", email: "c@x.com", invite_sent_at: Time.current).crm_stage
     assert_equal :attending, Invite.create!(name: "D", email: "d@x.com", invite_sent_at: Time.current, responded_at: Time.current, attending: true).crm_stage
     assert_equal :declined,  Invite.create!(name: "E", email: "e@x.com", invite_sent_at: Time.current, responded_at: Time.current, attending: false).crm_stage
+    # A response outranks the "sent" bookkeeping, so stages stay mutually exclusive.
+    assert_equal :attending, Invite.create!(name: "F", email: "f2@x.com", invite_sent_at: nil, responded_at: Time.current, attending: true).crm_stage
+  end
+
+  test "stages are mutually exclusive and cover every household" do
+    Invite.create!(name: "S1", email: "s1@x.com")
+    Invite.create!(name: "S2", email: "s2@x.com", invite_sent_at: Time.current)
+    Invite.create!(name: "S3", email: "s3@x.com", responded_at: Time.current, attending: true)
+    Invite.create!(name: "S4", email: "s4@x.com", do_not_send: true)
+
+    per_stage = StageHelper::STAGE_ORDER.sum { |stage| Invite.for_stage(stage).count }
+    assert_equal Invite.count, per_stage
   end
 
   test "for_stage scope matches crm_stage" do
