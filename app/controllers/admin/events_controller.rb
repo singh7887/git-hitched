@@ -7,7 +7,10 @@ module Admin
     end
 
     def show
-      rsvps = @event.rsvps.includes(guest: :invite).to_a
+      # Exclude households that are no longer invited.
+      rsvps = @event.rsvps.includes(guest: :invite)
+                    .where(guests: { invite_id: Invite.active.select(:id) })
+                    .references(:guests).to_a
       @attending_count = rsvps.count { |r| r.attending == true }
       @declined_count  = rsvps.count { |r| r.attending == false }
       @pending_count   = rsvps.count { |r| r.attending.nil? }

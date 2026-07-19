@@ -6,6 +6,8 @@ module Admin
       @guests = Guest.includes(:invite).order(:last_name, :first_name)
       @guests = @guests.where("first_name ILIKE ? OR last_name ILIKE ?", "%#{params[:q]}%", "%#{params[:q]}%") if params[:q].present?
       @guests = @guests.where(invites: { side: @admin_side }).references(:invite) if @admin_side
+      # Hide people from households that are no longer invited.
+      @guests = @guests.where(invites: { do_not_send: false }).references(:invite)
     end
 
     def show

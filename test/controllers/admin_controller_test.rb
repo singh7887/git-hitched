@@ -110,7 +110,8 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
   test "bulk phones page renders" do
     get bulk_phones_admin_invites_path, headers: admin_auth
     assert_response :success
-    assert_includes @response.body, "Bulk edit phones"
+    assert_includes @response.body, "Bulk edit"
+    assert_includes @response.body, "Not invited"
   end
 
   test "update_phones sets phone numbers" do
@@ -162,6 +163,47 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", admin_invites_path(stage: "not_sent")
     assert_select "a[href=?]", admin_invites_path(stage: "awaiting")
     assert_select "a[href=?]", admin_invites_path(stage: "attending")
+  end
+
+  test "not-invited households are hidden by default but visible under their stage" do
+    Invite.create!(name: "Gone Household", email: "gone@example.com", do_not_send: true)
+
+    get admin_invites_path, headers: admin_auth
+    assert_response :success
+    assert_not_includes @response.body, "Gone Household"
+
+    get admin_invites_path(stage: "skipped"), headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "Gone Household"
+  end
+
+  test "guests of not-invited households are hidden from the guests tab" do
+    excluded = Invite.create!(name: "Gone HH2", email: "gone2@example.com", do_not_send: true)
+    excluded.guests.create!(first_name: "Hidden", last_name: "Person", is_primary: true)
+
+    get admin_guests_path, headers: admin_auth
+    assert_response :success
+    assert_not_includes @response.body, "Hidden Person"
+  end
+
+  test "dashboard shows the pipeline with people counts and an excluded row" do
+    Invite.create!(name: "Excluded Fam", email: "exc@example.com", do_not_send: true, party_size: 5)
+
+    get admin_root_path, headers: admin_auth
+    assert_response :success
+    assert_includes @response.body, "People invited"
+    assert_includes @response.body, "Named guests"
+    assert_includes @response.body, "Not invited (excluded)"
+  end
+
+  test "bulk update can mark a household not invited" do
+    invite = invites(:smiths)
+
+    post update_phones_admin_invites_path, headers: admin_auth, params: {
+      invites: { invite.id.to_s => { phone: invite.phone.to_s, do_not_send: "1" } }
+    }
+
+    assert invite.reload.do_not_send?
   end
 
   test "households index shows the stage pipeline bar" do

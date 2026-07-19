@@ -5,14 +5,20 @@ module Admin
     def index
       @side = @admin_side
       invites = @side ? Invite.where(side: @side) : Invite.all
-      guests  = @side ? Guest.joins(:invite).where(invites: { side: @side }) : Guest.all
+      active  = invites.active
 
-      @total_invites = invites.count
-      @responded_invites = invites.where.not(responded_at: nil).count
-      @stage_counts = StageHelper::STAGE_ORDER.index_with { |stage| invites.for_stage(stage).count }
-      @total_guests = guests.count
-      @children_count = guests.where(is_child: true).count
-      @childcare_count = guests.where(needs_childcare: true).count
+      # Per-stage overview: households, people invited (party size), and named guests.
+      @stage_rows = StageHelper::ACTIVE_STAGES.map { |stage| stage_summary(stage, invites) }
+      @excluded = stage_summary(:skipped, invites)
+
+      @total_households = active.count
+      @total_people = active.sum(:party_size).to_i
+      @total_named_guests = guests_for(active).count
+      @responded_households = active.where.not(responded_at: nil).count
+
+      active_guests = guests_for(active)
+      @children_count = active_guests.where(is_child: true).count
+      @childcare_count = active_guests.where(needs_childcare: true).count
 
       @events = Event.order(:date, :start_time)
       @event_counts = event_counts_by_side(@side)
@@ -115,6 +121,21 @@ module Admin
 
     private
 
+    def guests_for(invite_relation)
+      Guest.where(invite_id: invite_relation.select(:id))
+    end
+
+    # Households / people-invited / named-guest counts for one stage.
+    def stage_summary(stage, invites)
+      rel = invites.for_stage(stage)
+      {
+        stage: stage,
+        households: rel.count,
+        people: rel.sum(:party_size).to_i,
+        guests: guests_for(rel).count
+      }
+    end
+
     # Scope an invite relation by the sticky side (@admin_side) and the sent filter,
     # so exports and the WhatsApp targets can be limited to e.g. groom-side unsent.
     def scope_by_side_and_sent(relation)
@@ -135,7 +156,7 @@ module Admin
 
     # Per-event attending/declined/pending RSVP counts, optionally scoped to one side.
     def event_counts_by_side(side)
-      scope = Rsvp.joins(guest: :invite)
+      scope = Rsvp.joins(guest: :invite).where(invites: { do_not_send: false })
       scope = scope.where(invites: { side: side }) if side
       grouped = scope.group(:event_id, :attending).count
 

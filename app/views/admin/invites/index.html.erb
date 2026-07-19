@@ -45,7 +45,7 @@
           <td>
             <%= link_to invite.name, admin_invite_path(invite) %>
             <% if invite.do_not_send %>
-              <span style="margin-left: 6px; font-size: var(--text-xs); padding: 1px 6px; border-radius: 999px; background: var(--color-bg-tertiary); color: var(--color-text-muted);">do-not-send</span>
+              <span style="margin-left: 6px; font-size: var(--text-xs); padding: 1px 6px; border-radius: 999px; background: var(--color-bg-tertiary); color: var(--color-text-muted);">not invited</span>
             <% end %>
           </td>
           <td><span style="font-size: var(--text-xs); padding: 1px 8px; border-radius: 999px; background: var(--color-bg-tertiary); color: var(--color-text-muted);"><%= invite.side.titleize %></span></td>
@@ -67,9 +67,9 @@
               <%= button_to "Mark sent",   mark_sent_admin_invite_path(invite),   method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" } %>
             <% end %>
             <% if invite.do_not_send %>
-              <%= button_to "Allow send", unmark_skip_admin_invite_path(invite), method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" } %>
+              <%= button_to "Re-invite", unmark_skip_admin_invite_path(invite), method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" } %>
             <% else %>
-              <%= button_to "Skip",       mark_skip_admin_invite_path(invite),   method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" }, data: { turbo_confirm: "Exclude #{invite.name} from the WhatsApp send?" } %>
+              <%= button_to "Not invited", mark_skip_admin_invite_path(invite),   method: :post, class: "btn btn-outline btn-sm", form: { style: "display: inline;" }, data: { turbo_confirm: "Mark #{invite.name} as NOT invited? They will be hidden from the lists and counts." } %>
             <% end %>
           </td>
         </tr>
