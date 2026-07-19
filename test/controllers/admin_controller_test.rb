@@ -110,7 +110,8 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
   test "bulk phones page renders" do
     get bulk_phones_admin_invites_path, headers: admin_auth
     assert_response :success
-    assert_includes @response.body, "Bulk edit phones"
+    assert_includes @response.body, "Bulk edit"
+    assert_includes @response.body, "Not invited"
   end
 
   test "update_phones sets phone numbers" do
