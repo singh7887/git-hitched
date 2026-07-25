@@ -19,6 +19,7 @@ class PagesController < ApplicationController
   end
 
   def explore
+    @recommendations = Recommendation.published.ordered
   end
 
   def attire

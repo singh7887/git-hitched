@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     end
     resources :guests
     resources :events
+    resources :recommendations
     resources :hotel_bookings, only: [ :index ] do
       post :refund, on: :member
     end

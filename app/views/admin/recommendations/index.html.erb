@@ -1,0 +1,45 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="type-serif-heading" style="font-size: var(--text-3xl);">Places to Visit</h1>
+  <%= link_to "New Place", new_admin_recommendation_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<p class="text-muted" style="font-size: var(--text-sm); margin-bottom: var(--space-4);">
+  Nuvdeep's picks — these appear in the <strong>Nuvdeep's Picks</strong> section at the top of the public
+  <%= link_to "Explore", explore_path, target: "_blank", rel: "noopener", style: "color: var(--color-accent);" %> page.
+  Lower sort order shows first. Unpublish to hide one without deleting it.
+</p>
+
+<% if @recommendations.empty? %>
+  <p class="text-muted">No places yet. Click <strong>New Place</strong> to add Nuvdeep's first recommendation.</p>
+<% else %>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th class="text-center">Order</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Location</th>
+          <th class="text-center">Published</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recommendations.each do |rec| %>
+          <tr<%= rec.published? ? "".html_safe : " style=\"opacity: 0.55;\"".html_safe %>>
+            <td class="text-center text-muted"><%= rec.sort_order %></td>
+            <td><%= link_to rec.name, edit_admin_recommendation_path(rec) %></td>
+            <td class="text-muted"><%= rec.category.presence || "—" %></td>
+            <td class="text-muted"><%= rec.location.presence || "—" %></td>
+            <td class="text-center"><%= rec.published? ? "✓" : "—" %></td>
+            <td class="text-right" style="white-space: nowrap;">
+              <%= link_to "Edit", edit_admin_recommendation_path(rec), class: "btn btn-outline btn-sm" %>
+              <%= button_to "Delete", admin_recommendation_path(rec), method: :delete, class: "btn btn-outline btn-sm",
+                form: { style: "display: inline;" }, data: { turbo_confirm: "Remove #{rec.name}?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
