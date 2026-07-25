@@ -1,8 +1,15 @@
-// Standalone WhatsApp sender for wedding RSVP invites.
-// Reads targets from the wedding site's admin endpoint, sends personalized
-// messages with throttling, and is resumable via a local sent.json log.
+// Reminder sender for wedding RSVPs.
 //
-// ⚠️ Uses unofficial whatsapp-web.js. Prefer a SECONDARY WhatsApp number.
+// Targets households that are AWAITING a response and were first messaged BEFORE
+// a cutoff date (so freshly-sent people aren't nudged the same day). Reuses the
+// same linked WhatsApp session and throttling as send.js, but keeps its own
+// reminders.json log and does NOT touch the DB "sent" flag.
+//
+//   node send-reminders.js --dry-run
+//   node send-reminders.js
+//
+// Env: ADMIN_USER, ADMIN_PASSWORD (required); TARGETS_URL, REMINDER_TEMPLATE,
+//      REMINDER_BEFORE (YYYY-MM-DD, default 2026-07-20), delay knobs (optional).
 
 const fs = require("fs");
 const path = require("path");
@@ -10,19 +17,23 @@ const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 
 const CONFIG = {
-  targetsUrl: process.env.TARGETS_URL || "https://thepannufamily.com/admin/whatsapp_targets.json",
+  targetsUrl:
+    process.env.TARGETS_URL ||
+    "https://thepannufamily.com/admin/whatsapp_targets.json?stage=awaiting",
   adminUser: process.env.ADMIN_USER,
   adminPass: process.env.ADMIN_PASSWORD,
-  defaultCountryCode: process.env.DEFAULT_COUNTRY_CODE || "1", // US fallback for 10-digit numbers
+  defaultCountryCode: process.env.DEFAULT_COUNTRY_CODE || "1",
   minDelayMs: parseInt(process.env.MIN_DELAY_MS || "20000", 10),
   maxDelayMs: parseInt(process.env.MAX_DELAY_MS || "40000", 10),
   longPauseEvery: parseInt(process.env.LONG_PAUSE_EVERY || "15", 10),
   longPauseMs: parseInt(process.env.LONG_PAUSE_MS || String(5 * 60_000), 10),
-  logFile: path.join(__dirname, "sent.json"),
+  sentLogFile: path.join(__dirname, "sent.json"), // read-only: real first-send dates
+  logFile: path.join(__dirname, "reminders.json"), // this run's own resumable log
+  before: process.env.REMINDER_BEFORE || "2026-07-20", // only remind if first sent before this day
   dryRun: process.argv.includes("--dry-run"),
   template:
-    process.env.MESSAGE_TEMPLATE ||
-    "Hi {first_name}! 💍 You're invited to Nuvdeep & Gulbir's wedding — Nov 25–28, 2026 in Anaheim, CA. Please RSVP here: {rsvp_link}",
+    process.env.REMINDER_TEMPLATE ||
+    "Hi {first_name}! 💍 Gentle reminder from Nuvdeep & Gulbir — we're finalizing our guest list for the wedding (Nov 25–28, 2026 in Anaheim, CA) and would hate to miss you. Could you take a moment to RSVP? It really helps us plan: {rsvp_link}",
 };
 
 function requireEnv() {
@@ -31,14 +42,13 @@ function requireEnv() {
   if (!CONFIG.adminPass) missing.push("ADMIN_PASSWORD");
   if (missing.length) {
     console.error(`Missing env vars: ${missing.join(", ")}`);
-    console.error("These are your wedding site's admin Basic Auth credentials.");
     process.exit(1);
   }
 }
 
-function loadLog() {
+function loadJson(file) {
   try {
-    return JSON.parse(fs.readFileSync(CONFIG.logFile, "utf8"));
+    return JSON.parse(fs.readFileSync(file, "utf8"));
   } catch {
     return {};
   }
@@ -50,7 +60,6 @@ function saveLog(log) {
   fs.renameSync(tmp, CONFIG.logFile);
 }
 
-// WhatsApp ID format: "<countryCode><number>@c.us" — no + sign, digits only.
 function toWhatsAppId(rawPhone) {
   const digits = String(rawPhone || "").replace(/\D/g, "");
   if (!digits) return null;
@@ -75,31 +84,32 @@ async function fetchTargets() {
   return res.json();
 }
 
-// Record a successful send in the DB so the admin panel shows it.
-async function markSentInDb(inviteId) {
-  // Derive the site origin from the targets URL. Must tolerate query params
-  // (e.g. ?side=groom&stage=not_sent), which an end-anchored path strip would miss.
-  const base = new URL(CONFIG.targetsUrl).origin;
-  const url = `${base}/admin/invites/${inviteId}/mark_sent`;
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { Authorization: authHeader(), Accept: "application/json" },
-    });
-    if (!res.ok) console.warn(`  ⚠ mark_sent ${inviteId}: ${res.status} ${res.statusText}`);
-  } catch (e) {
-    console.warn(`  ⚠ mark_sent ${inviteId} error: ${e?.message || e}`);
-  }
+// First-message date for an invite, from the main send log (YYYY-MM-DD) or null.
+function firstSentDate(sentLog, id) {
+  const e = sentLog[String(id)];
+  if (!e || e.status !== "sent" || !e.at) return null;
+  return e.at.slice(0, 10);
 }
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 const jitterDelay = (min, max) => Math.floor(min + Math.random() * (max - min));
 
+function selectPending(targets) {
+  const sentLog = loadJson(CONFIG.sentLogFile);
+  const reminded = loadJson(CONFIG.logFile);
+  return targets.filter((t) => {
+    const d = firstSentDate(sentLog, t.id);
+    if (!d || d >= CONFIG.before) return false; // never sent, or sent on/after the cutoff
+    if (reminded[t.id] && reminded[t.id].status === "sent") return false; // already reminded
+    return true;
+  });
+}
+
 async function runDryRun(pending) {
-  console.log(`\nWould send to ${pending.length} invite(s). Showing first 8:\n`);
+  console.log(`\nWould remind ${pending.length} household(s). Showing first 8:\n`);
   pending.slice(0, 8).forEach((t) => {
     console.log(`  TO  ${t.name} (${t.phone}) -> ${toWhatsAppId(t.phone)}`);
-    console.log(`  MSG ${buildMessage(t).replace(/\n/g, "\n      ")}\n`);
+    console.log(`  MSG ${buildMessage(t)}\n`);
   });
 }
 
@@ -109,14 +119,13 @@ async function runLive(pending) {
     puppeteer: { headless: true, args: ["--no-sandbox"] },
   });
 
-  let log = loadLog();
+  let log = loadJson(CONFIG.logFile);
   let sentCount = 0;
 
   client.on("qr", (qr) => {
-    console.log("\nScan this QR with WhatsApp on your phone (Settings → Linked devices):");
+    console.log("\nScan this QR with WhatsApp (Settings → Linked devices):");
     qrcode.generate(qr, { small: true });
   });
-
   client.on("auth_failure", (m) => {
     console.error("Auth failure:", m);
     process.exit(1);
@@ -127,9 +136,9 @@ async function runLive(pending) {
   });
 
   client.on("ready", async () => {
-    console.log(`\nWhatsApp ready. Letting session sync for 8s before first send...`);
+    console.log(`\nWhatsApp ready. Syncing 8s before first reminder...`);
     await delay(8000);
-    console.log(`Sending to ${pending.length} invites...\n`);
+    console.log(`Reminding ${pending.length} households...\n`);
 
     for (const t of pending) {
       const id = toWhatsAppId(t.phone);
@@ -149,7 +158,6 @@ async function runLive(pending) {
           await client.sendMessage(id, buildMessage(t));
           log[t.id] = { status: "sent", phone: t.phone, at: new Date().toISOString() };
           saveLog(log);
-          await markSentInDb(t.id);
           sentCount++;
           console.log(`✓ ${t.name} (${t.phone})  [${sentCount}/${pending.length}]`);
         }
@@ -185,20 +193,15 @@ async function runLive(pending) {
 
 async function main() {
   requireEnv();
-  console.log(`Mode: ${CONFIG.dryRun ? "DRY RUN" : "LIVE"}`);
+  console.log(`Mode: ${CONFIG.dryRun ? "DRY RUN" : "LIVE"} (REMINDER)`);
   console.log(`Targets URL: ${CONFIG.targetsUrl}`);
+  console.log(`Reminding only households first sent before: ${CONFIG.before}`);
 
   const targets = await fetchTargets();
-  const log = loadLog();
-  const pending = targets.filter((t) => {
-    if (t.sent_at) return false;                                  // already marked sent in DB
-    if (log[t.id] && log[t.id].status === "sent") return false;   // already sent in this local log
-    return true;
-  });
+  const pending = selectPending(targets);
   console.log(
-    `Loaded ${targets.length} targets; ${pending.length} pending (skipping ${
-      targets.length - pending.length
-    } already sent in DB or local log).`
+    `Loaded ${targets.length} awaiting target(s); ${pending.length} eligible for a reminder ` +
+      `(sent before ${CONFIG.before}, not yet reminded).`
   );
 
   if (CONFIG.dryRun) return runDryRun(pending);
