@@ -36,6 +36,17 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "GET /explore shows Nuvdeep's published picks and hides unpublished" do
+    Recommendation.create!(name: "Secret Beach", note: "Go at sunset", published: true)
+    Recommendation.create!(name: "Hidden Spot", published: false)
+
+    get explore_path
+    assert_response :success
+    assert_includes @response.body, "Nuvdeep's Picks"
+    assert_includes @response.body, "Secret Beach"
+    assert_not_includes @response.body, "Hidden Spot"
+  end
+
   test "GET /attire renders" do
     get attire_path
     assert_response :success

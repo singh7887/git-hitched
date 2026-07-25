@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_21_120100) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_21_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -682,6 +682,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_120100) do
     t.index ["property_id", "created_at"], name: "ix_responses_property_created", order: { created_at: :desc }
     t.index ["property_id"], name: "ix_responses_property_id"
     t.index ["ticket_id"], name: "ix_responses_ticket_id"
+  end
+
+  create_table "recommendations", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.string "location"
+    t.string "name", null: false
+    t.text "note"
+    t.boolean "published", default: true, null: false
+    t.integer "sort_order", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.string "url"
   end
 
   create_table "rsvps", force: :cascade do |t|

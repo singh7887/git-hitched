@@ -7,6 +7,39 @@
     Thursday is a free day. Here are some of our favorite spots in the area.
   </p>
 
+  <% if @recommendations.present? %>
+    <section class="appear" style="margin-bottom: var(--space-12); background: var(--color-gold-bg); border: 1px solid var(--color-gold); border-radius: var(--radius); padding: var(--space-6);">
+      <h2 class="type-serif-heading text-center" style="font-size: var(--text-2xl); margin-bottom: var(--space-1); color: var(--color-text-highlight);">✨ Nuvdeep's Picks</h2>
+      <p class="text-center" style="color: var(--color-text-secondary); font-size: var(--text-sm); margin-bottom: var(--space-6);">A few of my personal favorites — the places I'd send you to first.</p>
+
+      <div class="space-y-4">
+        <% @recommendations.each do |rec| %>
+          <div class="card">
+            <div class="card-body">
+              <div style="display: flex; align-items: baseline; gap: var(--space-2); flex-wrap: wrap;">
+                <h3 class="card-title" style="font-size: var(--text-lg); margin: 0;"><%= rec.name %></h3>
+                <% if rec.category.present? %>
+                  <span style="font-size: var(--text-xs); font-weight: 600; color: var(--color-text-muted); background: var(--color-bg-tertiary); padding: 2px 8px; border-radius: 999px;"><%= rec.category %></span>
+                <% end %>
+              </div>
+              <% if rec.location.present? %>
+                <p style="color: var(--color-text-muted); font-size: var(--text-sm); margin-top: var(--space-1); margin-bottom: var(--space-2);"><%= rec.location %></p>
+              <% end %>
+              <% if rec.note.present? %>
+                <p style="color: var(--color-text-secondary);"><%= simple_format(rec.note) %></p>
+              <% end %>
+              <% if rec.url.present? %>
+                <a href="<%= rec.url %>" target="_blank" rel="noopener" style="display: inline-block; margin-top: var(--space-2); color: var(--color-accent); font-size: var(--text-sm); font-weight: 600;">Visit / directions →</a>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <h2 class="type-serif-heading text-center appear" style="font-size: var(--text-xl); margin-bottom: var(--space-6); color: var(--color-text-muted);">More to explore in Orange County</h2>
+  <% end %>
+
   <div class="space-y-6">
     <div class="card appear">
       <div class="card-body">
