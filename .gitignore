@@ -49,4 +49,8 @@
 /tools/whatsapp_sender/.wwebjs_auth/
 /tools/whatsapp_sender/.wwebjs_cache/
 /tools/whatsapp_sender/sent.json
+/tools/whatsapp_sender/reminders.json
 /tools/whatsapp_sender/package-lock.json
+/tools/whatsapp_sender/qr.png
+/tools/whatsapp_sender/*.log
+/tools/whatsapp_sender/send-log.txt
